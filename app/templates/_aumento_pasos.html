@@ -1,0 +1,15 @@
+{# Encabezado del wizard de aumento global (vistas 18a-d).
+   Espera `paso_activo` (1, 2 o 3). #}
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+  <div>
+    <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;">Cobros</div>
+    <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Aumento global de honorarios</h1>
+  </div>
+  <ol style="display: flex; gap: 18px; margin: 0; padding: 0; list-style: none; font-size: 13px;">
+    {% for numero, nombre in [(1, 'Parámetros'), (2, 'Selección'), (3, 'Confirmar')] %}
+    <li style="color: {{ 'rgb(145,132,217)' if numero == paso_activo else 'rgb(117,121,140)' }};">
+      <span style="display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; border: 1px solid; font-size: 11px; margin-right: 6px;">{{ numero }}</span>{{ nombre }}
+    </li>
+    {% endfor %}
+  </ol>
+</div>

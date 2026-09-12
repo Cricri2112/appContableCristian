@@ -1,0 +1,71 @@
+{% extends "ficha_servicios.html" %}
+
+{% block titulo %}Cambiar honorario · {{ cliente.nombre }} — Estudio Contable{% endblock %}
+
+{# Diálogo de cambio individual de honorario (vista 17). La advertencia de
+   cambio retroactivo aparece cuando la vigencia elegida es anterior al mes
+   en curso (literal del Chat 3). #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="/contratos/{{ contrato.id }}/honorario" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">Cambiar honorario</span>
+    <div style="padding: 10px 12px; border-radius: 8px; background: rgb(27,29,43); font-size: 14px; display: flex; justify-content: space-between; gap: 12px;">
+      <span>{{ servicio.nombre }} · {{ cliente.nombre }}</span>
+      {% if vigente %}
+      <span style="color: rgb(147,151,171);">vigente <span style="color: rgb(233,233,237);">{{ vigente.honorario | importe }}</span> desde {{ vigente.fecha_desde | fecha }}</span>
+      {% endif %}
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field">
+        <label>Nuevo honorario <span style="color: rgb(145,132,217);">*</span></label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 10px; top: 8px; font-size: 14px; color: rgb(147,151,171);">$</span>
+          <input class="input" name="honorario" inputmode="numeric" value="{{ valores.get('honorario', '') }}" style="padding-left: 24px;" required>
+        </div>
+        {{ error_campo('honorario') }}
+      </div>
+      <div class="field">
+        <label>Fecha de vigencia <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="fecha_vigencia" id="campo-vigencia" data-mes-actual="{{ mes_actual.isoformat() }}">
+          {% for opcion in opciones_vigencia %}
+          <option value="{{ opcion.isoformat() }}" data-mes="{{ opcion | mes_corto }}"
+                  {% if valores.get('fecha_vigencia', vigencia_default.isoformat()) == opcion.isoformat() %}selected{% endif %}>{{ opcion | fecha }}</option>
+          {% endfor %}
+        </select>
+        <div style="font-size: 11px; color: rgb(117,121,140); margin-top: 4px;">Primer día de mes. No anterior al {{ vigente.fecha_desde | fecha if vigente else '—' }}.</div>
+        {{ error_campo('fecha_vigencia') }}
+      </div>
+    </div>
+    <div id="aviso-retroactivo" style="display: none; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: 8px; background: var(--color-warn-bg); box-shadow: var(--color-warn) 0 0 0 1px; font-size: 13px; color: var(--color-warn-on-bg);">
+      <i class="ph ph-warning" style="font-size: 16px; flex: 0 0 auto; margin-top: 1px;"></i>
+      <span>Estás aplicando un cambio retroactivo desde <span id="mes-retroactivo"></span>. El saldo del cliente se recalculará.</span>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140);">Se cierra el registro vigente el día anterior y se abre uno nuevo. El saldo se recalcula con el honorario de cada período.</div>
+    <div class="dialog-actions">
+      <a href="/clientes/{{ cliente.id }}/servicios" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Aplicar cambio</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Advertencia de cambio retroactivo (Chat 3): vigencia anterior al mes en curso.
+  const selectVigencia = document.getElementById("campo-vigencia");
+  const aviso = document.getElementById("aviso-retroactivo");
+  const mesRetro = document.getElementById("mes-retroactivo");
+  function actualizarAviso() {
+    const opcion = selectVigencia.selectedOptions[0];
+    const retroactivo = opcion.value < selectVigencia.dataset.mesActual;
+    aviso.style.display = retroactivo ? "flex" : "none";
+    mesRetro.textContent = opcion.dataset.mes;
+  }
+  selectVigencia.addEventListener("change", actualizarAviso);
+  actualizarAviso();
+</script>
+{% endblock %}

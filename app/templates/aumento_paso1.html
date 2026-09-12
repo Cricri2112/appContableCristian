@@ -1,0 +1,39 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Aumento global · Parámetros — Estudio Contable{% endblock %}
+
+{% block principal %}
+{% set paso_activo = 1 %}
+{% include "_aumento_pasos.html" %}
+
+<form method="post" action="/aumento-global/paso2" class="card" style="gap: 16px; padding: 20px; max-width: 560px;">
+  <div class="card-kicker">Paso 1 · Parámetros</div>
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+    <div class="field">
+      <label>Porcentaje de aumento <span style="color: rgb(145,132,217);">*</span></label>
+      <div style="position: relative;">
+        <input class="input" name="porcentaje" inputmode="decimal" value="{{ valores.get('porcentaje', '') }}" style="padding-right: 28px;" required>
+        <span style="position: absolute; right: 10px; top: 8px; font-size: 14px; color: rgb(147,151,171);">%</span>
+      </div>
+      {% if errores.get('porcentaje') %}
+      <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores['porcentaje'] }}</div>
+      {% else %}
+      <div style="font-size: 11px; color: rgb(117,121,140); margin-top: 4px;">Uso típico: IPC + margen en enero.</div>
+      {% endif %}
+    </div>
+    <div class="field">
+      <label>Fecha de vigencia <span style="color: rgb(145,132,217);">*</span></label>
+      <select class="input" name="fecha_vigencia">
+        {% for opcion in opciones_vigencia %}
+        <option value="{{ opcion.isoformat() }}" {% if valores.get('fecha_vigencia', vigencia_default.isoformat()) == opcion.isoformat() %}selected{% endif %}>{{ opcion | fecha }}</option>
+        {% endfor %}
+      </select>
+      <div style="font-size: 11px; color: rgb(117,121,140); margin-top: 4px;">Primer día de mes; aplica a todos los seleccionados.</div>
+    </div>
+  </div>
+  <div style="font-size: 13px; color: rgb(178,182,202);">Fórmula: honorario nuevo = redondeo hacia arriba de vigente × (1 + %) al múltiplo de 10. Ej.: $ 5.700 × 1,085 = $ 6.184,50 → <span style="color: rgb(233,233,237);">$ 6.190</span>.</div>
+  <div style="display: flex; justify-content: flex-end;">
+    <button type="submit" class="btn btn-primary">Continuar<i class="ph ph-arrow-right"></i></button>
+  </div>
+</form>
+{% endblock %}

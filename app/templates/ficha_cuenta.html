@@ -1,0 +1,103 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}{{ cliente.nombre }} · Estado de cuenta — Estudio Contable{% endblock %}
+
+{# Vista 10: saldo con desglose (H-06: la misma fórmula, presentada),
+   mapa de períodos del año y listados de cobros y descuentos. #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% include "_ficha_encabezado.html" %}
+
+  <div style="display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.6fr); gap: 16px; align-items: stretch;">
+    <section class="card" style="gap: 12px; padding: 16px 18px; box-shadow: rgb(63,66,77) 0 0 0 1px;">
+      <div class="card-kicker">Saldo vigente</div>
+      {% set color_saldo = 'var(--color-danger-text)' if desglose.saldo > 0 else 'var(--color-ok-text)' %}
+      {% set color_punto = 'var(--color-danger)' if desglose.saldo > 0 else 'var(--color-ok)' %}
+      <div style="display: flex; align-items: center; gap: 10px; font-size: 32px; font-weight: 500; letter-spacing: -0.02em; color: {{ color_saldo }};">
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: {{ color_punto }};"></span>{{ desglose.saldo | importe }}
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+        <div style="display: flex; justify-content: space-between;"><span style="color: rgb(178,182,202);">Cargos esperados desde el inicio</span><span>{{ desglose.cargos | importe }}</span></div>
+        <div style="display: flex; justify-content: space-between;"><span style="color: rgb(178,182,202);">Descuentos aplicados</span><span>− {{ desglose.descuentos | importe }}</span></div>
+        <div style="display: flex; justify-content: space-between;"><span style="color: rgb(178,182,202);">Cobros recibidos</span><span>− {{ desglose.cobros | importe }}</span></div>
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: auto;">
+        <a href="/clientes/{{ cliente.id }}/cobros/nuevo" class="btn btn-primary"><i class="ph ph-plus"></i>Registrar cobro</a>
+        <a href="/clientes/{{ cliente.id }}/descuentos/nuevo" class="btn btn-secondary"><i class="ph ph-minus"></i>Descuento</a>
+      </div>
+    </section>
+
+    {% for mapa in mapas %}
+    <section class="card" style="gap: 10px; padding: 16px 18px;">
+      <div class="card-kicker">Períodos · {{ mapa.servicio.nombre }} {{ hoy().year }}</div>
+      <div style="display: grid; grid-template-columns: repeat({{ mapa.celdas | length if mapa.celdas else 1 }}, minmax(0,1fr)); gap: 6px;">
+        {% for celda in mapa.celdas %}
+        {% if celda.cubierto %}
+        <div style="padding: 8px 4px; border-radius: 6px; text-align: center; font-size: 11px; background: var(--color-ok-bg); color: var(--color-ok-on-bg);">{{ celda.periodo | mes_abrev }}</div>
+        {% else %}
+        <div style="padding: 8px 4px; border-radius: 6px; text-align: center; font-size: 11px; background: var(--color-danger-bg); color: var(--color-danger-on-bg); {{ 'box-shadow: var(--color-danger) 0 0 0 1px;' if loop.last }}">{{ celda.periodo | mes_abrev }}</div>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <div class="card-meta">Verde: período cubierto por cobros. Rojo: impago. El honorario esperado de cada período usa el vigente en ese mes{% if mapa.honorario_vigente %} ({{ mapa.honorario_vigente | importe }} hoy){% endif %}.</div>
+    </section>
+    {% else %}
+    <section class="card" style="gap: 10px; padding: 16px 18px;">
+      <div class="card-kicker">Períodos</div>
+      <div style="font-size: 13px; color: rgb(147,151,171);">Sin contratos mensuales activos: no hay mapa de períodos.</div>
+    </section>
+    {% endfor %}
+  </div>
+
+  <section style="display: flex; flex-direction: column; gap: 8px;">
+    <h2 style="font-size: 17px; font-weight: 500; margin: 0;">Cobros</h2>
+    <table class="table">
+      <thead><tr><th>Fecha</th><th>Servicio</th><th>Período</th><th style="text-align: right;">Importe</th><th>Forma</th><th>Comprobante</th><th>Notas</th><th></th></tr></thead>
+      <tbody>
+        {% set etiquetas_forma = {'efectivo': 'Efectivo', 'transferencia': 'Transferencia', 'otro': 'Otro'} %}
+        {% set etiquetas_comprobante = {'e_ticket': 'e-Ticket', 'no_gravado': 'No gravado', 'sin_comprobante': 'Sin comprobante'} %}
+        {% for fila in filas_cobros %}
+        <tr>
+          <td style="color: rgb(178,182,202);">{{ fila.cobro.fecha_cobro | fecha }}</td>
+          <td>{{ fila.servicio.nombre if fila.servicio else '—' }}</td>
+          <td>{{ fila.cobro.periodo_desde | periodo(fila.cobro.periodo_hasta) }}</td>
+          <td style="text-align: right;">{{ fila.cobro.importe | importe }}</td>
+          <td style="color: rgb(178,182,202);">{{ etiquetas_forma[fila.cobro.forma_pago.value] }}</td>
+          <td><span class="tag tag-neutral">{{ etiquetas_comprobante[fila.cobro.tipo_comprobante.value] }}</span></td>
+          <td style="font-size: 13px; color: rgb(147,151,171);">{{ fila.cobro.notas or '—' }}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <a href="/cobros/{{ fila.cobro.id }}/editar" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147,151,171);"><i class="ph ph-pencil-simple"></i></a>
+            <a href="/cobros/{{ fila.cobro.id }}/eliminar" class="btn btn-icon" title="Eliminar" style="width: 30px; height: 30px; color: rgb(147,151,171);"><i class="ph ph-trash"></i></a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" style="color: rgb(147,151,171);">Sin cobros registrados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 8px;">
+    <h2 style="font-size: 17px; font-weight: 500; margin: 0;">Descuentos</h2>
+    <table class="table">
+      <thead><tr><th>Fecha</th><th>Servicio</th><th style="text-align: right;">Importe</th><th>Motivo</th><th></th></tr></thead>
+      <tbody>
+        {% for fila in filas_descuentos %}
+        <tr>
+          <td style="color: rgb(178,182,202);">{{ fila.descuento.fecha | fecha }}</td>
+          <td>{{ fila.servicio.nombre if fila.servicio else '—' }}</td>
+          <td style="text-align: right;">− {{ fila.descuento.importe | importe }}</td>
+          <td style="color: rgb(178,182,202);">{{ fila.descuento.motivo }}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <a href="/descuentos/{{ fila.descuento.id }}/editar" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147,151,171);"><i class="ph ph-pencil-simple"></i></a>
+            <a href="/descuentos/{{ fila.descuento.id }}/eliminar" class="btn btn-icon" title="Eliminar" style="width: 30px; height: 30px; color: rgb(147,151,171);"><i class="ph ph-trash"></i></a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="color: rgb(147,151,171);">Sin descuentos registrados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+{% endblock %}

@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.plantillas import templates
 from app.schemas.clientes import FormularioCliente
-from app.services import catalogo, clientes, contratos
+from app.services import catalogo, clientes, cobros, contratos, cuentas, honorarios
 from app.services.errores import ErrorValidacion
 
 router = APIRouter()
@@ -79,11 +79,17 @@ def _contexto_ficha(db: Session, cliente_id: int) -> dict | None:
     cliente = clientes.obtener_cliente(db, cliente_id)
     if cliente is None:
         return None
+    desglose = cuentas.calcular_saldo(db, cliente_id)
     return {
         "seccion": "clientes",
         "cliente": cliente,
         "es_mensual": clientes.es_mensual(db, cliente_id),
         "conteos_contratos": contratos.contar_contratos(db, cliente_id),
+        # Saldo del encabezado de la ficha (F5, vista 07): rojo si debe.
+        "saldo": desglose["saldo"],
+        "situacion_saldo": cuentas.situacion(
+            desglose["saldo"], cuentas.contar_periodos_impagos(db, cliente_id)
+        ),
     }
 
 
@@ -121,6 +127,40 @@ def _contexto_servicios(db: Session, cliente_id: int, finalizados: bool) -> dict
         ),
         "mostrar_finalizados": finalizados,
     }
+
+
+# ---------- Estado de cuenta e historial de honorarios (vistas 10 y 11) ----------
+
+def _contexto_cuenta(db: Session, cliente_id: int) -> dict:
+    """Contexto de la pestaña Estado de cuenta (también bajo los diálogos)."""
+    return {
+        "pestana": "cuenta",
+        "desglose": cuentas.calcular_saldo(db, cliente_id),
+        "mapas": cuentas.mapa_periodos(db, cliente_id),
+        "filas_cobros": cobros.listar_cobros(db, cliente_id),
+        "filas_descuentos": cobros.listar_descuentos(db, cliente_id),
+    }
+
+
+@router.get("/clientes/{cliente_id}/cuenta", response_class=HTMLResponse)
+def ficha_cuenta(request: Request, cliente_id: int, db: Session = Depends(get_db)):
+    contexto = _contexto_ficha(db, cliente_id)
+    if contexto is None:
+        return RedirectResponse("/clientes", status_code=303)
+    contexto |= _contexto_cuenta(db, cliente_id)
+    return templates.TemplateResponse(request, "ficha_cuenta.html", contexto)
+
+
+@router.get("/clientes/{cliente_id}/honorarios", response_class=HTMLResponse)
+def ficha_honorarios(request: Request, cliente_id: int, db: Session = Depends(get_db)):
+    contexto = _contexto_ficha(db, cliente_id)
+    if contexto is None:
+        return RedirectResponse("/clientes", status_code=303)
+    contexto |= {
+        "pestana": "honorarios",
+        "filas_historial": honorarios.historial_consolidado(db, cliente_id),
+    }
+    return templates.TemplateResponse(request, "ficha_honorarios.html", contexto)
 
 
 # ---------- Editar cliente (vista 13, diálogo sobre la ficha) ----------
@@ -252,6 +292,8 @@ def _contexto_dialogo_contrato(db: Session, contrato_id: int) -> dict | None:
         "contrato": contrato,
         "servicio": catalogo.obtener_servicio(db, contrato.servicio_id),
         "honorario_vigente": contratos.honorario_vigente(db, contrato_id),
+        # F6: el historial del contrato se muestra en su detalle.
+        "historial_contrato": honorarios.historial_por_contrato(db, contrato_id),
     }
 
 

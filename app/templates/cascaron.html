@@ -21,7 +21,7 @@
     {% endmacro %}
     {{ item_nav('/', 'ph-squares-four', 'Dashboard', False, habilitada=False) }}
     {{ item_nav('/clientes', 'ph-users', 'Clientes', seccion == 'clientes') }}
-    {{ item_nav('#', 'ph-currency-dollar', 'Cobros', False, habilitada=False) }}
+    {{ item_nav('/cobros', 'ph-currency-dollar', 'Cobros', seccion == 'cobros') }}
     {{ item_nav('#', 'ph-check-square', 'Tareas', False, habilitada=False) }}
     {{ item_nav('#', 'ph-calendar-blank', 'Vencimientos', False, habilitada=False) }}
     <div style="flex: 1;"></div>

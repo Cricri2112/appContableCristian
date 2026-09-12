@@ -1,0 +1,44 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Aumento global · Confirmar — Estudio Contable{% endblock %}
+
+{# Paso 3 (vista 18c): resumen antes de aplicar. Los datos viajan ocultos. #}
+{% block principal %}
+{% set paso_activo = 3 %}
+{% include "_aumento_pasos.html" %}
+
+<form method="post" action="/aumento-global/confirmar" style="display: flex; flex-direction: column; gap: 12px; max-width: 760px; margin: 0;">
+  <input type="hidden" name="porcentaje" value="{{ porcentaje }}">
+  <input type="hidden" name="fecha_vigencia" value="{{ vigencia.isoformat() }}">
+  {% for fila in resumen %}
+  <input type="hidden" name="seleccion" value="{{ fila.contrato.id }}">
+  <input type="hidden" name="nuevo_{{ fila.contrato.id }}" value="{{ fila.nuevo }}">
+  {% endfor %}
+
+  <div class="card-kicker">Paso 3 · Confirmar</div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px;">
+    <div class="card" style="gap: 2px;"><span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171);">Contratos</span><span style="font-size: 22px; font-weight: 500;">{{ resumen | length }}</span></div>
+    <div class="card" style="gap: 2px;"><span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171);">Vigencia</span><span style="font-size: 22px; font-weight: 500;">{{ vigencia | fecha }}</span></div>
+    <div class="card" style="gap: 2px;"><span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171);">Total mensual+anual</span><span style="font-size: 22px; font-weight: 500;">{{ total_vigente | importe }} <span style="color: rgb(147,151,171); font-size: 14px;">→</span> {{ total_nuevo | importe }}</span></div>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Cliente</th><th>Servicio</th><th style="text-align: right;">Vigente</th><th style="text-align: right;">Nuevo</th></tr></thead>
+    <tbody>
+      {% for fila in resumen %}
+      <tr>
+        <td>{{ fila.cliente.nombre }}</td>
+        <td>{{ fila.servicio.nombre }}</td>
+        <td style="text-align: right; color: rgb(178,182,202);">{{ fila.vigente | importe }}</td>
+        <td style="text-align: right;">{{ fila.nuevo | importe }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="display: flex; justify-content: space-between;">
+    <a href="/aumento-global" class="btn btn-secondary"><i class="ph ph-arrow-left"></i>Volver a empezar</a>
+    <button type="submit" class="btn btn-primary"><i class="ph ph-check"></i>Confirmar aumento</button>
+  </div>
+</form>
+{% endblock %}

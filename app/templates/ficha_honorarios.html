@@ -1,0 +1,33 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}{{ cliente.nombre }} · Honorarios — Estudio Contable{% endblock %}
+
+{# Vista 11: historial de honorarios consolidado del cliente, solo lectura. #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% include "_ficha_encabezado.html" %}
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <table class="table">
+      <thead><tr><th>Servicio</th><th style="text-align: right;">Honorario</th><th>Desde</th><th>Hasta</th></tr></thead>
+      <tbody>
+        {% for fila in filas_historial %}
+        <tr>
+          <td>{{ fila.servicio.nombre }}</td>
+          <td style="text-align: right;">{{ fila.registro.honorario | importe }}</td>
+          <td style="color: rgb(178,182,202);">{{ fila.registro.fecha_desde | fecha }}</td>
+          {% if fila.registro.fecha_hasta is none %}
+          <td style="color: var(--color-ok-text);">vigente</td>
+          {% else %}
+          <td>{{ fila.registro.fecha_hasta | fecha }}</td>
+          {% endif %}
+        </tr>
+        {% else %}
+        <tr><td colspan="4" style="color: rgb(147,151,171);">Sin honorarios registrados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: rgb(117,121,140); margin: 0; max-width: 720px;">Consolidado de todos los contratos (activos y finalizados), ordenado por fecha desde descendente. Solo lectura: los cambios se hacen desde "Cambiar honorario" en el contrato o desde el aumento global.</p>
+  </div>
+</div>
+{% endblock %}

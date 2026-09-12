@@ -17,6 +17,9 @@ templates.env.filters["fecha_larga"] = formato.fecha_larga
 templates.env.filters["importe"] = formato.formato_importe
 templates.env.filters["regimen"] = formato.regimen_legible
 templates.env.filters["frecuencia"] = formato.frecuencia_legible
+templates.env.filters["mes_corto"] = formato.mes_corto
+templates.env.filters["mes_abrev"] = formato.mes_abreviado
+templates.env.filters["periodo"] = formato.formato_periodo
 
 
 def _hoy():

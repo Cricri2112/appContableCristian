@@ -1,0 +1,55 @@
+{% extends "ficha_cuenta.html" %}
+
+{% block titulo %}{{ 'Editar' if descuento else 'Registrar' }} descuento · {{ cliente.nombre }} — Estudio Contable{% endblock %}
+
+{# Diálogo de registrar/editar descuento (vista 16b). Solo desde la ficha. #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+
+{% set accion = '/descuentos/' ~ descuento.id ~ '/editar' if descuento else '/clientes/' ~ cliente.id ~ '/descuentos/nuevo' %}
+
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="{{ accion }}" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">{{ 'Editar descuento' if descuento else 'Registrar descuento' }} · {{ cliente.nombre }}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field">
+        <label>Servicio contratado</label>
+        <select class="input" name="servicio_contratado_id">
+          <option value="">Sin servicio específico</option>
+          {% for fila in contratos_cliente %}
+          <option value="{{ fila.contrato.id }}" {% if valores.get('servicio_contratado_id') == fila.contrato.id | string %}selected{% endif %}>{{ fila.servicio.nombre }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('servicio_contratado_id') }}
+      </div>
+      <div class="field">
+        <label>Fecha <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" type="date" name="fecha" value="{{ valores.get('fecha', '') }}" required>
+        {{ error_campo('fecha') }}
+      </div>
+      <div class="field">
+        <label>Importe <span style="color: rgb(145,132,217);">*</span></label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 10px; top: 8px; font-size: 14px; color: rgb(147,151,171);">$</span>
+          <input class="input" name="importe" inputmode="numeric" placeholder="0" value="{{ valores.get('importe', '') }}" style="padding-left: 24px;" required>
+        </div>
+        {{ error_campo('importe') }}
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Motivo <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" name="motivo" placeholder="ej: bonificación por demora" value="{{ valores.get('motivo', '') }}" required>
+        {{ error_campo('motivo') }}
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140);">El descuento se resta del saldo. Siempre positivo. Solo desde la ficha del cliente.</div>
+    <div class="dialog-actions">
+      <a href="/clientes/{{ cliente.id }}/cuenta" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">{{ 'Guardar' if descuento else 'Registrar' }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

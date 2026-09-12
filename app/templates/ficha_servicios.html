@@ -32,8 +32,8 @@
           <td style="text-align: right; white-space: nowrap;">
             {% if fila.contrato.activo %}
             <a href="/contratos/{{ fila.contrato.id }}" class="btn btn-ghost" style="font-size: 13px;">Detalle</a>
-            {# Cambiar honorario (H-07) llega con F6 en la Etapa 3. #}
-            <button class="btn btn-ghost" style="font-size: 13px;" disabled title="Disponible en la Etapa 3">Cambiar honorario</button>
+            {# Acción directa en la fila (hallazgo H-07). #}
+            <a href="/contratos/{{ fila.contrato.id }}/honorario" class="btn btn-ghost" style="font-size: 13px;">Cambiar honorario</a>
             <a href="/contratos/{{ fila.contrato.id }}/finalizar" class="btn btn-ghost" style="font-size: 13px; color: rgb(147,151,171);">Finalizar</a>
             {% endif %}
           </td>
