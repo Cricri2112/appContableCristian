@@ -10,6 +10,7 @@ itsdangerous>=2.2,<3.0       # firma de la cookie de sesión
 bcrypt>=4.1,<5.0             # hash de la contraseña de login
 pydantic>=2.7,<3.0
 pydantic-settings>=2.3,<3.0  # lectura de variables de entorno / .env
+tzdata
 
 # Testing
 pytest>=8.0,<9.0
