@@ -32,10 +32,16 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     """Aplica las migraciones conectándose a la base."""
     engine = create_engine(settings.database_url)
-    with engine.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
-        with context.begin_transaction():
-            context.run_migrations()
+    try:
+        with engine.connect() as connection:
+            context.configure(connection=connection, target_metadata=target_metadata)
+            with context.begin_transaction():
+                context.run_migrations()
+    finally:
+        # Libera la conexión del pool. Sin esto, en Windows el archivo
+        # SQLite queda "en uso" y no se puede borrar (los tests fallan
+        # al limpiar sus bases temporales).
+        engine.dispose()
 
 
 if context.is_offline_mode():

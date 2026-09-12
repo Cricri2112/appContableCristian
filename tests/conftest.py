@@ -23,21 +23,29 @@ from app.services.autenticacion import hashear_password
 
 @pytest.fixture
 def db_temporal():
-    """Sesión de SQLAlchemy sobre una base SQLite temporal con el esquema creado."""
-    directorio = tempfile.mkdtemp()
-    ruta_db = Path(directorio) / "test.db"
-    engine = create_engine(
-        f"sqlite:///{ruta_db}", connect_args={"check_same_thread": False}
-    )
-    Base.metadata.create_all(engine)
-    Sesion = sessionmaker(bind=engine, autoflush=False, autocommit=False)
-    sesion = Sesion()
+    """Sesión de SQLAlchemy sobre una base SQLite temporal con el esquema creado.
+
+    La limpieza cierra sesión y engine ANTES de borrar el directorio:
+    Windows no permite borrar un archivo SQLite con conexiones abiertas.
+    """
+    directorio = tempfile.TemporaryDirectory()
     try:
-        yield sesion
+        ruta_db = Path(directorio.name) / "test.db"
+        engine = create_engine(
+            f"sqlite:///{ruta_db}", connect_args={"check_same_thread": False}
+        )
+        try:
+            Base.metadata.create_all(engine)
+            Sesion = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+            sesion = Sesion()
+            try:
+                yield sesion
+            finally:
+                sesion.close()
+        finally:
+            engine.dispose()
     finally:
-        sesion.close()
-        engine.dispose()
-        ruta_db.unlink(missing_ok=True)
+        directorio.cleanup()
 
 
 @pytest.fixture
