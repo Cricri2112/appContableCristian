@@ -1,0 +1,85 @@
+/* Mapeo Pico.css ↔ Nocturne. Pico se usa como reset + grilla + formularios nativos;
+   estas variables lo tematizan con los tokens de Nocturne para que el HTML de referencia
+   y los templates Jinja2 rindan igual. Cargar DESPUÉS de pico.min.css y nocturne.css. */
+:root, [data-theme="dark"] {
+  --pico-font-family: "Inter", system-ui, sans-serif;
+  --pico-font-size: 14px;
+  --pico-line-height: 1.45;
+  --pico-border-radius: 8px;
+  --pico-spacing: 0.75rem;
+  --pico-typography-spacing-vertical: 0.75rem;
+  --pico-block-spacing-vertical: 1rem;
+  --pico-form-element-spacing-vertical: 0.45rem;
+  --pico-form-element-spacing-horizontal: 0.7rem;
+
+  --pico-background-color: #161826;
+  --pico-color: #e9e9ed;
+  --pico-h1-color: #e9e9ed; --pico-h2-color: #e9e9ed; --pico-h3-color: #e9e9ed;
+  --pico-muted-color: #9397ab;
+  --pico-muted-border-color: #292b31;
+  --pico-card-background-color: #232532;
+  --pico-card-border-color: #3f424d;
+  --pico-card-sectioning-background-color: #1b1d2b;
+
+  --pico-primary: #9184d9;
+  --pico-primary-background: transparent;
+  --pico-primary-border: #9184d9;
+  --pico-primary-underline: #9184d9;
+  --pico-primary-hover: #b5abfc;
+  --pico-primary-hover-background: rgba(145,132,217,.12);
+  --pico-primary-focus: rgba(145,132,217,.35);
+  --pico-primary-inverse: #9184d9;
+
+  --pico-secondary: #9397ab;
+  --pico-secondary-background: transparent;
+  --pico-secondary-border: rgba(233,233,237,.16);
+  --pico-secondary-hover: #b2b6ca;
+  --pico-secondary-hover-background: rgba(233,233,237,.06);
+  --pico-secondary-inverse: #cfd3e5;
+
+  --pico-form-element-background-color: #1b1d2b;
+  --pico-form-element-border-color: #3f424d;
+  --pico-form-element-color: #e9e9ed;
+  --pico-form-element-placeholder-color: #75798c;
+  --pico-form-element-active-border-color: #9184d9;
+  --pico-form-element-focus-color: rgba(145,132,217,.35);
+  --pico-form-element-invalid-border-color: oklch(0.66 0.125 25);
+  --pico-form-element-invalid-active-border-color: oklch(0.66 0.125 25);
+  --pico-form-element-valid-border-color: oklch(0.66 0.125 150);
+  --pico-form-element-disabled-opacity: 0.45;
+  --pico-switch-background-color: #3f424d;
+  --pico-switch-checked-background-color: #9184d9;
+
+  --pico-table-border-color: #292b31;
+  --pico-table-row-stripped-background-color: rgba(233,233,237,.03);
+
+  --pico-code-background-color: #1b1d2b;
+  --pico-code-color: #d2cefd;
+  --pico-mark-background-color: #423a6a;
+  --pico-mark-color: #f5f4ff;
+  --pico-modal-overlay-background-color: rgba(41,43,49,.6);
+  --pico-box-shadow: 0 8px 24px rgba(0,0,0,.45);
+}
+
+/* Semánticos de la app (no existen en Pico ni en Nocturne). */
+:root {
+  --color-ok: oklch(0.66 0.125 150);      --color-ok-text: oklch(0.72 0.125 150);      --color-ok-bg: oklch(0.34 0.06 150);      --color-ok-on-bg: oklch(0.92 0.06 150);
+  --color-warn: oklch(0.76 0.125 80);     --color-warn-text: oklch(0.78 0.1 80);       --color-warn-bg: oklch(0.36 0.06 80);     --color-warn-on-bg: oklch(0.92 0.06 80);
+  --color-danger: oklch(0.66 0.125 25);   --color-danger-text: oklch(0.72 0.125 25);   --color-danger-bg: oklch(0.34 0.06 25);   --color-danger-on-bg: oklch(0.92 0.06 25);
+  --color-org-dgi: #9184d9; --color-org-dgi-bg: #423a6a; --color-org-dgi-on: #f5f4ff;
+  --color-org-bps: #b2b6ca; --color-org-bps-bg: #3f424d; --color-org-bps-on: #e4e7f5;
+  --color-org-otro: #75798c; --color-org-otro-bg: #292b31; --color-org-otro-on: #b2b6ca;
+  --color-estado-pendiente-bg: #3f424d;  --color-estado-pendiente-on: #e4e7f5;
+  --color-estado-proceso-bg: #423a6a;    --color-estado-proceso-on: #f5f4ff;
+  --color-estado-cancelada-bg: #292b31;  --color-estado-cancelada-on: #9397ab;
+}
+
+/* Neutralizar lo que Pico impone sobre el markup de referencia. */
+body { margin: 0; font-variant-numeric: tabular-nums; }
+button, [role="button"], input, select, textarea { margin-bottom: 0; width: auto; }
+h1, h2, h3 { margin-bottom: 0; }
+table { margin-bottom: 0; }
+a:hover { color: #b5abfc; }
+:focus-visible { outline: 2px solid #9184d9; outline-offset: 2px; }
+/* Pico agrega padding/borders a .btn (button) — Nocturne gana. */
+.btn { --pico-border-width: 1px; }

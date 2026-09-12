@@ -29,10 +29,10 @@ def test_login_correcto_redirige_y_deja_sesion(cliente_web, usuario_de_prueba):
     assert respuesta.headers["location"] == "/"
     assert "sesion" in respuesta.cookies
 
-    # Con la sesión activa, la página base responde
+    # Con la sesión activa, la página base responde con el cascarón
     pagina = cliente_web.get("/")
     assert pagina.status_code == 200
-    assert "Sesión iniciada" in pagina.text
+    assert "Cerrar sesión" in pagina.text
 
 
 def test_login_incorrecto_muestra_error_y_se_audita(

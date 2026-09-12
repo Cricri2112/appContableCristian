@@ -70,6 +70,18 @@ def cliente_web(db_temporal):
 
 
 @pytest.fixture
+def sesion(cliente_web, usuario_de_prueba):
+    """Cliente de pruebas con la sesión ya iniciada."""
+    respuesta = cliente_web.post(
+        "/login",
+        data={"usuario": "contador", "password": "clave-correcta"},
+        follow_redirects=False,
+    )
+    assert respuesta.status_code == 303
+    return cliente_web
+
+
+@pytest.fixture
 def usuario_de_prueba(db_temporal):
     """Usuario único de la app, con contraseña conocida por los tests."""
     usuario = UsuarioLogin(

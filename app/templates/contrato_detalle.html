@@ -1,0 +1,36 @@
+{% extends "ficha_servicios.html" %}
+
+{% block titulo %}Detalle del contrato · {{ cliente.nombre }} — Estudio Contable{% endblock %}
+
+{# Detalle del servicio contratado (F4): datos del contrato + edición de la
+   fecha de inicio (único campo editable, y solo sin tareas ni cobros).
+   El historial de honorarios del contrato llega con F6 en la Etapa 3. #}
+{% block dialogo %}
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <div class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">{{ servicio.nombre }}</span>
+    <div style="padding: 10px 12px; border-radius: 8px; background: rgb(27,29,43); font-size: 14px; display: flex; justify-content: space-between; gap: 12px;">
+      <span><span class="tag tag-accent">{{ servicio.frecuencia | frecuencia }}</span></span>
+      <span style="color: rgb(147,151,171);">Honorario vigente: {{ honorario_vigente | importe }}</span>
+    </div>
+
+    <form method="post" action="/contratos/{{ contrato.id }}/fecha-inicio" style="margin: 0; display: flex; flex-direction: column; gap: 10px;">
+      <div class="field" style="max-width: 260px;">
+        <label>Fecha de inicio</label>
+        <input class="input" type="date" name="fecha_inicio" value="{{ contrato.fecha_inicio.isoformat() }}" {% if not puede_editar_fecha %}disabled{% endif %}>
+        {% if errores.get('fecha_inicio') %}
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores['fecha_inicio'] }}</div>
+        {% elif not puede_editar_fecha %}
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>No se puede modificar la fecha de inicio porque existen tareas o cobros asociados.</div>
+        {% else %}
+        <div style="font-size: 11px; color: rgb(117,121,140); margin-top: 4px;">Único campo editable. Ante un error de servicio, finalizá el contrato y creá uno nuevo.</div>
+        {% endif %}
+      </div>
+      <div class="dialog-actions">
+        <a href="/clientes/{{ cliente.id }}/servicios" class="btn btn-secondary">Cerrar</a>
+        {% if puede_editar_fecha %}<button type="submit" class="btn btn-primary">Guardar</button>{% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

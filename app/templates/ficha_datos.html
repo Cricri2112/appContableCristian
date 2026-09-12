@@ -1,0 +1,52 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}{{ cliente.nombre }} — Estudio Contable{% endblock %}
+
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% include "_ficha_encabezado.html" %}
+
+  {# Vista 07: datos generales + historial de regímenes. #}
+  <div style="display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 20px; align-items: start;">
+    <section class="card" style="gap: 14px; padding: 16px 18px;">
+      <div class="card-kicker">Datos generales</div>
+      {% macro dato(titulo, valor) %}
+      <div><dt style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 2px;">{{ titulo }}</dt><dd style="margin: 0;">{{ valor }}</dd></div>
+      {% endmacro %}
+      <dl style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px 24px; margin: 0; font-size: 14px;">
+        {{ dato('Régimen vigente', cliente.regimen | regimen) }}
+        <div><dt style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 2px;">Estado</dt>
+        <dd style="margin: 0; display: flex; align-items: center; gap: 6px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{ 'var(--color-ok)' if cliente.activo else 'rgb(117,121,140)' }};"></span>{{ 'Activo' if cliente.activo else 'Inactivo' }}</dd></div>
+        {{ dato('RUT', cliente.rut or '—') }}
+        {{ dato('CI', cliente.ci or '—') }}
+        {{ dato('Fecha de nacimiento', cliente.fecha_nacimiento | fecha) }}
+        {{ dato('Fecha de inicio', cliente.fecha_inicio | fecha) }}
+        {{ dato('Email', cliente.email or '—') }}
+        {{ dato('Teléfono', cliente.telefono or '—') }}
+        <div style="grid-column: 1 / -1;"><dt style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 2px;">Notas</dt><dd style="margin: 0; color: rgb(178,182,202); text-wrap: pretty;">{{ cliente.notas or '—' }}</dd></div>
+      </dl>
+    </section>
+
+    <section class="card" style="gap: 10px; padding: 16px 18px;">
+      <div class="card-kicker">Historial de regímenes</div>
+      <table class="table">
+        <thead><tr><th>Régimen</th><th>Desde</th><th>Hasta</th></tr></thead>
+        <tbody>
+          {% for registro in historial %}
+          <tr>
+            <td>{{ registro.regimen | regimen }}</td>
+            <td style="color: rgb(178,182,202);">{{ registro.fecha_desde | fecha }}</td>
+            {% if registro.fecha_hasta is none %}
+            <td style="color: var(--color-ok-text);">vigente</td>
+            {% else %}
+            <td>{{ registro.fecha_hasta | fecha }}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="card-meta">Solo lectura. Se escribe desde el flujo de cambio de régimen al editar el cliente.</div>
+    </section>
+  </div>
+</div>
+{% endblock %}

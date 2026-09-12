@@ -1,0 +1,36 @@
+{% extends "ficha_servicios.html" %}
+
+{% block titulo %}Finalizar servicio · {{ cliente.nombre }} — Estudio Contable{% endblock %}
+
+{# Diálogo de finalizar servicio (vista 15b). El listado de consecuencias
+   es el copy del hallazgo H-09 de la adenda de la Etapa 1. #}
+{% block dialogo %}
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="/contratos/{{ contrato.id }}/finalizar" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">Finalizar servicio</span>
+    <div style="padding: 10px 12px; border-radius: 8px; background: rgb(27,29,43); font-size: 14px; display: flex; justify-content: space-between; gap: 12px;">
+      <span>{{ servicio.nombre }} <span class="tag tag-accent" style="margin-left: 6px;">{{ servicio.frecuencia | frecuencia }}</span></span>
+      <span style="color: rgb(147,151,171);">desde {{ contrato.fecha_inicio | fecha }} · {{ honorario_vigente | importe }}</span>
+    </div>
+    <div class="field" style="max-width: 260px;">
+      <label>Fecha de finalización <span style="color: rgb(145,132,217);">*</span></label>
+      <input class="input" type="date" name="fecha_fin" value="{{ valores.get('fecha_fin', '') }}" required>
+      {% if errores.get('fecha_fin') %}
+      <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores['fecha_fin'] }}</div>
+      {% else %}
+      <div style="font-size: 11px; color: rgb(117,121,140); margin-top: 4px;">No puede ser anterior al inicio del contrato.</div>
+      {% endif %}
+    </div>
+    <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: rgb(178,182,202); display: flex; flex-direction: column; gap: 4px;">
+      <li>El contrato pasa a finalizado y sale del listado activo.</li>
+      <li>Se cierra el honorario vigente en esa fecha.</li>
+      <li>Las tareas pendientes quedan como están.</li>
+      <li>La deuda de períodos impagos no se borra.</li>
+    </ul>
+    <div class="dialog-actions">
+      <a href="/clientes/{{ cliente.id }}/servicios" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Finalizar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

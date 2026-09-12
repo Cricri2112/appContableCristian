@@ -1,0 +1,112 @@
+{# Diálogo de crear/editar cliente (vista 13). Espera en el contexto:
+   cliente (None al crear), valores, errores, y al editar fecha_cambio_default.
+   El bloque de fecha de cambio de régimen solo aparece al editar; se muestra
+   con un toque de JavaScript cuando el select de régimen cambia de valor. #}
+
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+
+{% set accion = '/clientes/' ~ cliente.id ~ '/editar' if cliente else '/clientes/nuevo' %}
+
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="{{ accion }}" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">{{ 'Editar cliente' if cliente else 'Nuevo cliente' }}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Nombre <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" name="nombre" value="{{ valores.get('nombre', '') }}" required>
+        {{ error_campo('nombre') }}
+      </div>
+
+      <div class="field">
+        <label>Régimen <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="regimen" id="campo-regimen" {% if cliente %}data-vigente="{{ cliente.regimen.value }}"{% endif %}>
+          {% for valor, etiqueta in [
+            ('unipersonal_prof', 'Unipersonal profesional'),
+            ('unipersonal_no_prof', 'Unipersonal no profesional'),
+            ('monotributo', 'Monotributo'),
+            ('pequena_empresa', 'Pequeña empresa'),
+            ('regimen_general', 'Régimen general'),
+            ('persona_fisica', 'Persona física'),
+          ] %}
+          <option value="{{ valor }}" {% if valores.get('regimen') == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('regimen') }}
+      </div>
+
+      <div class="field">
+        <label>Fecha de inicio{% if not cliente %} <span style="color: rgb(145,132,217);">*</span>{% endif %}</label>
+        {% if cliente %}
+        <input class="input" type="date" disabled value="{{ cliente.fecha_inicio.isoformat() }}">
+        <div style="font-size: 11px; color: rgb(117,121,140); margin-top: 4px;">No editable después de crear.</div>
+        {% else %}
+        <input class="input" type="date" name="fecha_inicio" value="{{ valores.get('fecha_inicio', '') }}" required>
+        {{ error_campo('fecha_inicio') }}
+        {% endif %}
+      </div>
+
+      {% if cliente %}
+      {# Flujo de cambio de régimen (Chat 3): visible solo si el régimen elegido difiere del vigente. #}
+      {% set mostrar_bloque_cambio = errores.get('fecha_cambio_regimen') or valores.get('regimen') != cliente.regimen.value %}
+      <div id="bloque-cambio-regimen"
+           style="grid-column: 1 / -1; padding: 12px 14px; border-radius: 8px; background: rgb(27,29,43); box-shadow: rgb(93,82,148) 0 0 0 1px; display: {{ 'grid' if mostrar_bloque_cambio else 'none' }}; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; align-items: end;">
+        <div class="field">
+          <label>Fecha de cambio de régimen <span style="color: rgb(145,132,217);">*</span></label>
+          <input class="input" type="date" name="fecha_cambio_regimen" value="{{ valores.get('fecha_cambio_regimen') or fecha_cambio_default }}">
+          {{ error_campo('fecha_cambio_regimen') }}
+        </div>
+        <div style="font-size: 12px; color: rgb(178,182,202); text-wrap: pretty;">Cierra el régimen vigente el día anterior y abre uno nuevo en el historial. No puede ser anterior al inicio del régimen vigente ni futura.</div>
+      </div>
+      {% endif %}
+
+      <div class="field">
+        <label>RUT</label>
+        <input class="input" name="rut" value="{{ valores.get('rut', '') }}">
+        {{ error_campo('rut') }}
+      </div>
+      <div class="field">
+        <label>CI</label>
+        <input class="input" name="ci" value="{{ valores.get('ci', '') }}">
+        {{ error_campo('ci') }}
+      </div>
+      <div class="field">
+        <label>Fecha de nacimiento</label>
+        <input class="input" type="date" name="fecha_nacimiento" value="{{ valores.get('fecha_nacimiento', '') }}">
+      </div>
+      <div class="field">
+        <label>Teléfono</label>
+        <input class="input" name="telefono" value="{{ valores.get('telefono', '') }}">
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Email</label>
+        <input class="input" name="email" value="{{ valores.get('email', '') }}">
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Notas</label>
+        <textarea class="input" name="notas" style="min-height: 64px;">{{ valores.get('notas', '') }}</textarea>
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140);">RUT: 12 dígitos, único entre todos los clientes (incluidos inactivos). CI: única. No se valida nombre duplicado.</div>
+    <div class="dialog-actions">
+      <a href="{{ '/clientes/' ~ cliente.id if cliente else '/clientes' }}" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+
+{% if cliente %}
+<script>
+  // Muestra u oculta el bloque de fecha de cambio según el régimen elegido.
+  const selectRegimen = document.getElementById("campo-regimen");
+  const bloqueCambio = document.getElementById("bloque-cambio-regimen");
+  selectRegimen.addEventListener("change", () => {
+    const sinCambio = selectRegimen.value === selectRegimen.dataset.vigente;
+    bloqueCambio.style.display = sinCambio ? "none" : "grid";
+  });
+</script>
+{% endif %}

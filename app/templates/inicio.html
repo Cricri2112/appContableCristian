@@ -1,13 +1,14 @@
-{% extends "base.html" %}
+{% extends "cascaron.html" %}
 
 {% block titulo %}Inicio — Estudio Contable{% endblock %}
 
-{% block contenido %}
-<main>
-    <h1>Estudio Contable</h1>
-    <p>Sesión iniciada. Etapa 0: fundación técnica — sin funcionalidades de negocio todavía.</p>
-    <form method="post" action="/logout">
-        <button type="submit">Cerrar sesión</button>
-    </form>
-</main>
+{% block principal %}
+{# Página base provisoria: el dashboard (F9) llega en la Etapa 6. #}
+<div>
+  <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;">Inicio</div>
+  <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Estudio Contable</h1>
+</div>
+<p style="font-size: 14px; color: rgb(178,182,202); max-width: 560px;">
+  Elegí una sección en el menú. El dashboard con los indicadores del mes llega en la Etapa 6.
+</p>
 {% endblock %}

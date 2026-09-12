@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{# Cascarón de la app (referencia/README.md, punto 3): aside 212px sticky +
+   barra superior (fecha, campanita, salir) + main. Las secciones de etapas
+   futuras se muestran apagadas hasta que se implementen. #}
+
+{% block cuerpo %}
+<div style="display: grid; grid-template-columns: 212px minmax(0,1fr); min-height: 100vh; background: rgb(22,24,38);">
+
+  <aside style="background: rgb(27,29,43); display: flex; flex-direction: column; padding: 16px 12px; gap: 4px; border-right: 1px solid rgb(41,43,49); position: sticky; top: 0; height: 100vh;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px 18px; font-size: 15px; font-weight: 500;">
+      <span style="width: 8px; height: 8px; border-radius: 2px; background: rgb(145,132,217); display: inline-block;"></span>Estudio
+    </div>
+    {% macro item_nav(url, icono, etiqueta, activa, habilitada=True) %}
+      <a href="{{ url if habilitada else '#' }}"
+         style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; text-decoration: none; color: {{ 'rgb(233,233,237)' if activa else ('rgb(207,211,229)' if habilitada else 'rgb(117,121,140)') }}; {{ 'background: rgb(41,43,55);' if activa }}"
+         {% if activa %}aria-current="page"{% endif %}
+         {% if not habilitada %}title="Disponible en una etapa posterior"{% endif %}>
+        <i class="ph {{ icono }}" style="font-size: 18px;"></i>{{ etiqueta }}
+      </a>
+    {% endmacro %}
+    {{ item_nav('/', 'ph-squares-four', 'Dashboard', False, habilitada=False) }}
+    {{ item_nav('/clientes', 'ph-users', 'Clientes', seccion == 'clientes') }}
+    {{ item_nav('#', 'ph-currency-dollar', 'Cobros', False, habilitada=False) }}
+    {{ item_nav('#', 'ph-check-square', 'Tareas', False, habilitada=False) }}
+    {{ item_nav('#', 'ph-calendar-blank', 'Vencimientos', False, habilitada=False) }}
+    <div style="flex: 1;"></div>
+    {{ item_nav('/configuracion/servicios', 'ph-gear-six', 'Configuración', seccion == 'configuracion') }}
+  </aside>
+
+  <div style="display: flex; flex-direction: column; min-width: 0;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 12px 28px; border-bottom: 1px solid rgb(41,43,49);">
+      <span style="font-size: 12px; color: rgb(117,121,140); margin-right: auto;">{{ hoy() | fecha_larga }}</span>
+      {# Campanita de recordatorios: se activa en la Etapa 6 (F10). #}
+      <button class="btn btn-icon btn-secondary" aria-label="Recordatorios" disabled title="Disponible en una etapa posterior"><i class="ph ph-bell" style="font-size: 18px;"></i></button>
+      <form method="post" action="/logout" style="margin: 0;">
+        <button type="submit" class="btn btn-icon btn-secondary" aria-label="Cerrar sesión" title="Cerrar sesión"><i class="ph ph-sign-out" style="font-size: 18px;"></i></button>
+      </form>
+    </div>
+
+    <main style="padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+      {% block principal %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+{% block dialogo %}{% endblock %}
+{% endblock %}

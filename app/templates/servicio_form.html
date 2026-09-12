@@ -1,0 +1,44 @@
+{% extends "configuracion_servicios.html" %}
+
+{# Diálogo de crear/editar servicio (vista 20b) sobre el listado. #}
+
+{% block titulo %}{{ 'Editar' if servicio else 'Nuevo' }} servicio — Estudio Contable{% endblock %}
+
+{% block dialogo %}
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;"
+        action="{{ '/configuracion/servicios/' ~ servicio.id ~ '/editar' if servicio else '/configuracion/servicios/nuevo' }}">
+    <span class="dialog-title">{{ 'Editar servicio' if servicio else 'Nuevo servicio' }}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field" style="grid-column: 1 / -1;">
+        <label for="nombre">Nombre <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" id="nombre" name="nombre" value="{{ valores.get('nombre', '') }}" required
+               {% if errores.get('nombre') %}aria-invalid="true" style="border-color: var(--color-danger);"{% endif %}>
+        {% if errores.get('nombre') %}
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores['nombre'] }}</div>
+        {% endif %}
+      </div>
+      <div class="field">
+        <label for="frecuencia">Frecuencia <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" id="frecuencia" name="frecuencia" {% if frecuencia_bloqueada %}disabled{% endif %}>
+          {% for valor, etiqueta in [('mensual', 'Mensual'), ('anual', 'Anual'), ('unico', 'Único')] %}
+          <option value="{{ valor }}" {% if valores.get('frecuencia') == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+        {# Un select deshabilitado no viaja en el POST: la frecuencia vigente va oculta. #}
+        {% if frecuencia_bloqueada %}
+        <input type="hidden" name="frecuencia" value="{{ valores.get('frecuencia', '') }}">
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>No se puede cambiar la frecuencia de un servicio con contratos activos.</div>
+        {% elif errores.get('frecuencia') %}
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores['frecuencia'] }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140);">El nombre es único entre activos e inactivos.</div>
+    <div class="dialog-actions">
+      <a href="/configuracion/servicios" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
