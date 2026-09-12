@@ -1,0 +1,39 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Cobros — Estudio Contable{% endblock %}
+
+{# Vista 03: registro global de cobros, por saldo descendente, con los
+   totales de cabecera (H-04) y el acceso al aumento global (H-08). #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+    <div>
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;">Cobros</div>
+      <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Registro de cobros</h1>
+    </div>
+    <div style="display: flex; gap: 16px; align-items: center; font-size: 13px; color: rgb(147,151,171); flex-wrap: wrap;">
+      <a href="/aumento-global" class="btn btn-secondary" style="font-size: 13px;"><i class="ph ph-trend-up"></i>Aumento global de honorarios</a>
+      <span>Total adeudado <span style="color: var(--color-danger-text); font-size: 17px; font-weight: 500; margin-left: 6px;">{{ total_adeudado | importe }}</span></span>
+      <span>A favor <span style="color: var(--color-ok-text); font-size: 17px; font-weight: 500; margin-left: 6px;">{{ total_a_favor | importe }}</span></span>
+    </div>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Cliente</th><th>Régimen</th><th style="text-align: right;">Saldo vigente</th><th>Situación</th><th></th></tr></thead>
+    <tbody>
+      {% for fila in filas %}
+      <tr>
+        <td>{{ fila.cliente.nombre }}</td>
+        <td style="white-space: nowrap;"><span class="tag tag-neutral">{{ fila.cliente.regimen | regimen }}</span></td>
+        <td style="text-align: right;"><span style="color: {{ 'var(--color-danger-text)' if fila.saldo > 0 else 'var(--color-ok-text)' }};">{{ fila.saldo | importe }}</span></td>
+        <td style="font-size: 13px; color: rgb(147,151,171); white-space: nowrap;">{{ fila.situacion }}</td>
+        <td style="text-align: right; white-space: nowrap;"><a href="/clientes/{{ fila.cliente.id }}/cobros/nuevo" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i class="ph ph-plus"></i>Registrar cobro</a></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" style="color: rgb(147,151,171);">Sin clientes activos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p style="font-size: 12px; color: rgb(117,121,140); margin: 0; max-width: 640px;">Solo clientes activos, ordenados por saldo descendente. "Registrar cobro" abre el formulario con el cliente preseleccionado.</p>
+</div>
+{% endblock %}

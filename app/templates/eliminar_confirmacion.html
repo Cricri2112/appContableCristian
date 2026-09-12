@@ -1,0 +1,20 @@
+{% extends "ficha_cuenta.html" %}
+
+{% block titulo %}Eliminar registro — Estudio Contable{% endblock %}
+
+{# Confirmación de eliminación física (cobros y descuentos), con el
+   literal exacto del Chat 3. El registro queda en auditoria. #}
+{% block dialogo %}
+<div class="dialog-backdrop" style="z-index: 50;">
+  <div class="dialog">
+    <span class="dialog-title">Eliminar registro</span>
+    <p class="dialog-body">¿Confirmás que querés eliminar este registro? Esta acción no se puede deshacer.</p>
+    <div class="dialog-actions">
+      <a href="{{ volver }}" class="btn btn-secondary">Cancelar</a>
+      <form method="post" action="{{ accion_eliminar }}" style="margin: 0;">
+        <button type="submit" class="btn btn-primary" style="color: var(--color-danger-text); border-color: var(--color-danger);">Eliminar</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

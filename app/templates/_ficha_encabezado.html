@@ -13,11 +13,23 @@
       <span style="font-size: 13px; color: rgb(178,182,202); align-self: center;">Cliente desde {{ cliente.fecha_inicio | fecha }}</span>
     </div>
   </div>
-  <div style="display: flex; gap: 8px; align-items: center;">
-    <a href="/clientes/{{ cliente.id }}/editar" class="btn btn-secondary"><i class="ph ph-pencil-simple"></i>Editar</a>
-    <form method="post" action="/clientes/{{ cliente.id }}/activo" style="margin: 0;">
-      <button type="submit" class="btn btn-secondary" style="color: rgb(147,151,171);"><i class="ph ph-power"></i>{{ 'Desactivar' if cliente.activo else 'Reactivar' }}</button>
-    </form>
+  <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+    {# Tarjeta de saldo (F5): rojo si debe, verde al día / a favor. #}
+    <div style="padding: 10px 14px; border-radius: 8px; background: rgb(27,29,43); box-shadow: rgb(63,66,77) 0 0 0 1px; min-width: 150px;">
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171);">Saldo</div>
+      {% set color_saldo = 'var(--color-danger-text)' if saldo > 0 else 'var(--color-ok-text)' %}
+      {% set color_punto = 'var(--color-danger)' if saldo > 0 else 'var(--color-ok)' %}
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 500; color: {{ color_saldo }};">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ color_punto }};"></span>{{ saldo | importe }}
+      </div>
+      <div style="font-size: 12px; color: rgb(147,151,171);">{{ situacion_saldo }}</div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <a href="/clientes/{{ cliente.id }}/editar" class="btn btn-secondary"><i class="ph ph-pencil-simple"></i>Editar</a>
+      <form method="post" action="/clientes/{{ cliente.id }}/activo" style="margin: 0;">
+        <button type="submit" class="btn btn-secondary" style="color: rgb(147,151,171);"><i class="ph ph-power"></i>{{ 'Desactivar' if cliente.activo else 'Reactivar' }}</button>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -33,7 +45,7 @@
   {{ pestana_item('/clientes/' ~ cliente.id, 'Datos generales', pestana == 'datos') }}
   {{ pestana_item('/clientes/' ~ cliente.id ~ '/servicios', 'Servicios contratados', pestana == 'servicios', conteo=conteos_contratos.activos) }}
   {{ pestana_item('#', 'Credenciales', False, habilitada=False) }}
-  {{ pestana_item('#', 'Estado de cuenta', False, habilitada=False) }}
-  {{ pestana_item('#', 'Historial de honorarios', False, habilitada=False) }}
+  {{ pestana_item('/clientes/' ~ cliente.id ~ '/cuenta', 'Estado de cuenta', pestana == 'cuenta') }}
+  {{ pestana_item('/clientes/' ~ cliente.id ~ '/honorarios', 'Historial de honorarios', pestana == 'honorarios') }}
   {{ pestana_item('#', 'Próximos vencimientos', False, habilitada=False) }}
 </nav>

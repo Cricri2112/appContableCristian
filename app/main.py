@@ -11,7 +11,14 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 import app.models  # noqa: F401 — registra los modelos y activa la auditoría
-from app.routes import autenticacion, clientes, configuracion, inicio
+from app.routes import (
+    autenticacion,
+    clientes,
+    cobros,
+    configuracion,
+    honorarios,
+    inicio,
+)
 from app.services.autenticacion import generar_token_sesion, verificar_token_sesion
 
 app = FastAPI(title="App de gestión del estudio contable")
@@ -55,3 +62,5 @@ app.include_router(autenticacion.router)
 app.include_router(inicio.router)
 app.include_router(clientes.router)
 app.include_router(configuracion.router)
+app.include_router(cobros.router)
+app.include_router(honorarios.router)

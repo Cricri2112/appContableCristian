@@ -1,0 +1,81 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Aumento global · Selección — Estudio Contable{% endblock %}
+
+{# Paso 2 (vista 18b): ningún contrato preseleccionado; el honorario nuevo
+   es editable por fila (el importe manual reemplaza al calculado sin
+   redondeo adicional). Las filas con vigencia inválida van deshabilitadas. #}
+{% block principal %}
+{% set paso_activo = 2 %}
+{% include "_aumento_pasos.html" %}
+
+<form method="post" action="/aumento-global/paso3" style="display: flex; flex-direction: column; gap: 12px; margin: 0;">
+  <input type="hidden" name="porcentaje" value="{{ porcentaje }}">
+  <input type="hidden" name="fecha_vigencia" value="{{ vigencia.isoformat() }}">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <div style="display: flex; gap: 12px; align-items: center; font-size: 13px; color: rgb(147,151,171);">
+      <span class="card-kicker">Paso 2 · Selección</span>
+      <span>{{ porcentaje }} % · vigencia {{ vigencia | fecha }}</span>
+      <span><span id="contador-seleccion" style="color: rgb(233,233,237);">0</span> seleccionados</span>
+    </div>
+    <div style="display: flex; gap: 6px;">
+      <button type="button" class="btn btn-ghost" style="font-size: 13px;" onclick="marcarTodos(true)">Seleccionar todos</button>
+      <button type="button" class="btn btn-ghost" style="font-size: 13px; color: rgb(147,151,171);" onclick="marcarTodos(false)">Deseleccionar todos</button>
+    </div>
+  </div>
+
+  {% if error_seleccion %}
+  <div role="alert" style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ error_seleccion }}</div>
+  {% endif %}
+
+  <table class="table">
+    <thead><tr><th style="width: 36px;"></th><th>Cliente</th><th>Servicio</th><th>Frecuencia</th><th style="text-align: right;">Vigente</th><th style="text-align: right;">Nuevo</th><th></th></tr></thead>
+    <tbody>
+      {% for fila in candidatos %}
+      <tr {% if not fila.valida %}style="opacity: 0.55;"{% endif %}>
+        <td>
+          <label class="radio" style="min-height: 24px;">
+            <input type="checkbox" name="seleccion" value="{{ fila.contrato.id }}" {% if not fila.valida %}disabled{% endif %} onchange="actualizarContador()">
+            <span class="dot" style="border-radius: 4px;"></span>
+          </label>
+        </td>
+        <td>{{ fila.cliente.nombre }}</td>
+        <td>{{ fila.servicio.nombre }}</td>
+        <td><span class="tag tag-accent">{{ fila.servicio.frecuencia | frecuencia }}</span></td>
+        <td style="text-align: right; color: rgb(178,182,202);">{{ fila.vigente | importe }}</td>
+        <td style="text-align: right;">
+          <div style="position: relative; display: inline-block; width: 110px;">
+            <span style="position: absolute; left: 10px; top: 6px; font-size: 13px; color: rgb(147,151,171);">$</span>
+            <input class="input" name="nuevo_{{ fila.contrato.id }}" inputmode="numeric" value="{{ fila.nuevo }}" {% if not fila.valida %}disabled{% endif %} style="min-height: 32px; padding: 4px 8px 4px 22px; text-align: right; font-size: 13px;">
+          </div>
+        </td>
+        <td style="font-size: 12px; color: var(--color-danger-text); white-space: nowrap;">{% if not fila.valida %}Vigencia anterior al honorario vigente{% endif %}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" style="color: rgb(147,151,171);">No hay contratos mensuales ni anuales activos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p style="font-size: 12px; color: rgb(117,121,140); margin: 0; max-width: 720px;">Por defecto ninguno está seleccionado (permite excluir clientes con acuerdos o de ingreso reciente). Los únicos quedan afuera: ya se cotizaron.</p>
+
+  <div style="display: flex; justify-content: space-between;">
+    <a href="/aumento-global" class="btn btn-secondary"><i class="ph ph-arrow-left"></i>Parámetros</a>
+    <button type="submit" class="btn btn-primary">Continuar<i class="ph ph-arrow-right"></i></button>
+  </div>
+</form>
+
+<script>
+  function casillas() {
+    return Array.from(document.querySelectorAll('input[name="seleccion"]:not(:disabled)'));
+  }
+  function actualizarContador() {
+    document.getElementById("contador-seleccion").textContent =
+      casillas().filter(c => c.checked).length;
+  }
+  function marcarTodos(valor) {
+    casillas().forEach(c => { c.checked = valor; });
+    actualizarContador();
+  }
+</script>
+{% endblock %}

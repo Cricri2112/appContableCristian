@@ -1,0 +1,91 @@
+{% extends "ficha_cuenta.html" %}
+
+{% block titulo %}{{ 'Editar' if cobro else 'Registrar' }} cobro — Estudio Contable{% endblock %}
+
+{# Diálogo de registrar/editar cobro (vista 16a). #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+
+{% set accion = '/cobros/' ~ cobro.id ~ '/editar' if cobro else '/clientes/' ~ cliente.id ~ '/cobros/nuevo' %}
+
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="{{ accion }}" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">{{ 'Editar cobro' if cobro else 'Registrar cobro' }}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field">
+        <label>Cliente <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="cliente_id">
+          {% for c in clientes_activos %}
+          <option value="{{ c.id }}" {% if valores.get('cliente_id') == c.id | string %}selected{% endif %}>{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('cliente_id') }}
+      </div>
+      <div class="field">
+        <label>Servicio contratado</label>
+        <select class="input" name="servicio_contratado_id">
+          <option value="">Sin servicio específico</option>
+          {% for fila in contratos_cliente %}
+          <option value="{{ fila.contrato.id }}" {% if valores.get('servicio_contratado_id') == fila.contrato.id | string %}selected{% endif %}>{{ fila.servicio.nombre }} · {{ (fila.servicio.frecuencia | frecuencia) | lower }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('servicio_contratado_id') }}
+      </div>
+      <div class="field">
+        <label>Período desde</label>
+        <input class="input" type="date" name="periodo_desde" value="{{ valores.get('periodo_desde', '') }}">
+        {{ error_campo('periodo_desde') }}
+      </div>
+      <div class="field">
+        <label>Período hasta</label>
+        <input class="input" type="date" name="periodo_hasta" value="{{ valores.get('periodo_hasta', '') }}">
+        {{ error_campo('periodo_hasta') }}
+      </div>
+      <div style="grid-column: 1 / -1; font-size: 12px; color: rgb(117,121,140); margin-top: -4px; text-wrap: pretty;">Van juntos: primer día del mes inicial y último del final. Un pago de varios meses es un solo cobro. <span style="color: rgb(210,206,253);">Servicio único: ambas fechas llevan la fecha real del trabajo (adenda C1).</span></div>
+      <div class="field">
+        <label>Fecha de cobro <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" type="date" name="fecha_cobro" value="{{ valores.get('fecha_cobro', '') }}" required>
+        {{ error_campo('fecha_cobro') }}
+      </div>
+      <div class="field">
+        <label>Importe <span style="color: rgb(145,132,217);">*</span></label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 10px; top: 8px; font-size: 14px; color: rgb(147,151,171);">$</span>
+          <input class="input" name="importe" inputmode="numeric" value="{{ valores.get('importe', '') }}" style="padding-left: 24px;" required>
+        </div>
+        {{ error_campo('importe') }}
+      </div>
+      <div class="field">
+        <label>Forma de pago <span style="color: rgb(145,132,217);">*</span></label>
+        <div class="seg">
+          {% for valor, etiqueta in [('transferencia', 'Transferencia'), ('efectivo', 'Efectivo'), ('otro', 'Otro')] %}
+          <label class="seg-opt"><input type="radio" name="forma_pago" value="{{ valor }}" {% if valores.get('forma_pago') == valor %}checked{% endif %}>{{ etiqueta }}</label>
+          {% endfor %}
+        </div>
+        {{ error_campo('forma_pago') }}
+      </div>
+      <div class="field">
+        <label>Comprobante <span style="color: rgb(145,132,217);">*</span></label>
+        <div class="seg">
+          {% for valor, etiqueta in [('e_ticket', 'e-Ticket'), ('no_gravado', 'No gravado'), ('sin_comprobante', 'Sin comprob.')] %}
+          <label class="seg-opt"><input type="radio" name="tipo_comprobante" value="{{ valor }}" {% if valores.get('tipo_comprobante') == valor %}checked{% endif %}>{{ etiqueta }}</label>
+          {% endfor %}
+        </div>
+        {{ error_campo('tipo_comprobante') }}
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Notas</label>
+        <input class="input" name="notas" placeholder="Opcional" value="{{ valores.get('notas', '') }}">
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <a href="/clientes/{{ cliente.id }}/cuenta" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">{{ 'Guardar' if cobro else 'Registrar' }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Aumento global aplicado — Estudio Contable{% endblock %}
+
+{# Vista 18d: confirmación de que el aumento se aplicó. #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 16px; max-width: 560px;">
+  <div class="card" style="gap: 12px; padding: 20px; box-shadow: rgb(63,66,77) 0 0 0 1px;">
+    <div style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 500;">
+      <i class="ph ph-check-circle" style="font-size: 24px; color: var(--color-ok-text);"></i>Aumento aplicado
+    </div>
+    <p style="margin: 0; font-size: 14px; color: rgb(178,182,202);">
+      Se actualizaron {{ aplicados }} contrato{{ 's' if aplicados != 1 }} con vigencia {{ vigencia | fecha }}.
+      Cada uno cerró su honorario anterior y abrió el nuevo en el historial. Los saldos ya reflejan el cambio.
+    </p>
+    <div style="display: flex; gap: 8px;">
+      <a href="/cobros" class="btn btn-primary">Ir a Cobros</a>
+      <a href="/aumento-global" class="btn btn-secondary">Nuevo aumento</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

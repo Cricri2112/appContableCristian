@@ -6,7 +6,7 @@ punto de integración diferido a la Etapa 5 (Chat 5).
 """
 
 from datetime import date
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 
 from sqlalchemy.orm import Session
 
@@ -19,6 +19,7 @@ from app.models import (
 )
 from app.models.base import ahora_montevideo
 from app.services.errores import ErrorValidacion
+from app.services.importes import parsear_importe
 
 # Orden de presentación por frecuencia (Chat 3): mensual → anual → único.
 ORDEN_FRECUENCIA = {"mensual": 0, "anual": 1, "unico": 2}
@@ -106,17 +107,8 @@ def _ultimo_honorario(db: Session, contrato_id: int) -> Decimal | None:
 
 
 def _parsear_honorario(honorario_texto: str) -> tuple[Decimal | None, str | None]:
-    """Convierte el texto del formulario a Decimal; devuelve (valor, error)."""
-    texto = honorario_texto.strip().replace(",", ".")
-    if not texto:
-        return None, "Ingresá el honorario."
-    try:
-        valor = Decimal(texto)
-    except InvalidOperation:
-        return None, "Ingresá un honorario válido."
-    if valor <= 0:
-        return None, "El honorario debe ser mayor a cero."
-    return valor, None
+    """Convierte el texto del formulario a Decimal (formato local)."""
+    return parsear_importe(honorario_texto, "honorario")
 
 
 def contratar(

@@ -18,6 +18,10 @@ MESES = [
     "enero", "febrero", "marzo", "abril", "mayo", "junio",
     "julio", "agosto", "setiembre", "octubre", "noviembre", "diciembre",
 ]
+MESES_CORTOS = [
+    "ene", "feb", "mar", "abr", "may", "jun",
+    "jul", "ago", "set", "oct", "nov", "dic",
+]
 
 VACIO = "—"
 
@@ -64,6 +68,35 @@ def fecha_larga(valor: date | datetime) -> str:
         f"{DIAS_SEMANA[valor.weekday()]} {valor.day} "
         f"de {MESES[valor.month - 1]} de {valor.year}"
     )
+
+
+def mes_abreviado(valor: date) -> str:
+    """Solo la abreviatura del mes: "ene" (celdas del mapa de períodos)."""
+    return MESES_CORTOS[valor.month - 1]
+
+
+def mes_corto(valor: date) -> str:
+    """Ej.: "jun 2026" (formato de períodos del README de referencia)."""
+    return f"{MESES_CORTOS[valor.month - 1]} {valor.year}"
+
+
+def formato_periodo(desde: date | None, hasta: date | None) -> str:
+    """Período cubierto por un cobro.
+
+    - Sin período: —
+    - Servicio único (ambas fechas iguales, la fecha real del trabajo): dd/mm/aaaa
+    - Un solo mes: "jun 2026"
+    - Rango de meses: "abr – may 2026"
+    """
+    if desde is None or hasta is None:
+        return VACIO
+    if desde == hasta:
+        return formato_fecha(desde)
+    if (desde.year, desde.month) == (hasta.year, hasta.month):
+        return mes_corto(desde)
+    if desde.year == hasta.year:
+        return f"{MESES_CORTOS[desde.month - 1]} – {MESES_CORTOS[hasta.month - 1]} {desde.year}"
+    return f"{mes_corto(desde)} – {mes_corto(hasta)}"
 
 
 def formato_importe(valor: Decimal | int | float | None) -> str:
