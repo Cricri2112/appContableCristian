@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block titulo %}Inicio — Estudio Contable{% endblock %}
+
+{% block contenido %}
+<main>
+    <h1>Estudio Contable</h1>
+    <p>Sesión iniciada. Etapa 0: fundación técnica — sin funcionalidades de negocio todavía.</p>
+    <form method="post" action="/logout">
+        <button type="submit">Cerrar sesión</button>
+    </form>
+</main>
+{% endblock %}

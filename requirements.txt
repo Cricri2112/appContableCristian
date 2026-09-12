@@ -1,0 +1,16 @@
+# Dependencias de la Etapa 0 (Chat 4 — stack cerrado).
+# APScheduler se suma en la Etapa 5 y cryptography (Fernet) en la Etapa 4.
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+sqlalchemy>=2.0,<3.0
+alembic>=1.13,<2.0
+jinja2>=3.1,<4.0
+python-multipart>=0.0.9      # necesario para leer formularios (login)
+itsdangerous>=2.2,<3.0       # firma de la cookie de sesión
+bcrypt>=4.1,<5.0             # hash de la contraseña de login
+pydantic>=2.7,<3.0
+pydantic-settings>=2.3,<3.0  # lectura de variables de entorno / .env
+
+# Testing
+pytest>=8.0,<9.0
+httpx>=0.27,<1.0             # cliente de pruebas de FastAPI
