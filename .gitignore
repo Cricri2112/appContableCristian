@@ -1,0 +1,12 @@
+# Secretos locales — nunca se suben al repo
+.env
+
+# Base de datos SQLite local
+*.db
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
