@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>19 · Crear tarea ad-hoc (F7) — Estudio Contable</title>
+<!-- Referencia visual generada desde el prototipo (Etapa 1). Pico.css es la base; nocturne.css y pico-map.css la tematizan. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+<link rel="stylesheet" href="./nocturne.css">
+<link rel="stylesheet" href="./pico-map.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+</head><body>
+<div id="dc-root"><div class="sc-host" data-sc-name="Prototipo Estudio Contable"><div data-dc-tpl="6" style="display: grid; grid-template-columns: 212px minmax(0px, 1fr); min-height: 100vh; background: rgb(22, 24, 38);">
+  <aside data-dc-tpl="7" style="background: rgb(27, 29, 43); display: flex; flex-direction: column; padding: 16px 12px; gap: 4px; border-right: 1px solid rgb(41, 43, 49); position: sticky; top: 0px; height: 100vh;">
+    <div data-dc-tpl="8" style="display: flex; align-items: center; gap: 8px; padding: 6px 10px 18px; font-size: 15px; font-weight: 500;"><span data-dc-tpl="9" style="width: 8px; height: 8px; border-radius: 2px; background: rgb(145, 132, 217); display: inline-block;"></span>Estudio</div>
+    <a data-dc-tpl="10" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;"><i data-dc-tpl="11" class="ph ph-squares-four" style="font-size: 18px;"></i>Dashboard</a>
+    <a data-dc-tpl="12" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;"><i data-dc-tpl="13" class="ph ph-users" style="font-size: 18px;"></i>Clientes</a>
+    <a data-dc-tpl="14" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;"><i data-dc-tpl="15" class="ph ph-currency-dollar" style="font-size: 18px;"></i>Cobros</a>
+    <a data-dc-tpl="16" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;" aria-current="page"><i data-dc-tpl="17" class="ph ph-check-square" style="font-size: 18px;"></i>Tareas<span data-dc-tpl="18" style="margin-left: auto; font-size: 11px; color: rgb(147, 151, 171);"><span class="sc-interp">7/18</span></span></a>
+    <a data-dc-tpl="19" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;"><i data-dc-tpl="20" class="ph ph-calendar-blank" style="font-size: 18px;"></i>Vencimientos</a>
+    <div data-dc-tpl="21" style="flex: 1 1 0%;"></div>
+    <a data-dc-tpl="22" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 12px; color: rgb(117, 121, 140); text-decoration: none;"><i data-dc-tpl="23" class="ph ph-list-bullets" style="font-size: 16px;"></i>Índice de formularios (ref.)</a>
+    <a data-dc-tpl="24" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(147, 151, 171); text-decoration: none;"><i data-dc-tpl="25" class="ph ph-gear-six" style="font-size: 18px;"></i>Configuración</a>
+  </aside>
+
+  <div data-dc-tpl="26" style="display: flex; flex-direction: column; min-width: 0px;">
+    <div data-dc-tpl="27" style="display: flex; align-items: center; gap: 8px; padding: 12px 28px; border-bottom: 1px solid rgb(41, 43, 49); position: relative;">
+      <span data-dc-tpl="28" style="font-size: 12px; color: rgb(117, 121, 140); margin-right: auto;">jueves 11 de setiembre de 2026</span>
+      <button data-dc-tpl="29" class="btn btn-icon btn-secondary" aria-label="Recordatorios" style="position: relative;"><i data-dc-tpl="30" class="ph ph-bell" style="font-size: 18px;"></i><span data-dc-tpl="31" style="position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0px 5px; border-radius: 9px; background: rgb(145, 132, 217); color: rgb(22, 24, 38); font-size: 11px; font-weight: 600; display: grid; place-items: center;"><span class="sc-interp">4</span></span></button>
+      <button data-dc-tpl="32" class="btn btn-icon btn-secondary" aria-label="Cerrar sesión" title="Cerrar sesión"><i data-dc-tpl="33" class="ph ph-sign-out" style="font-size: 18px;"></i></button>
+
+      
+      
+    </div>
+
+    
+    
+    <div data-dc-tpl="55" class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+      <div data-dc-tpl="56" class="dialog" style="width: min(600px, 100%);">
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        <div data-dc-tpl="498" data-screen-label="19 Tarea ad-hoc" style="display: flex; flex-direction: column; gap: 14px;">
+          <span data-dc-tpl="499" class="dialog-title">Nueva tarea ad-hoc</span>
+          <div data-dc-tpl="500" style="display: grid; grid-template-columns: repeat(2, minmax(0px, 1fr)); gap: 12px;">
+            <div data-dc-tpl="501" class="field" style="grid-column: 1 / -1;"><label data-dc-tpl="502">Servicio contratado <span data-dc-tpl="503" style="color: rgb(145, 132, 217);">*</span></label><select data-dc-tpl="504" class="input"><option data-dc-tpl="505" value="" selected="">Elegí cliente y servicio…</option><option data-dc-tpl="506">Verdulería El Sol · Liquidación mensual</option><option data-dc-tpl="507">Verdulería El Sol · DDJJ IVA anual</option><option data-dc-tpl="508">Pereira, Ana · Certificado de ingresos</option></select></div>
+            <div data-dc-tpl="509" class="field" style="grid-column: 1 / -1;"><label data-dc-tpl="510">Nombre <span data-dc-tpl="511" style="color: rgb(145, 132, 217);">*</span></label><input data-dc-tpl="512" class="input" placeholder="ej: Pedir nota de crédito de agosto"></div>
+            <div data-dc-tpl="513" class="field"><label data-dc-tpl="514">Período <span data-dc-tpl="515" style="color: rgb(145, 132, 217);">*</span></label><input data-dc-tpl="516" class="input" type="month" value="2026-09"></div>
+            <div data-dc-tpl="517" class="field" style="align-self: end;"><label data-dc-tpl="518" class="radio" style="min-height: 36px;"><input data-dc-tpl="519" type="checkbox"><span data-dc-tpl="520" class="dot" style="border-radius: 4px;"></span>Requiere info del cliente</label></div>
+            <div data-dc-tpl="521" class="field" style="grid-column: 1 / -1;"><label data-dc-tpl="522">Notas</label><input data-dc-tpl="523" class="input" placeholder="Opcional"></div>
+          </div>
+          <div data-dc-tpl="524" style="font-size: 12px; color: rgb(117, 121, 140);">Se crea pendiente, sin template. Aparece al final del grupo del cliente en la vista de tareas.</div>
+          <div data-dc-tpl="525" class="dialog-actions"><button data-dc-tpl="526" class="btn btn-secondary">Cancelar</button><button data-dc-tpl="527" class="btn btn-primary">Crear tarea</button></div>
+        </div>
+        
+
+      </div>
+    </div>
+    
+
+    <main data-dc-tpl="528" style="padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 20px; min-width: 0px;">
+
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+
+
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div data-dc-tpl="1165" data-screen-label="04 Tareas" style="display: flex; flex-direction: column; gap: 20px;">
+        <div data-dc-tpl="1166" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div data-dc-tpl="1167"><div data-dc-tpl="1168" style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147, 151, 171); margin-bottom: 4px;">Tareas</div><h1 data-dc-tpl="1169" style="font-size: 25px; font-weight: 500; margin: 0px; letter-spacing: -0.015em;">Tareas del período</h1></div>
+          <div data-dc-tpl="1170" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div data-dc-tpl="1171" style="display: inline-flex; align-items: center; border: 1px solid rgba(233, 233, 237, 0.16); border-radius: 8px; overflow: hidden;"><button data-dc-tpl="1172" class="btn btn-icon" style="width: 32px; height: 32px; border-radius: 0px;"><i data-dc-tpl="1173" class="ph ph-caret-left"></i></button><span data-dc-tpl="1174" style="font-size: 13px; padding: 0px 10px; min-width: 110px; text-align: center;">setiembre 2026</span><button data-dc-tpl="1175" class="btn btn-icon" style="width: 32px; height: 32px; border-radius: 0px;"><i data-dc-tpl="1176" class="ph ph-caret-right"></i></button></div>
+            <select data-dc-tpl="1177" class="input" style="width: auto; min-height: 34px;"><option data-dc-tpl="1178">Todos los clientes</option></select>
+            <div data-dc-tpl="1179" class="seg"><label data-dc-tpl="1180" class="seg-opt"><input data-dc-tpl="1181" type="radio" name="f" readonly="" checked="">Todas</label><label data-dc-tpl="1182" class="seg-opt"><input data-dc-tpl="1183" type="radio" name="f" readonly="">Pendientes</label><label data-dc-tpl="1184" class="seg-opt"><input data-dc-tpl="1185" type="radio" name="f" readonly="">Completadas</label></div>
+            <button data-dc-tpl="1186" class="btn btn-primary"><i data-dc-tpl="1187" class="ph ph-plus"></i>Tarea ad-hoc</button>
+          </div>
+        </div>
+        <div data-dc-tpl="1188" style="display: flex; gap: 16px; align-items: center; font-size: 13px; color: rgb(147, 151, 171);"><span data-dc-tpl="1189"><span data-dc-tpl="1190" style="color: rgb(233, 233, 237); font-size: 17px; font-weight: 500;"><span class="sc-interp">7/18</span></span> completadas</span><span data-dc-tpl="1191" style="display: inline-flex; align-items: center; gap: 6px;"><span data-dc-tpl="1192" style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.66 0.125 150);"></span>al día</span><span data-dc-tpl="1193" style="display: inline-flex; align-items: center; gap: 6px;"><span data-dc-tpl="1194" style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.76 0.125 80);"></span>&gt; 5 días</span><span data-dc-tpl="1195" style="display: inline-flex; align-items: center; gap: 6px;"><span data-dc-tpl="1196" style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.66 0.125 25);"></span>≤ 5 días o vencido</span></div>
+
+        
+          <section data-dc-tpl="1198" style="border-radius: 14px; background: rgb(35, 37, 50); overflow: hidden; box-shadow: rgb(63, 66, 77) 0px 0px 0px 1px;">
+            <header data-dc-tpl="1199" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgb(27, 29, 43);">
+              <span data-dc-tpl="1200" style="width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; background: oklch(0.66 0.125 150); box-shadow: oklch(0.66 0.125 150 / 0.6) 0px 0px 10px;"></span>
+              <div data-dc-tpl="1201" style="flex: 1 1 0%; min-width: 0px;"><div data-dc-tpl="1202" style="font-size: 15px; font-weight: 500;"><span class="sc-interp">Fernández, Lucía</span> <span data-dc-tpl="1203" style="color: rgb(147, 151, 171); font-weight: 400; font-size: 13px;">· <span class="sc-interp">Unipersonal profesional</span> · <span class="sc-interp">Liquidación mensual</span></span></div><div data-dc-tpl="1204" style="font-size: 12px; color: rgb(147, 151, 171);"><span class="sc-interp">Fecha límite: 24/09 — DGI</span></div></div>
+              <span data-dc-tpl="1205" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp">4 de 4</span></span>
+            </header>
+            <table data-dc-tpl="1206" class="table">
+              <thead data-dc-tpl="1207"><tr data-dc-tpl="1208"><th data-dc-tpl="1209" style="width: 44%;">Tarea</th><th data-dc-tpl="1210">Estado</th><th data-dc-tpl="1211">Info cliente</th><th data-dc-tpl="1212">Notas</th><th data-dc-tpl="1213"></th></tr></thead>
+              <tbody data-dc-tpl="1214">
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px; color: rgb(147, 151, 171);"><span class="sc-interp">Solicitar facturas emitidas</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: oklch(0.34 0.06 150); color: oklch(0.92 0.06 150); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Completada</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">Esperando al cliente</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px; color: rgb(147, 151, 171);"><span class="sc-interp">Verificar facturas a favor en DGI</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: oklch(0.34 0.06 150); color: oklch(0.92 0.06 150); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Completada</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px; color: rgb(147, 151, 171);"><span class="sc-interp">Calcular IVA e IRPF</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: oklch(0.34 0.06 150); color: oklch(0.92 0.06 150); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Completada</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px; color: rgb(147, 151, 171);"><span class="sc-interp">Emitir y enviar boletos</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: oklch(0.34 0.06 150); color: oklch(0.92 0.06 150); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Completada</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        
+          <section data-dc-tpl="1198" style="border-radius: 14px; background: rgb(35, 37, 50); overflow: hidden; box-shadow: rgb(63, 66, 77) 0px 0px 0px 1px;">
+            <header data-dc-tpl="1199" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgb(27, 29, 43);">
+              <span data-dc-tpl="1200" style="width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; background: oklch(0.76 0.125 80); box-shadow: oklch(0.76 0.125 80 / 0.6) 0px 0px 10px;"></span>
+              <div data-dc-tpl="1201" style="flex: 1 1 0%; min-width: 0px;"><div data-dc-tpl="1202" style="font-size: 15px; font-weight: 500;"><span class="sc-interp">Techera, Rubén</span> <span data-dc-tpl="1203" style="color: rgb(147, 151, 171); font-weight: 400; font-size: 13px;">· <span class="sc-interp">Unipersonal no profesional</span> · <span class="sc-interp">Liquidación mensual</span></span></div><div data-dc-tpl="1204" style="font-size: 12px; color: rgb(147, 151, 171);"><span class="sc-interp">Fecha límite: 24/09 — DGI · faltan 13 días</span></div></div>
+              <span data-dc-tpl="1205" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp">1 de 3</span></span>
+            </header>
+            <table data-dc-tpl="1206" class="table">
+              <thead data-dc-tpl="1207"><tr data-dc-tpl="1208"><th data-dc-tpl="1209" style="width: 44%;">Tarea</th><th data-dc-tpl="1210">Estado</th><th data-dc-tpl="1211">Info cliente</th><th data-dc-tpl="1212">Notas</th><th data-dc-tpl="1213"></th></tr></thead>
+              <tbody data-dc-tpl="1214">
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px; color: rgb(147, 151, 171);"><span class="sc-interp">Solicitar facturas emitidas</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: oklch(0.34 0.06 150); color: oklch(0.92 0.06 150); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Completada</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">Esperando al cliente</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Verificar facturas a favor en DGI</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Emitir y enviar boletos</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        
+          <section data-dc-tpl="1198" style="border-radius: 14px; background: rgb(35, 37, 50); overflow: hidden; box-shadow: rgb(63, 66, 77) 0px 0px 0px 1px;">
+            <header data-dc-tpl="1199" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgb(27, 29, 43);">
+              <span data-dc-tpl="1200" style="width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; background: oklch(0.66 0.125 25); box-shadow: oklch(0.66 0.125 25 / 0.6) 0px 0px 10px;"></span>
+              <div data-dc-tpl="1201" style="flex: 1 1 0%; min-width: 0px;"><div data-dc-tpl="1202" style="font-size: 15px; font-weight: 500;"><span class="sc-interp">Verdulería El Sol</span> <span data-dc-tpl="1203" style="color: rgb(147, 151, 171); font-weight: 400; font-size: 13px;">· <span class="sc-interp">Régimen general</span> · <span class="sc-interp">Liquidación mensual</span></span></div><div data-dc-tpl="1204" style="font-size: 12px; color: oklch(0.78 0.1 25);"><span class="sc-interp">Fecha límite: 15/09 — BPS · faltan 4 días</span></div></div>
+              <span data-dc-tpl="1205" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp">2 de 6</span></span>
+            </header>
+            <table data-dc-tpl="1206" class="table">
+              <thead data-dc-tpl="1207"><tr data-dc-tpl="1208"><th data-dc-tpl="1209" style="width: 44%;">Tarea</th><th data-dc-tpl="1210">Estado</th><th data-dc-tpl="1211">Info cliente</th><th data-dc-tpl="1212">Notas</th><th data-dc-tpl="1213"></th></tr></thead>
+              <tbody data-dc-tpl="1214">
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px; color: rgb(147, 151, 171);"><span class="sc-interp">Descargar info del facturador electrónico</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: oklch(0.34 0.06 150); color: oklch(0.92 0.06 150); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Completada</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px; color: rgb(147, 151, 171);"><span class="sc-interp">Verificar facturas a favor en DGI</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: oklch(0.34 0.06 150); color: oklch(0.92 0.06 150); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Completada</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Liquidar IVA</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(66, 58, 106); color: rgb(245, 244, 255); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">En proceso</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp">Falta nota de crédito de agosto</span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Emitir boletos DGI</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Emitir boleto BPS</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Enviar boletos al cliente</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        
+          <section data-dc-tpl="1198" style="border-radius: 14px; background: rgb(35, 37, 50); overflow: hidden; box-shadow: rgb(63, 66, 77) 0px 0px 0px 1px;">
+            <header data-dc-tpl="1199" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgb(27, 29, 43);">
+              <span data-dc-tpl="1200" style="width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; background: oklch(0.66 0.125 25); box-shadow: oklch(0.66 0.125 25 / 0.6) 0px 0px 10px;"></span>
+              <div data-dc-tpl="1201" style="flex: 1 1 0%; min-width: 0px;"><div data-dc-tpl="1202" style="font-size: 15px; font-weight: 500;"><span class="sc-interp">Rodríguez, Martín</span> <span data-dc-tpl="1203" style="color: rgb(147, 151, 171); font-weight: 400; font-size: 13px;">· <span class="sc-interp">Monotributo</span> · <span class="sc-interp">Liquidación mensual</span></span></div><div data-dc-tpl="1204" style="font-size: 12px; color: oklch(0.78 0.1 25);"><span class="sc-interp">Fecha límite: 15/09 — BPS · faltan 4 días</span></div></div>
+              <span data-dc-tpl="1205" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp">0 de 3</span></span>
+            </header>
+            <table data-dc-tpl="1206" class="table">
+              <thead data-dc-tpl="1207"><tr data-dc-tpl="1208"><th data-dc-tpl="1209" style="width: 44%;">Tarea</th><th data-dc-tpl="1210">Estado</th><th data-dc-tpl="1211">Info cliente</th><th data-dc-tpl="1212">Notas</th><th data-dc-tpl="1213"></th></tr></thead>
+              <tbody data-dc-tpl="1214">
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Emitir boleto BPS monotributo</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Enviar boleto al cliente</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Confirmar pago</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp"></span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">Esperando al cliente</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        
+          <section data-dc-tpl="1198" style="border-radius: 14px; background: rgb(35, 37, 50); overflow: hidden; box-shadow: rgb(63, 66, 77) 0px 0px 0px 1px;">
+            <header data-dc-tpl="1199" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgb(27, 29, 43);">
+              <span data-dc-tpl="1200" style="width: 10px; height: 10px; flex: 0 0 auto;"></span>
+              <div data-dc-tpl="1201" style="flex: 1 1 0%; min-width: 0px;"><div data-dc-tpl="1202" style="font-size: 15px; font-weight: 500;"><span class="sc-interp">Pereira, Ana</span> <span data-dc-tpl="1203" style="color: rgb(147, 151, 171); font-weight: 400; font-size: 13px;">· <span class="sc-interp">Persona física</span> · <span class="sc-interp">Certificado de ingresos</span></span></div><div data-dc-tpl="1204" style="font-size: 12px; color: rgb(117, 121, 140);"><span class="sc-interp">Sin vencimientos aplicables en el período</span></div></div>
+              <span data-dc-tpl="1205" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp">0 de 2</span></span>
+            </header>
+            <table data-dc-tpl="1206" class="table">
+              <thead data-dc-tpl="1207"><tr data-dc-tpl="1208"><th data-dc-tpl="1209" style="width: 44%;">Tarea</th><th data-dc-tpl="1210">Estado</th><th data-dc-tpl="1211">Info cliente</th><th data-dc-tpl="1212">Notas</th><th data-dc-tpl="1213"></th></tr></thead>
+              <tbody data-dc-tpl="1214">
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Reunir comprobantes de ingresos</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp">ad-hoc</span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">Esperando al cliente</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp">Pidió plazo hasta el 20</span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              
+                <tr data-dc-tpl="1216">
+                  <td data-dc-tpl="1217"><span data-dc-tpl="1218" style="font-size: 14px;"><span class="sc-interp">Redactar y firmar certificado</span></span><span data-dc-tpl="1219" style="font-size: 11px; color: rgb(117, 121, 140); margin-left: 8px;"><span class="sc-interp">ad-hoc</span></span></td>
+                  <td data-dc-tpl="1220"><button data-dc-tpl="1221" class="tag" title="Clic para avanzar el estado" style="background: rgb(63, 66, 77); color: rgb(228, 231, 245); border: 0px; cursor: pointer; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 11px; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit;"><span class="sc-interp">Pendiente</span></button></td>
+                  <td data-dc-tpl="1222" style="font-size: 13px; color: rgb(178, 182, 202);"><span class="sc-interp">—</span></td>
+                  <td data-dc-tpl="1223" style="font-size: 13px; color: rgb(147, 151, 171);"><span class="sc-interp"></span></td>
+                  <td data-dc-tpl="1224" style="text-align: right; white-space: nowrap;"><button data-dc-tpl="1225" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1226" class="ph ph-pencil-simple"></i></button><button data-dc-tpl="1227" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147, 151, 171);"><i data-dc-tpl="1228" class="ph ph-x-circle"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        
+        <p data-dc-tpl="1229" style="font-size: 12px; color: rgb(117, 121, 140); margin: 0px; max-width: 720px;">Un clic en el estado avanza pendiente → en proceso → completada (sin confirmación). Cancelar pide confirmación. Completadas y canceladas pueden reabrirse con un clic. La fecha límite es el vencimiento aplicable más próximo del período; sin vencimientos, no hay semáforo.</p>
+      </div>
+      
+
+      
+      
+
+      
+      
+
+    </main>
+  </div></div></div></div>
+</body></html>

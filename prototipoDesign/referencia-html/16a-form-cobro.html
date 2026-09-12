@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>16a · Registrar cobro (F5) — Estudio Contable</title>
+<!-- Referencia visual generada desde el prototipo (Etapa 1). Pico.css es la base; nocturne.css y pico-map.css la tematizan. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+<link rel="stylesheet" href="./nocturne.css">
+<link rel="stylesheet" href="./pico-map.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+</head><body>
+<div id="dc-root"><div class="sc-host" data-sc-name="Prototipo Estudio Contable"><div data-dc-tpl="6" style="display: grid; grid-template-columns: 212px minmax(0px, 1fr); min-height: 100vh; background: rgb(22, 24, 38);">
+  <aside data-dc-tpl="7" style="background: rgb(27, 29, 43); display: flex; flex-direction: column; padding: 16px 12px; gap: 4px; border-right: 1px solid rgb(41, 43, 49); position: sticky; top: 0px; height: 100vh;">
+    <div data-dc-tpl="8" style="display: flex; align-items: center; gap: 8px; padding: 6px 10px 18px; font-size: 15px; font-weight: 500;"><span data-dc-tpl="9" style="width: 8px; height: 8px; border-radius: 2px; background: rgb(145, 132, 217); display: inline-block;"></span>Estudio</div>
+    <a data-dc-tpl="10" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;"><i data-dc-tpl="11" class="ph ph-squares-four" style="font-size: 18px;"></i>Dashboard</a>
+    <a data-dc-tpl="12" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;"><i data-dc-tpl="13" class="ph ph-users" style="font-size: 18px;"></i>Clientes</a>
+    <a data-dc-tpl="14" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;" aria-current="page"><i data-dc-tpl="15" class="ph ph-currency-dollar" style="font-size: 18px;"></i>Cobros</a>
+    <a data-dc-tpl="16" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;"><i data-dc-tpl="17" class="ph ph-check-square" style="font-size: 18px;"></i>Tareas<span data-dc-tpl="18" style="margin-left: auto; font-size: 11px; color: rgb(147, 151, 171);"><span class="sc-interp">7/18</span></span></a>
+    <a data-dc-tpl="19" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(207, 211, 229); text-decoration: none;"><i data-dc-tpl="20" class="ph ph-calendar-blank" style="font-size: 18px;"></i>Vencimientos</a>
+    <div data-dc-tpl="21" style="flex: 1 1 0%;"></div>
+    <a data-dc-tpl="22" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 12px; color: rgb(117, 121, 140); text-decoration: none;"><i data-dc-tpl="23" class="ph ph-list-bullets" style="font-size: 16px;"></i>Índice de formularios (ref.)</a>
+    <a data-dc-tpl="24" href="#" class="scp0" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 14px; color: rgb(147, 151, 171); text-decoration: none;"><i data-dc-tpl="25" class="ph ph-gear-six" style="font-size: 18px;"></i>Configuración</a>
+  </aside>
+
+  <div data-dc-tpl="26" style="display: flex; flex-direction: column; min-width: 0px;">
+    <div data-dc-tpl="27" style="display: flex; align-items: center; gap: 8px; padding: 12px 28px; border-bottom: 1px solid rgb(41, 43, 49); position: relative;">
+      <span data-dc-tpl="28" style="font-size: 12px; color: rgb(117, 121, 140); margin-right: auto;">jueves 11 de setiembre de 2026</span>
+      <button data-dc-tpl="29" class="btn btn-icon btn-secondary" aria-label="Recordatorios" style="position: relative;"><i data-dc-tpl="30" class="ph ph-bell" style="font-size: 18px;"></i><span data-dc-tpl="31" style="position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0px 5px; border-radius: 9px; background: rgb(145, 132, 217); color: rgb(22, 24, 38); font-size: 11px; font-weight: 600; display: grid; place-items: center;"><span class="sc-interp">4</span></span></button>
+      <button data-dc-tpl="32" class="btn btn-icon btn-secondary" aria-label="Cerrar sesión" title="Cerrar sesión"><i data-dc-tpl="33" class="ph ph-sign-out" style="font-size: 18px;"></i></button>
+
+      
+      
+    </div>
+
+    
+    
+    <div data-dc-tpl="55" class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+      <div data-dc-tpl="56" class="dialog" style="width: min(600px, 100%);">
+
+        
+
+        
+
+        
+
+        
+
+        
+        <div data-dc-tpl="201" data-screen-label="16 Registrar cobro" style="display: flex; flex-direction: column; gap: 14px;">
+          <span data-dc-tpl="202" class="dialog-title">Registrar cobro</span>
+          <div data-dc-tpl="203" style="display: grid; grid-template-columns: repeat(2, minmax(0px, 1fr)); gap: 12px;">
+            <div data-dc-tpl="204" class="field"><label data-dc-tpl="205">Cliente <span data-dc-tpl="206" style="color: rgb(145, 132, 217);">*</span></label><select data-dc-tpl="207" class="input"><option data-dc-tpl="208" value="8" selected="">Verdulería El Sol</option><option data-dc-tpl="209" value="11">Rodríguez, Martín</option><option data-dc-tpl="210" value="7">Acosta, Nahuel</option></select></div>
+            <div data-dc-tpl="211" class="field"><label data-dc-tpl="212">Servicio contratado</label><select data-dc-tpl="213" class="input"><option data-dc-tpl="214" value="">Sin servicio específico</option><option data-dc-tpl="215" value="mensual" selected="">Liquidación mensual · mensual</option><option data-dc-tpl="216" value="anual">DDJJ IVA anual · anual</option><option data-dc-tpl="217" value="unico">Gestión ante BPS · único</option></select></div>
+            <div data-dc-tpl="218" class="field"><label data-dc-tpl="219">Período desde</label><input data-dc-tpl="220" class="input" type="date" value="2026-07-01"></div>
+            <div data-dc-tpl="221" class="field"><label data-dc-tpl="222">Período hasta</label><input data-dc-tpl="223" class="input" type="date" value="2026-08-31"></div>
+            <div data-dc-tpl="224" style="grid-column: 1 / -1; font-size: 12px; color: rgb(117, 121, 140); margin-top: -4px; text-wrap: pretty;">Van juntos: primer día del mes inicial y último del final. Un pago de varios meses es un solo cobro. <span data-dc-tpl="226" style="color: rgb(210, 206, 253);">Servicio único: ambas fechas llevan la fecha real del trabajo (adenda C1).</span></div>
+            <div data-dc-tpl="227" class="field"><label data-dc-tpl="228">Fecha de cobro <span data-dc-tpl="229" style="color: rgb(145, 132, 217);">*</span></label><input data-dc-tpl="230" class="input" type="date" value="2026-09-11"></div>
+            <div data-dc-tpl="231" class="field"><label data-dc-tpl="232">Importe <span data-dc-tpl="233" style="color: rgb(145, 132, 217);">*</span></label><div data-dc-tpl="234" style="position: relative;"><span data-dc-tpl="235" style="position: absolute; left: 10px; top: 8px; font-size: 14px; color: rgb(147, 151, 171);">$</span><input data-dc-tpl="236" class="input" inputmode="numeric" value="14.000" style="padding-left: 24px;"></div></div>
+            <div data-dc-tpl="237" class="field"><label data-dc-tpl="238">Forma de pago <span data-dc-tpl="239" style="color: rgb(145, 132, 217);">*</span></label><div data-dc-tpl="240" class="seg"><label data-dc-tpl="241" class="seg-opt"><input data-dc-tpl="242" type="radio" name="fp" checked="">Transferencia</label><label data-dc-tpl="243" class="seg-opt"><input data-dc-tpl="244" type="radio" name="fp">Efectivo</label><label data-dc-tpl="245" class="seg-opt"><input data-dc-tpl="246" type="radio" name="fp">Otro</label></div></div>
+            <div data-dc-tpl="247" class="field"><label data-dc-tpl="248">Comprobante <span data-dc-tpl="249" style="color: rgb(145, 132, 217);">*</span></label><div data-dc-tpl="250" class="seg"><label data-dc-tpl="251" class="seg-opt"><input data-dc-tpl="252" type="radio" name="tc" checked="">e-Ticket</label><label data-dc-tpl="253" class="seg-opt"><input data-dc-tpl="254" type="radio" name="tc">No gravado</label><label data-dc-tpl="255" class="seg-opt"><input data-dc-tpl="256" type="radio" name="tc">Sin comprob.</label></div></div>
+            <div data-dc-tpl="257" class="field" style="grid-column: 1 / -1;"><label data-dc-tpl="258">Notas</label><input data-dc-tpl="259" class="input" placeholder="Opcional"></div>
+          </div>
+          <div data-dc-tpl="260" class="dialog-actions"><button data-dc-tpl="261" class="btn btn-secondary">Cancelar</button><button data-dc-tpl="262" class="btn btn-primary">Registrar</button></div>
+        </div>
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+      </div>
+    </div>
+    
+
+    <main data-dc-tpl="528" style="padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 20px; min-width: 0px;">
+
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+
+
+      
+      
+
+      
+      
+
+      
+      
+      <div data-dc-tpl="1131" data-screen-label="03 Cobros" style="display: flex; flex-direction: column; gap: 20px;">
+        <div data-dc-tpl="1132" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div data-dc-tpl="1133"><div data-dc-tpl="1134" style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147, 151, 171); margin-bottom: 4px;">Cobros</div><h1 data-dc-tpl="1135" style="font-size: 25px; font-weight: 500; margin: 0px; letter-spacing: -0.015em;">Registro de cobros</h1></div>
+          <div data-dc-tpl="1136" style="display: flex; gap: 16px; align-items: center; font-size: 13px; color: rgb(147, 151, 171); flex-wrap: wrap;"><a data-dc-tpl="1137" href="#" class="btn btn-secondary" style="font-size: 13px;"><i data-dc-tpl="1138" class="ph ph-trend-up"></i>Aumento global de honorarios</a><span data-dc-tpl="1139">Total adeudado <span data-dc-tpl="1140" style="color: oklch(0.72 0.125 25); font-size: 17px; font-weight: 500; margin-left: 6px;"><span class="sc-interp">$ 41.600</span></span></span><span data-dc-tpl="1141">A favor <span data-dc-tpl="1142" style="color: oklch(0.72 0.125 150); font-size: 17px; font-weight: 500; margin-left: 6px;"><span class="sc-interp">$ 6.500</span></span></span></div>
+        </div>
+        <table data-dc-tpl="1143" class="table">
+          <thead data-dc-tpl="1144"><tr data-dc-tpl="1145"><th data-dc-tpl="1146">Cliente</th><th data-dc-tpl="1147">Régimen</th><th data-dc-tpl="1148" style="text-align: right;">Saldo vigente</th><th data-dc-tpl="1149">Situación</th><th data-dc-tpl="1150"></th></tr></thead>
+          <tbody data-dc-tpl="1151">
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Verdulería El Sol</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Régimen general</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 25);"><span class="sc-interp">$ 16.800</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Debe · 3 períodos</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Rodríguez, Martín</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Monotributo</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 25);"><span class="sc-interp">$ 11.400</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Debe · 2 períodos</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Méndez, Sofía</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Unipersonal profesional</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 25);"><span class="sc-interp">$ 5.700</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Debe · 1 período</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Acosta, Nahuel</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Unipersonal no profesional</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 25);"><span class="sc-interp">$ 4.200</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Debe · 1 período</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">García, Julián</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Persona física</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 25);"><span class="sc-interp">$ 3.500</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Debe · 1 período</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Fernández, Lucía</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Unipersonal profesional</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Castro, Diego</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Unipersonal profesional</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Ortiz, Valentina</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Unipersonal profesional</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Silva, Andrés</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Unipersonal profesional</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Techera, Rubén</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Unipersonal no profesional</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Taller Norte SRL</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Régimen general</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Bentancor, Carla</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Monotributo</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Panadería La Espiga</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Pequeña empresa</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Pereira, Ana</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Persona física</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">$ 0</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Al día</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          
+            <tr data-dc-tpl="1153"><td data-dc-tpl="1154"><span class="sc-interp">Pérez, Gonzalo</span></td><td data-dc-tpl="1155" style="white-space: nowrap;"><span data-dc-tpl="1156" class="tag tag-neutral"><span class="sc-interp">Régimen general</span></span></td><td data-dc-tpl="1157" style="text-align: right;"><span data-dc-tpl="1158" style="color: oklch(0.72 0.125 150);"><span class="sc-interp">−$ 6.500</span></span></td><td data-dc-tpl="1159" style="font-size: 13px; color: rgb(147, 151, 171); white-space: nowrap;"><span class="sc-interp">Saldo a favor</span></td><td data-dc-tpl="1160" style="text-align: right; white-space: nowrap;"><a data-dc-tpl="1161" href="#" class="btn btn-primary" style="font-size: 13px; padding: 4px 10px;"><i data-dc-tpl="1162" class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          </tbody>
+        </table>
+        <p data-dc-tpl="1163" style="font-size: 12px; color: rgb(117, 121, 140); margin: 0px; max-width: 640px;">Solo clientes activos, ordenados por saldo descendente. "Registrar cobro" abre el formulario con el cliente preseleccionado.</p>
+      </div>
+      
+
+      
+      
+
+      
+      
+
+      
+      
+
+    </main>
+  </div></div></div></div>
+</body></html>

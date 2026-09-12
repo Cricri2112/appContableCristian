@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nocturne-0a52cd25-5dbf-4508-9376-688d61ebb35a/styles.css">
+<script src="_ds/nocturne-0a52cd25-5dbf-4508-9376-688d61ebb35a/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+body{background:#161826;color:#e9e9ed;font-family:"Inter",system-ui,sans-serif;margin:0}
+a{color:#9184d9}a:hover{color:#b5abfc}
+</style>
+</helmet>
+<div style="max-width:1180px;margin:0 auto;padding:40px 32px 80px;display:flex;flex-direction:column;gap:56px">
+
+<header style="display:flex;flex-direction:column;gap:10px">
+  <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9184d9">Etapa 1 · Grupo 1 de 6</div>
+  <h1 style="font-size:32px;font-weight:500;margin:0;letter-spacing:-.015em">Estudio Contable — Sistema de diseño base</h1>
+  <p style="max-width:720px;margin:0;font-size:15px;color:#b2b6ca;text-wrap:pretty">Nocturne aplicado a la app de gestión: tokens, tipografía, cascarón de navegación y los componentes que se repiten en las 26 vistas. Pico.css queda como base (reset, grilla, formularios nativos) y se tematiza con estas variables — el HTML de referencia usa las clases de Nocturne, que Claude Code mapea a las variables <code style="font-size:13px;color:#d2cefd">--pico-*</code>.</p>
+</header>
+
+<!-- 1 Color -->
+<section style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px">
+  <div><h2 style="font-size:20px;font-weight:500;margin:0 0 6px">1. Color</h2><p style="font-size:13px;color:#9397ab;margin:0">Fondo, superficie, texto y un solo acento. Los tres semánticos se suman con la misma luminosidad y croma del acento (OKLCH), solo cambia el tono.</p></div>
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:8px;background:#161826;box-shadow:0 0 0 1px #3f424d"></div><div style="font-size:12px">Fondo <span style="color:#75798c">--color-bg</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:8px;background:#232532;box-shadow:0 0 0 1px #3f424d"></div><div style="font-size:12px">Superficie <span style="color:#75798c">--color-surface</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:8px;background:#e9e9ed"></div><div style="font-size:12px">Texto <span style="color:#75798c">--color-text</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:8px;background:#9184d9"></div><div style="font-size:12px">Acento <span style="color:#75798c">--color-accent</span></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:8px;background:linear-gradient(to right,oklch(0.66 0.125 150) 50%,oklch(0.34 0.06 150) 50%)"></div><div style="font-size:12px">Al día / completado <span style="color:#75798c">--color-ok</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:8px;background:linear-gradient(to right,oklch(0.76 0.125 80) 50%,oklch(0.36 0.06 80) 50%)"></div><div style="font-size:12px">Atención <span style="color:#75798c">--color-warn</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:8px;background:linear-gradient(to right,oklch(0.66 0.125 25) 50%,oklch(0.34 0.06 25) 50%)"></div><div style="font-size:12px">Debe / urgente <span style="color:#75798c">--color-danger</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:8px;background:linear-gradient(to right,#9397ab 50%,#3f424d 50%)"></div><div style="font-size:12px">Neutro / inactivo <span style="color:#75798c">--color-neutral-*</span></div></div>
+    </div>
+    <p style="font-size:13px;color:#9397ab;margin:0;max-width:640px;text-wrap:pretty">Regla: el color semántico va en marcas y texto corto (punto, importe, tag), nunca como relleno grande. La mitad oscura de cada par es el fondo de su tag. Organismos del calendario: DGI = acento, BPS = neutro claro, Otro = neutro medio.</p>
+  </div>
+</section>
+
+<!-- 2 Tipografía -->
+<section style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px">
+  <div><h2 style="font-size:20px;font-weight:500;margin:0 0 6px">2. Tipografía</h2><p style="font-size:13px;color:#9397ab;margin:0">Inter, peso máximo 500. Jerarquía por tamaño y espacio. Importes en tabular-nums, formato uruguayo.</p></div>
+  <div style="display:flex;flex-direction:column;gap:14px;font-variant-numeric:tabular-nums">
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline"><span style="font-size:11px;color:#75798c">Título de vista · 25</span><span style="font-size:25px;font-weight:500;letter-spacing:-.015em">Tareas del período</span></div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline"><span style="font-size:11px;color:#75798c">Sección · 17</span><span style="font-size:17px;font-weight:500">Servicios contratados</span></div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline"><span style="font-size:11px;color:#75798c">Cuerpo · 14</span><span style="font-size:14px">Liquidación mensual · honorario vigente $ 5.700 desde 01/03/2026</span></div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline"><span style="font-size:11px;color:#75798c">Etiqueta · 11</span><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Honorario vigente</span></div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline"><span style="font-size:11px;color:#75798c">Cifra · 32</span><span style="font-size:32px;font-weight:500;letter-spacing:-.02em">$ 68.400 <span style="font-size:14px;color:#9397ab;letter-spacing:0">esperado</span></span></div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline"><span style="font-size:11px;color:#75798c">Formatos</span><span style="font-size:14px;color:#b2b6ca">Importes: <span style="color:#e9e9ed">$ 6.190</span> (punto de miles, sin decimales salvo que existan). Fechas: <span style="color:#e9e9ed">22/06/2026</span>. Períodos: <span style="color:#e9e9ed">jun 2026</span>. Vacíos: <span style="color:#e9e9ed">—</span>.</span></div>
+  </div>
+</section>
+
+<!-- 3 Navegación -->
+<section style="display:flex;flex-direction:column;gap:24px">
+  <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px"><div><h2 style="font-size:20px;font-weight:500;margin:0 0 6px">3. Cascarón de navegación</h2><p style="font-size:13px;color:#9397ab;margin:0">Barra lateral fija con las 6 entradas principales + Configuración. Campanita arriba a la derecha con contador de recordatorios activos.</p></div>
+  <p style="font-size:13px;color:#9397ab;margin:0;text-wrap:pretty">En móvil (tareas, cobros, dashboard, vault) la barra lateral se convierte en una barra inferior de 5 entradas; Vencimientos y Configuración quedan bajo "Más". Acciones primarias de cada vista viven a la derecha del título.</p></div>
+
+  <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+    <!-- desktop shell -->
+    <div style="flex:1 1 640px;min-width:0;border-radius:14px;overflow:hidden;box-shadow:0 0 0 1px #3f424d;display:grid;grid-template-columns:212px minmax(0,1fr);height:460px;background:#161826">
+      <aside style="background:#1b1d2b;display:flex;flex-direction:column;padding:16px 12px;gap:4px;border-right:1px solid #292b31">
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 10px 18px;font-size:15px;font-weight:500"><span style="width:8px;height:8px;border-radius:2px;background:#9184d9;display:inline-block"></span>Estudio</div>
+        <a href="#" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#9184d9;background:rgba(145,132,217,.12);text-decoration:none"><i class="ph ph-squares-four" style="font-size:18px"></i>Dashboard</a>
+        <a href="#" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-users" style="font-size:18px"></i>Clientes</a>
+        <a href="#" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-currency-dollar" style="font-size:18px"></i>Cobros</a>
+        <a href="#" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-check-square" style="font-size:18px"></i>Tareas<span style="margin-left:auto;font-size:11px;color:#9397ab">18/31</span></a>
+        <a href="#" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-calendar-blank" style="font-size:18px"></i>Vencimientos</a>
+        <div style="flex:1"></div>
+        <a href="#" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#9397ab;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-gear-six" style="font-size:18px"></i>Configuración</a>
+      </aside>
+      <div style="display:flex;flex-direction:column;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 20px;border-bottom:1px solid #292b31">
+          <span style="font-size:12px;color:#75798c;margin-right:auto">jueves 11 set 2026</span>
+          <button class="btn btn-icon btn-secondary" style="position:relative" aria-label="Recordatorios"><i class="ph ph-bell" style="font-size:18px"></i><span style="position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#9184d9;color:#161826;font-size:11px;font-weight:600;display:grid;place-items:center">4</span></button>
+          <button class="btn btn-icon btn-secondary" aria-label="Sesión"><i class="ph ph-sign-out" style="font-size:18px"></i></button>
+        </div>
+        <div style="padding:24px 28px;display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+            <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px">Clientes</div><h3 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Listado de clientes</h3></div>
+            <div style="display:flex;gap:8px;align-items:center"><label style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#b2b6ca;cursor:pointer"><span style="width:30px;height:16px;border-radius:8px;background:#3f424d;position:relative;display:inline-block"><span style="position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:6px;background:#b2b6ca"></span></span>Mostrar inactivos</label><button class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo cliente</button></div>
+          </div>
+          <div style="height:1px;background:linear-gradient(to right,transparent,rgba(233,233,237,.16) 48px,rgba(233,233,237,.16) calc(100% - 48px),transparent)"></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><div style="height:12px;width:60%;border-radius:4px;background:repeating-linear-gradient(135deg,#232532 0 6px,#292b31 6px 12px)"></div><div style="height:12px;width:80%;border-radius:4px;background:repeating-linear-gradient(135deg,#232532 0 6px,#292b31 6px 12px)"></div><div style="height:12px;width:70%;border-radius:4px;background:repeating-linear-gradient(135deg,#232532 0 6px,#292b31 6px 12px)"></div><div style="font-size:11px;color:#595d6c;font-family:ui-monospace,monospace">área de contenido de la vista</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- mobile shell -->
+    <div style="width:300px;flex:none;border-radius:14px;overflow:hidden;box-shadow:0 0 0 1px #3f424d;height:460px;background:#161826;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px"><span style="font-size:17px;font-weight:500">Tareas</span><button class="btn btn-icon btn-secondary" style="position:relative;width:32px;height:32px" aria-label="Recordatorios"><i class="ph ph-bell" style="font-size:16px"></i><span style="position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#9184d9;color:#161826;font-size:10px;font-weight:600;display:grid;place-items:center">4</span></button></div>
+      <div style="flex:1;padding:8px 16px;display:flex;flex-direction:column;gap:8px"><div style="height:12px;width:70%;border-radius:4px;background:repeating-linear-gradient(135deg,#232532 0 6px,#292b31 6px 12px)"></div><div style="height:12px;width:90%;border-radius:4px;background:repeating-linear-gradient(135deg,#232532 0 6px,#292b31 6px 12px)"></div><div style="height:12px;width:55%;border-radius:4px;background:repeating-linear-gradient(135deg,#232532 0 6px,#292b31 6px 12px)"></div></div>
+      <nav style="display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid #292b31;background:#1b1d2b;padding:6px 4px 10px">
+        <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:44px"><i class="ph ph-squares-four" style="font-size:20px"></i>Inicio</a>
+        <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9184d9;text-decoration:none;min-height:44px"><i class="ph ph-check-square" style="font-size:20px"></i>Tareas</a>
+        <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:44px"><i class="ph ph-currency-dollar" style="font-size:20px"></i>Cobros</a>
+        <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:44px"><i class="ph ph-users" style="font-size:20px"></i>Clientes</a>
+        <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:44px"><i class="ph ph-dots-three-outline" style="font-size:20px"></i>Más</a>
+      </nav>
+    </div>
+  </div>
+</section>
+
+<!-- 4 Componentes -->
+<section style="display:flex;flex-direction:column;gap:28px">
+  <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px"><div><h2 style="font-size:20px;font-weight:500;margin:0 0 6px">4. Componentes repetidos</h2><p style="font-size:13px;color:#9397ab;margin:0">Los mismos en todas las vistas. Sin variantes por pantalla.</p></div><div></div></div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px">
+
+    <!-- Tags -->
+    <div class="card" style="gap:14px">
+      <div class="card-kicker">Tags · régimen, frecuencia, estado</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="tag tag-neutral">Unipersonal profesional</span><span class="tag tag-neutral">Unipersonal no profesional</span><span class="tag tag-neutral">Monotributo</span><span class="tag tag-neutral">Pequeña empresa</span><span class="tag tag-neutral">Régimen general</span><span class="tag tag-neutral">Persona física</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="tag tag-accent">Mensual</span><span class="tag tag-accent">Anual</span><span class="tag tag-accent">Único</span><span class="tag tag-outline">Mensual</span><span class="tag tag-outline">Eventual</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="tag" style="background:#3f424d;color:#e4e7f5">Pendiente</span><span class="tag" style="background:#423a6a;color:#f5f4ff">En proceso</span><span class="tag" style="background:oklch(0.34 0.06 150);color:oklch(0.92 0.06 150)">Completada</span><span class="tag" style="background:#292b31;color:#9397ab;text-decoration:line-through">Cancelada</span><span class="tag" style="background:#292b31;color:#9397ab">Inactivo</span></div>
+      <div class="card-meta">Régimen: neutro. Frecuencia: acento. Mensual/eventual (derivado): outline. Estados de tarea: neutro → acento → verde; cancelada tachada.</div>
+    </div>
+
+    <!-- Indicadores de saldo -->
+    <div class="card" style="gap:14px">
+      <div class="card-kicker">Saldo · indicador verde / rojo (F5)</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;font-variant-numeric:tabular-nums">
+        <div style="flex:1;min-width:140px;padding:12px 14px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Saldo</div><div style="display:flex;align-items:center;gap:8px;font-size:22px;font-weight:500;color:oklch(0.72 0.125 25)"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.125 25)"></span>$ 11.400</div><div style="font-size:12px;color:#9397ab">Debe · 2 períodos</div></div>
+        <div style="flex:1;min-width:140px;padding:12px 14px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Saldo</div><div style="display:flex;align-items:center;gap:8px;font-size:22px;font-weight:500;color:oklch(0.72 0.125 150)"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.125 150)"></span>$ 0</div><div style="font-size:12px;color:#9397ab">Al día</div></div>
+        <div style="flex:1;min-width:140px;padding:12px 14px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Saldo</div><div style="display:flex;align-items:center;gap:8px;font-size:22px;font-weight:500;color:oklch(0.72 0.125 150)"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.125 150)"></span>−$ 5.700</div><div style="font-size:12px;color:#9397ab">Saldo a favor</div></div>
+      </div>
+      <div class="card-meta">Positivo = debe (rojo). Cero o negativo = al día / a favor (verde). En tablas, el mismo punto + importe coloreado en la celda.</div>
+    </div>
+
+    <!-- Semáforo -->
+    <div class="card" style="gap:12px;grid-column:1 / -1">
+      <div class="card-kicker">Semáforo de urgencia + fecha límite · encabezado de grupo por cliente (F7 ↔ F8)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><span style="width:10px;height:10px;border-radius:50%;background:oklch(0.66 0.125 150);box-shadow:0 0 10px oklch(0.66 0.125 150 / .6);flex:none"></span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">Fernández, Lucía <span style="color:#9397ab;font-weight:400">· Unipersonal profesional</span></div><div style="font-size:12px;color:#9397ab">Fecha límite: 22/06 — DGI</div></div><span style="font-size:12px;color:#9397ab;font-variant-numeric:tabular-nums">4 de 4</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><span style="width:10px;height:10px;border-radius:50%;background:oklch(0.76 0.125 80);box-shadow:0 0 10px oklch(0.76 0.125 80 / .6);flex:none"></span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">Verdulería El Sol <span style="color:#9397ab;font-weight:400">· Régimen general</span></div><div style="font-size:12px;color:#9397ab">Fecha límite: 25/06 — BPS · faltan 9 días</div></div><span style="font-size:12px;color:#9397ab;font-variant-numeric:tabular-nums">2 de 6</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><span style="width:10px;height:10px;border-radius:50%;background:oklch(0.66 0.125 25);box-shadow:0 0 10px oklch(0.66 0.125 25 / .6);flex:none"></span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">Rodríguez, Martín <span style="color:#9397ab;font-weight:400">· Monotributo</span></div><div style="font-size:12px;color:oklch(0.78 0.1 25)">Fecha límite: 18/06 — BPS · faltan 2 días</div></div><span style="font-size:12px;color:#9397ab;font-variant-numeric:tabular-nums">0 de 3</span></div>
+      </div>
+      <div class="card-meta">Verde: todo completado o cancelado. Amarillo: pendientes y &gt; 5 días. Rojo: pendientes y ≤ 5 días o vencido. Sin vencimientos aplicables: sin punto ni fecha límite. El punto lleva un halo suave — único lugar donde el color "brilla".</div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card" style="gap:12px;grid-column:1 / -1;padding:14px 16px">
+      <div class="card-kicker">Tabla de datos · reglas que se desvanecen en los extremos</div>
+      <table class="table" style="font-variant-numeric:tabular-nums">
+        <thead><tr><th>Nombre</th><th>Régimen</th><th>RUT</th><th>Tipo</th><th style="text-align:right">Saldo</th><th>Estado</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Fernández, Lucía</td><td><span class="tag tag-neutral">Unipersonal profesional</span></td><td style="color:#b2b6ca">217894560012</td><td><span class="tag tag-outline">Mensual</span></td><td style="text-align:right;color:oklch(0.72 0.125 150)">$ 0</td><td><span style="font-size:13px;color:#b2b6ca">Activo</span></td><td style="text-align:right"><a href="#" class="btn btn-ghost" style="font-size:13px">Ver ficha</a></td></tr>
+          <tr><td>Verdulería El Sol</td><td><span class="tag tag-neutral">Régimen general</span></td><td style="color:#b2b6ca">218855430017</td><td><span class="tag tag-outline">Mensual</span></td><td style="text-align:right;color:oklch(0.72 0.125 25)">$ 11.400</td><td><span style="font-size:13px;color:#b2b6ca">Activo</span></td><td style="text-align:right"><a href="#" class="btn btn-ghost" style="font-size:13px">Ver ficha</a></td></tr>
+          <tr><td>Pereira, Ana</td><td><span class="tag tag-neutral">Persona física</span></td><td style="color:#75798c">—</td><td><span class="tag tag-outline">Eventual</span></td><td style="text-align:right;color:oklch(0.72 0.125 150)">$ 0</td><td><span style="font-size:13px;color:#75798c">Inactivo</span></td><td style="text-align:right"><a href="#" class="btn btn-ghost" style="font-size:13px">Ver ficha</a></td></tr>
+        </tbody>
+      </table>
+      <div class="card-meta">Encabezados en mayúsculas 11px. Importes alineados a la derecha. Acción por fila como botón ghost. Vacíos con "—". En móvil, las tablas de las 4 vistas responsive pasan a lista de tarjetas.</div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="card" style="gap:14px">
+      <div class="card-kicker">Formulario · campos, obligatorios, mensajes exactos</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field" style="grid-column:1 / -1"><label>Nombre <span style="color:#9184d9">*</span></label><input class="input" value="Fernández, Lucía"></div>
+        <div class="field"><label>Régimen <span style="color:#9184d9">*</span></label><select class="input"><option>Unipersonal profesional</option><option>Pequeña empresa</option></select></div>
+        <div class="field"><label>Fecha de inicio <span style="color:#9184d9">*</span></label><input class="input" type="date" value="2026-09-11"></div>
+        <div class="field" style="grid-column:1 / -1"><label>RUT</label><input class="input" value="21789456" style="border-color:oklch(0.66 0.125 25)"><div style="display:flex;align-items:center;gap:6px;margin-top:5px;font-size:12px;color:oklch(0.78 0.1 25)"><i class="ph ph-warning-circle"></i>El RUT debe tener 12 dígitos numéricos.</div></div>
+        <div class="field" style="grid-column:1 / -1"><label>Notas</label><textarea class="input" style="min-height:64px" placeholder="Opcional"></textarea></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px"><button class="btn btn-secondary">Cancelar</button><button class="btn btn-primary">Guardar</button></div>
+      <div class="card-meta">Obligatorio = asterisco en acento. Error = borde rojo + mensaje literal del Chat 3 debajo del campo. Guardar siempre a la derecha, primario outline.</div>
+    </div>
+
+    <!-- Diálogo + toggle + filtros -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="card" style="gap:12px">
+        <div class="card-kicker">Confirmación destructiva</div>
+        <div class="dialog" style="width:100%;padding:14px;gap:8px">
+          <div class="dialog-title" style="font-size:17px">Eliminar credencial</div>
+          <div class="dialog-body">¿Confirmás que querés eliminar esta credencial? Esta acción no se puede deshacer.</div>
+          <div class="dialog-actions" style="margin-top:4px"><button class="btn btn-secondary">Cancelar</button><button class="btn" style="color:oklch(0.72 0.125 25);border-color:oklch(0.66 0.125 25)">Eliminar</button></div>
+        </div>
+        <div class="card-meta">Solo para eliminaciones físicas y cancelar tarea. El resto de los cambios de estado son un clic, sin diálogo.</div>
+      </div>
+      <div class="card" style="gap:12px">
+        <div class="card-kicker">Filtros · segmentado y período</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <div class="seg"><label class="seg-opt"><input type="radio" name="e" checked>Todas</label><label class="seg-opt"><input type="radio" name="e">Pendientes</label><label class="seg-opt"><input type="radio" name="e">Completadas</label></div>
+          <div style="display:inline-flex;align-items:center;border:1px solid rgba(233,233,237,.16);border-radius:8px;overflow:hidden"><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-left"></i></button><span style="font-size:13px;padding:0 10px;min-width:96px;text-align:center">setiembre 2026</span><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-right"></i></button></div>
+        </div>
+        <div style="padding:18px;border-radius:8px;border:1px dashed #3f424d;text-align:center;font-size:13px;color:#9397ab">No hay vencimientos en los próximos 15 días.</div>
+        <div class="card-meta">Estado vacío: caja punteada con el mensaje literal. Navegador de mes: mismo control en calendario, tareas e histórico.</div>
+      </div>
+    </div>
+
+    <!-- Recordatorio item -->
+    <div class="card" style="gap:10px;grid-column:1 / -1">
+      <div class="card-kicker">Ítem de recordatorio · panel campanita (F10)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px">
+        <div style="display:flex;gap:10px;padding:10px 12px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><i class="ph ph-calendar-blank" style="font-size:18px;color:#9184d9;flex:none;margin-top:2px"></i><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px"><div style="font-size:13px;line-height:1.4">IVA mensual (DGI) vence el 22/09/2026 — faltan 2 días. Afecta a 7 clientes.</div><div style="display:flex;gap:10px;align-items:center;font-size:12px;color:#9397ab">hace 1 h<a href="#" class="btn btn-ghost" style="font-size:12px;padding:2px 4px">Ver calendario</a><a href="#" class="btn btn-ghost" style="font-size:12px;padding:2px 4px;color:#9397ab">Silenciar</a></div></div></div>
+        <div style="display:flex;gap:10px;padding:10px 12px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><i class="ph ph-check-square" style="font-size:18px;color:oklch(0.76 0.125 80);flex:none;margin-top:2px"></i><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px"><div style="font-size:13px;line-height:1.4">La tarea Solicitar facturas emitidas de Verdulería El Sol lleva 10 días sin completarse.</div><div style="display:flex;gap:10px;align-items:center;font-size:12px;color:#9397ab">hace 3 días<a href="#" class="btn btn-ghost" style="font-size:12px;padding:2px 4px">Ver tarea</a><a href="#" class="btn btn-ghost" style="font-size:12px;padding:2px 4px;color:#9397ab">Silenciar</a></div></div></div>
+        <div style="display:flex;gap:10px;padding:10px 12px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d"><i class="ph ph-currency-dollar" style="font-size:18px;color:oklch(0.66 0.125 25);flex:none;margin-top:2px"></i><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px"><div style="font-size:13px;line-height:1.4">Rodríguez, Martín tiene pendiente el pago de jul 2026. Saldo actual: $ 11.400.</div><div style="display:flex;gap:10px;align-items:center;font-size:12px;color:#9397ab">hace 10 días<a href="#" class="btn btn-ghost" style="font-size:12px;padding:2px 4px">Registrar cobro</a><a href="#" class="btn btn-ghost" style="font-size:12px;padding:2px 4px;color:#9397ab">Silenciar</a></div></div></div>
+      </div>
+      <div class="card-meta">Ícono por tipo: vencimiento (acento), tarea atrasada (amarillo), cobro pendiente (rojo). Orden del panel: vencimientos por fecha → tareas y cobros por antigüedad.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 Hallazgos -->
+<section style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px">
+  <div><h2 style="font-size:20px;font-weight:500;margin:0 0 6px">5. Registro de hallazgos</h2><p style="font-size:13px;color:#9397ab;margin:0">Se acumula grupo a grupo; al cierre se consolida como adenda al Chat 3.</p></div>
+  <div style="display:flex;flex-direction:column;gap:8px;font-size:14px">
+    <div style="display:grid;grid-template-columns:70px 1fr 90px;gap:12px;padding:10px 12px;border-radius:8px;background:#232532"><span style="color:#9184d9">H-01</span><span>Mapeo Pico.css ↔ Nocturne: Pico se usa solo como reset y grilla; los tokens de Nocturne sobreescriben <code style="font-size:13px;color:#d2cefd">--pico-*</code>. No es cambio funcional.</span><span class="tag tag-neutral" style="justify-self:end">Técnico</span></div>
+    <div style="display:grid;grid-template-columns:70px 1fr 90px;gap:12px;padding:10px 12px;border-radius:8px;background:#232532"><span style="color:#9184d9">H-02</span><span>La barra lateral muestra "X/Y tareas completadas del período" junto a Tareas. Es dato derivado que F7 ya calcula por cliente; se suma el total. Sin cambio de modelo.</span><span class="tag tag-accent" style="justify-self:end">MVP</span></div>
+    <div style="display:grid;grid-template-columns:70px 1fr 90px;gap:12px;padding:10px 12px;border-radius:8px;background:#232532"><span style="color:#9184d9">H-03</span><span>Los recordatorios de tipo <code style="font-size:13px;color:#d2cefd">cobro_pendiente</code> ofrecen "Registrar cobro" como acción directa (F10 dice "ir al elemento relacionado"; el elemento es el formulario de cobro precargado con el cliente).</span><span class="tag tag-accent" style="justify-self:end">MVP</span></div>
+  </div>
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>

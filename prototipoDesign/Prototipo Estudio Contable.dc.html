@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nocturne-0a52cd25-5dbf-4508-9376-688d61ebb35a/styles.css">
+<script src="_ds/nocturne-0a52cd25-5dbf-4508-9376-688d61ebb35a/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+body{background:#161826;color:#e9e9ed;font-family:"Inter",system-ui,sans-serif;margin:0;font-variant-numeric:tabular-nums}
+a{color:#9184d9}a:hover{color:#b5abfc}
+</style>
+</helmet>
+
+<!-- ═══ ESCRITORIO ═══ -->
+<sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:212px minmax(0,1fr);min-height:100vh;background:#161826">
+  <aside style="background:#1b1d2b;display:flex;flex-direction:column;padding:16px 12px;gap:4px;border-right:1px solid #292b31;position:sticky;top:0;height:100vh">
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px 18px;font-size:15px;font-weight:500"><span style="width:8px;height:8px;border-radius:2px;background:#9184d9;display:inline-block"></span>Estudio</div>
+    <a href="#" onClick="{{ go.dashboard }}" aria-current="{{ cur.dashboard }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-squares-four" style="font-size:18px"></i>Dashboard</a>
+    <a href="#" onClick="{{ go.clientes }}" aria-current="{{ cur.clientes }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-users" style="font-size:18px"></i>Clientes</a>
+    <a href="#" onClick="{{ go.cobros }}" aria-current="{{ cur.cobros }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-currency-dollar" style="font-size:18px"></i>Cobros</a>
+    <a href="#" onClick="{{ go.tareas }}" aria-current="{{ cur.tareas }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-check-square" style="font-size:18px"></i>Tareas<span style="margin-left:auto;font-size:11px;color:#9397ab">{{ progresoTotal }}</span></a>
+    <a href="#" onClick="{{ go.calendario }}" aria-current="{{ cur.calendario }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#cfd3e5;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-calendar-blank" style="font-size:18px"></i>Vencimientos</a>
+    <div style="flex:1"></div>
+    <a href="#" onClick="{{ go.formularios }}" aria-current="{{ cur.formularios }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:12px;color:#75798c;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-list-bullets" style="font-size:16px"></i>Índice de formularios (ref.)</a>
+    <a href="#" onClick="{{ go.config }}" aria-current="{{ cur.config }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#9397ab;text-decoration:none" style-hover="background:rgba(233,233,237,.06)"><i class="ph ph-gear-six" style="font-size:18px"></i>Configuración</a>
+  </aside>
+
+  <div style="display:flex;flex-direction:column;min-width:0">
+    <div style="display:flex;align-items:center;gap:8px;padding:12px 28px;border-bottom:1px solid #292b31;position:relative">
+      <span style="font-size:12px;color:#75798c;margin-right:auto">jueves 11 de setiembre de 2026</span>
+      <button class="btn btn-icon btn-secondary" onClick="{{ toggleBell }}" style="position:relative" aria-label="Recordatorios"><i class="ph ph-bell" style="font-size:18px"></i><span style="position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#9184d9;color:#161826;font-size:11px;font-weight:600;display:grid;place-items:center">{{ recCount }}</span></button>
+      <button onClick="{{ go.login }}" class="btn btn-icon btn-secondary" aria-label="Cerrar sesión" title="Cerrar sesión"><i class="ph ph-sign-out" style="font-size:18px"></i></button>
+
+      <!-- Panel de recordatorios (vista 6) -->
+      <sc-if value="{{ bellOpen }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="06 Recordatorios" style="position:absolute;top:56px;right:28px;width:420px;z-index:20;display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:14px;background:#232532;box-shadow:0 0 0 1px #9397ab,0 16px 40px rgba(0,0,0,.65)">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:2px 4px"><span style="font-size:15px;font-weight:500">Recordatorios</span><span style="font-size:12px;color:#9397ab">{{ recCount }} activos</span></div>
+        <sc-for list="{{ recordatorios }}" as="r" hint-placeholder-count="4">
+          <div style="display:flex;gap:10px;padding:10px 12px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d">
+            <i class="{{ r.icon }}" style="{{ r.iconStyle }}"></i>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+              <div style="font-size:13px;line-height:1.4">{{ r.mensaje }}</div>
+              <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:#9397ab;flex-wrap:wrap"><span>{{ r.antiguedad }}</span><a href="#" onClick="{{ r.ir }}" class="btn btn-ghost" style="font-size:12px;padding:2px 4px">{{ r.accion }}</a><a href="#" onClick="{{ r.silenciar }}" class="btn btn-ghost" style="font-size:12px;padding:2px 4px;color:#9397ab">Silenciar</a>
+                <sc-if value="{{ r.silOpen }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;gap:4px;align-items:center;font-size:12px;color:#9397ab">por<button class="btn btn-secondary" style="padding:2px 8px;font-size:12px">3 d</button><button class="btn btn-secondary" style="padding:2px 8px;font-size:12px">5 d</button><button class="btn btn-secondary" style="padding:2px 8px;font-size:12px" disabled="{{ r.sil7off }}">7 d</button></span></sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+        <div style="font-size:11px;color:#75798c;padding:2px 4px">Los cerrados no se muestran. Silenciar saca el ítem del panel y del email hasta la fecha elegida.</div>
+      </div>
+      </sc-if>
+    </div>
+
+    <!-- ═══ Formularios en diálogo (13–17, 19) ═══ -->
+    <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop" style="z-index:50;align-items:start;padding-top:48px;overflow:auto">
+      <div class="dialog" style="width:min(600px,100%)">
+
+        <sc-if value="{{ form.cliente }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="13 Editar cliente" style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="dialog-title">Editar cliente</span><span style="font-size:12px;color:#9397ab">Mismo formulario para crear</span></div>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field" style="grid-column:1 / -1"><label>Nombre <span style="color:#9184d9">*</span></label><input class="input" defaultValue="Verdulería El Sol"></div>
+            <div class="field"><label>Régimen <span style="color:#9184d9">*</span></label><select class="input" defaultValue="regimen_general" onChange="{{ onRegimen }}"><option value="unipersonal_prof">Unipersonal profesional</option><option value="unipersonal_no_prof">Unipersonal no profesional</option><option value="monotributo">Monotributo</option><option value="pequena_empresa">Pequeña empresa</option><option value="regimen_general">Régimen general</option><option value="persona_fisica">Persona física</option></select></div>
+            <div class="field"><label>Fecha de inicio</label><input class="input" type="date" defaultValue="2023-04-01" disabled="{{ true }}"><div style="font-size:11px;color:#75798c;margin-top:4px">No editable después de crear.</div></div>
+            <sc-if value="{{ regCambio }}" hint-placeholder-val="{{ false }}">
+            <div style="grid-column:1 / -1;padding:12px 14px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #5d5294;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end">
+              <div class="field"><label>Fecha de cambio de régimen <span style="color:#9184d9">*</span></label><input class="input" type="date" defaultValue="2026-09-11"></div>
+              <div style="font-size:12px;color:#b2b6ca;text-wrap:pretty">Cierra el régimen vigente el día anterior y abre uno nuevo en el historial. No puede ser anterior al 01/01/2025 ni futura.</div>
+            </div>
+            </sc-if>
+            <div class="field"><label>RUT</label><input class="input" defaultValue="218855430017"></div>
+            <div class="field"><label>CI</label><input class="input" defaultValue="4.512.336-7"></div>
+            <div class="field"><label>Fecha de nacimiento</label><input class="input" type="date" defaultValue="1979-03-14"></div>
+            <div class="field"><label>Teléfono</label><input class="input" defaultValue="099 123 456"></div>
+            <div class="field" style="grid-column:1 / -1"><label>Email</label><input class="input" defaultValue="elsol.verduleria@gmail.com"></div>
+            <div class="field" style="grid-column:1 / -1"><label>Notas</label><textarea class="input" style="min-height:64px" defaultValue="Manda las facturas por WhatsApp los primeros días del mes. Facturador propio con acceso directo."></textarea></div>
+          </div>
+          <div style="font-size:12px;color:#75798c">RUT: 12 dígitos, único entre todos los clientes (incluidos inactivos). CI: única. No se valida nombre duplicado.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Guardar</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.credencial }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="14 Nueva credencial" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Nueva credencial · Verdulería El Sol</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field"><label>Tipo <span style="color:#9184d9">*</span></label><select class="input" defaultValue="dgi"><option value="dgi">DGI</option><option value="bps">BPS</option><option value="facturador">Facturador</option><option value="clave_dgi">Clave DGI (certificados)</option><option value="otro">Otro</option></select></div>
+            <div class="field"><label>Última actualización</label><input class="input" defaultValue="11/09/2026" disabled="{{ true }}"></div>
+            <div class="field"><label>Usuario</label><input class="input" onChange="{{ setCu }}" placeholder="RUT, email o usuario"></div>
+            <div class="field"><label>Contraseña</label><div style="position:relative"><input class="input" type="password" onChange="{{ setCp }}" style="padding-right:36px"><button class="btn btn-icon" style="position:absolute;right:2px;top:2px;width:32px;height:32px;color:#9397ab" aria-label="Revelar"><i class="ph ph-eye"></i></button></div></div>
+            <sc-if value="{{ credErr }}" hint-placeholder-val="{{ false }}"><div style="grid-column:1 / -1;display:flex;align-items:center;gap:6px;font-size:12px;color:oklch(0.78 0.1 25)"><i class="ph ph-warning-circle"></i>Ingresá al menos usuario o contraseña.</div></sc-if>
+            <div class="field" style="grid-column:1 / -1"><label>Notas</label><textarea class="input" style="min-height:64px" placeholder="ej: la contraseña es la fecha de nacimiento"></textarea></div>
+          </div>
+          <div style="font-size:12px;color:#75798c;display:flex;gap:6px;align-items:center"><i class="ph ph-lock-key"></i>Usuario, contraseña y notas se cifran antes de guardarse. Puede haber más de una credencial del mismo tipo.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ intentar }}" class="btn btn-primary">Guardar</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.contratar }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="15 Contratar servicio" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Contratar servicio · Verdulería El Sol</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field" style="grid-column:1 / -1"><label>Servicio <span style="color:#9184d9">*</span></label><select class="input" defaultValue="" onChange="{{ onServ }}"><option value="">Elegí un servicio…</option><option>Liquidación mensual</option><option>DDJJ IVA anual</option><option>DDJJ IRPF anual</option><option>DDJJ FONASA</option><option>Declaración IRPF persona física</option><option>Certificado de ingresos</option><option>Gestión ante DGI</option><option>Gestión ante BPS</option></select>
+              <sc-if value="{{ servDup }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;gap:6px;margin-top:5px;font-size:12px;color:oklch(0.78 0.1 25)"><i class="ph ph-warning-circle"></i>El cliente ya tiene ese servicio contratado activo.</div></sc-if></div>
+            <div class="field"><label>Fecha de inicio <span style="color:#9184d9">*</span></label><input class="input" type="date" defaultValue="2026-09-11"></div>
+            <div class="field"><label>Honorario <span style="color:#9184d9">*</span></label><div style="position:relative"><span style="position:absolute;left:10px;top:8px;font-size:14px;color:#9397ab">$</span><input class="input" inputMode="numeric" style="padding-left:24px" placeholder="0"></div></div>
+          </div>
+          <div style="font-size:12px;color:#75798c;text-wrap:pretty">Al guardar se crea el primer honorario del historial y, si el servicio es mensual, las tareas del período en curso. Los únicos generan tareas solo si hay templates.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Contratar</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.finalizar }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="15b Finalizar servicio" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Finalizar servicio</span>
+          <div style="padding:10px 12px;border-radius:8px;background:#1b1d2b;font-size:14px;display:flex;justify-content:space-between;gap:12px"><span>Liquidación mensual <span class="tag tag-accent" style="margin-left:6px">Mensual</span></span><span style="color:#9397ab">desde 01/04/2023 · $ 7.000</span></div>
+          <div class="field" style="max-width:260px"><label>Fecha de finalización <span style="color:#9184d9">*</span></label><input class="input" type="date" defaultValue="2026-09-11"><div style="font-size:11px;color:#75798c;margin-top:4px">No puede ser anterior al inicio del contrato.</div></div>
+          <ul style="margin:0;padding-left:18px;font-size:13px;color:#b2b6ca;display:flex;flex-direction:column;gap:4px"><li>El contrato pasa a finalizado y sale del listado activo.</li><li>Se cierra el honorario vigente en esa fecha.</li><li>Las tareas pendientes quedan como están.</li><li>La deuda de períodos impagos no se borra.</li></ul>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Finalizar</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.cobro }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="16 Registrar cobro" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Registrar cobro</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field"><label>Cliente <span style="color:#9184d9">*</span></label><select class="input" defaultValue="8"><option value="8">Verdulería El Sol</option><option value="11">Rodríguez, Martín</option><option value="7">Acosta, Nahuel</option></select></div>
+            <div class="field"><label>Servicio contratado</label><select class="input" defaultValue="mensual" onChange="{{ onCobroServ }}"><option value="">Sin servicio específico</option><option value="mensual">Liquidación mensual · mensual</option><option value="anual">DDJJ IVA anual · anual</option><option value="unico">Gestión ante BPS · único</option></select></div>
+            <div class="field"><label>Período desde</label><input class="input" type="date" defaultValue="2026-07-01"></div>
+            <div class="field"><label>Período hasta</label><input class="input" type="date" defaultValue="2026-08-31"></div>
+            <div style="grid-column:1 / -1;font-size:12px;color:#75798c;margin-top:-4px;text-wrap:pretty">Van juntos: primer día del mes inicial y último del final. Un pago de varios meses es un solo cobro. <sc-if value="{{ cobroUnico }}" hint-placeholder-val="{{ false }}"><span style="color:#d2cefd">Servicio único: ambas fechas llevan la fecha real del trabajo (adenda C1).</span></sc-if></div>
+            <div class="field"><label>Fecha de cobro <span style="color:#9184d9">*</span></label><input class="input" type="date" defaultValue="2026-09-11"></div>
+            <div class="field"><label>Importe <span style="color:#9184d9">*</span></label><div style="position:relative"><span style="position:absolute;left:10px;top:8px;font-size:14px;color:#9397ab">$</span><input class="input" inputMode="numeric" style="padding-left:24px" defaultValue="14.000"></div></div>
+            <div class="field"><label>Forma de pago <span style="color:#9184d9">*</span></label><div class="seg"><label class="seg-opt"><input type="radio" name="fp" defaultChecked="{{ true }}">Transferencia</label><label class="seg-opt"><input type="radio" name="fp">Efectivo</label><label class="seg-opt"><input type="radio" name="fp">Otro</label></div></div>
+            <div class="field"><label>Comprobante <span style="color:#9184d9">*</span></label><div class="seg"><label class="seg-opt"><input type="radio" name="tc" defaultChecked="{{ true }}">e-Ticket</label><label class="seg-opt"><input type="radio" name="tc">No gravado</label><label class="seg-opt"><input type="radio" name="tc">Sin comprob.</label></div></div>
+            <div class="field" style="grid-column:1 / -1"><label>Notas</label><input class="input" placeholder="Opcional"></div>
+          </div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Registrar</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.descuento }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="16b Registrar descuento" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Registrar descuento · Verdulería El Sol</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field"><label>Servicio contratado</label><select class="input" defaultValue=""><option value="">Sin servicio específico</option><option>Liquidación mensual</option><option>DDJJ IVA anual</option></select></div>
+            <div class="field"><label>Fecha <span style="color:#9184d9">*</span></label><input class="input" type="date" defaultValue="2026-09-11"></div>
+            <div class="field"><label>Importe <span style="color:#9184d9">*</span></label><div style="position:relative"><span style="position:absolute;left:10px;top:8px;font-size:14px;color:#9397ab">$</span><input class="input" inputMode="numeric" style="padding-left:24px" placeholder="0"></div></div>
+            <div class="field" style="grid-column:1 / -1"><label>Motivo <span style="color:#9184d9">*</span></label><input class="input" placeholder="ej: bonificación por demora"></div>
+          </div>
+          <div style="font-size:12px;color:#75798c">El descuento se resta del saldo. Siempre positivo. Solo desde la ficha del cliente.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Registrar</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.honorario }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="17 Cambio de honorario" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Cambiar honorario</span>
+          <div style="padding:10px 12px;border-radius:8px;background:#1b1d2b;font-size:14px;display:flex;justify-content:space-between;gap:12px"><span>Liquidación mensual · Verdulería El Sol</span><span style="color:#9397ab">vigente <span style="color:#e9e9ed">$ 7.000</span> desde 01/01/2026</span></div>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field"><label>Nuevo honorario <span style="color:#9184d9">*</span></label><div style="position:relative"><span style="position:absolute;left:10px;top:8px;font-size:14px;color:#9397ab">$</span><input class="input" inputMode="numeric" style="padding-left:24px" value="{{ hNuevo }}" onChange="{{ setHNuevo }}"></div>
+              <sc-if value="{{ hIgual }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;gap:6px;margin-top:5px;font-size:12px;color:oklch(0.78 0.1 25)"><i class="ph ph-warning-circle"></i>El nuevo honorario es igual al vigente.</div></sc-if></div>
+            <div class="field"><label>Fecha de vigencia <span style="color:#9184d9">*</span></label><select class="input" value="{{ hVig }}" onChange="{{ setHVig }}"><sc-for list="{{ mesesVig }}" as="m" hint-placeholder-count="3"><option value="{{ m.v }}">{{ m.label }}</option></sc-for></select><div style="font-size:11px;color:#75798c;margin-top:4px">Primer día de mes. No anterior al 01/01/2026.</div></div>
+          </div>
+          <sc-if value="{{ hRetro }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:8px;background:oklch(0.36 0.06 80 / .5);box-shadow:0 0 0 1px oklch(0.76 0.125 80);font-size:13px;color:oklch(0.92 0.06 80)"><i class="ph ph-warning" style="font-size:16px;flex:none;margin-top:1px"></i>{{ hRetroMsg }}</div></sc-if>
+          <div style="font-size:12px;color:#75798c">Se cierra el registro vigente el día anterior y se abre uno nuevo. El saldo se recalcula con el honorario de cada período.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary" disabled="{{ hIgual }}">Aplicar cambio</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.servicio }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="20b Editar servicio" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Editar servicio</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field" style="grid-column:1 / -1"><label>Nombre <span style="color:#9184d9">*</span></label><input class="input" defaultValue="Liquidación mensual"></div>
+            <div class="field"><label>Frecuencia <span style="color:#9184d9">*</span></label><select class="input" defaultValue="mensual" disabled="{{ true }}"><option value="mensual">Mensual</option><option value="anual">Anual</option><option value="unico">Único</option></select><div style="display:flex;align-items:center;gap:6px;margin-top:5px;font-size:12px;color:oklch(0.78 0.1 25)"><i class="ph ph-warning-circle"></i>No se puede cambiar la frecuencia de un servicio con contratos activos.</div></div>
+          </div>
+          <div style="font-size:12px;color:#75798c">El nombre es único entre activos e inactivos.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Guardar</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.template }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="21b Nuevo template" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Nuevo template de tarea</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field"><label>Servicio <span style="color:#9184d9">*</span></label><select class="input" defaultValue="Liquidación mensual" onChange="{{ onTplServ }}"><option>Liquidación mensual</option><option>DDJJ IVA anual</option><option>DDJJ IRPF anual</option><option>DDJJ FONASA</option><option>Certificado de ingresos</option></select></div>
+            <div class="field"><label>Régimen <span style="color:#9184d9">*</span></label><select class="input" defaultValue="todos"><option value="todos">Todos</option><option value="unipersonal_prof">Unipersonal profesional</option><option value="unipersonal_no_prof">Unipersonal no profesional</option><option value="monotributo">Monotributo</option><option value="pequena_empresa">Pequeña empresa</option><option value="regimen_general">Régimen general</option><option value="persona_fisica">Persona física</option></select></div>
+            <div class="field" style="grid-column:1 / -1"><label>Nombre <span style="color:#9184d9">*</span></label><input class="input" placeholder="ej: Descargar facturas del facturador electrónico"></div>
+            <div class="field" style="grid-column:1 / -1"><label>Descripción</label><textarea class="input" style="min-height:56px" placeholder="Opcional"></textarea></div>
+            <div class="field"><label>Orden <span style="color:#9184d9">*</span></label><input class="input" inputMode="numeric" defaultValue="1"></div>
+            <sc-if value="{{ tplAnual }}" hint-placeholder-val="{{ false }}"><div class="field"><label>Mes de generación <span style="color:#9184d9">*</span></label><select class="input" defaultValue="6"><option value="1">enero</option><option value="2">febrero</option><option value="3">marzo</option><option value="4">abril</option><option value="5">mayo</option><option value="6">junio</option><option value="7">julio</option><option value="8">agosto</option><option value="9">setiembre</option><option value="10">octubre</option><option value="11">noviembre</option><option value="12">diciembre</option></select><div style="font-size:11px;color:#75798c;margin-top:4px">Solo para servicios anuales.</div></div></sc-if>
+          </div>
+          <div style="font-size:12px;color:#75798c">No puede repetirse servicio + régimen + nombre entre activos. El orden puede repetirse entre combinaciones distintas. Elegí un servicio anual para ver el mes de generación.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Crear template</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.vencimiento }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="22b Nuevo vencimiento" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Nuevo vencimiento</span>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+            <div class="field" style="grid-column:1 / -1"><label>Descripción <span style="color:#9184d9">*</span></label><input class="input" placeholder="ej: Aportes mensuales"></div>
+            <div class="field"><label>Organismo <span style="color:#9184d9">*</span></label><div class="seg"><label class="seg-opt"><input type="radio" name="org" defaultChecked="{{ true }}">DGI</label><label class="seg-opt"><input type="radio" name="org">BPS</label><label class="seg-opt"><input type="radio" name="org">Otro</label></div></div>
+            <div class="field" style="grid-column:span 2"><label>Régimen <span style="color:#9184d9">*</span></label><select class="input" defaultValue="todos"><option value="todos">Todos</option><option value="unipersonal_prof">Unipersonal profesional</option><option value="unipersonal_no_prof">Unipersonal no profesional</option><option value="monotributo">Monotributo</option><option value="pequena_empresa">Pequeña empresa</option><option value="regimen_general">Régimen general</option><option value="persona_fisica">Persona física</option></select></div>
+            <div class="field"><label>Mes</label><select class="input" defaultValue=""><option value="">Todos los meses</option><option value="1">enero</option><option value="2">febrero</option><option value="3">marzo</option><option value="4">abril</option><option value="5">mayo</option><option value="6">junio</option><option value="7">julio</option><option value="8">agosto</option><option value="9">setiembre</option><option value="10">octubre</option><option value="11">noviembre</option><option value="12">diciembre</option></select></div>
+            <div class="field"><label>Día de vencimiento <span style="color:#9184d9">*</span></label><input class="input" inputMode="numeric" placeholder="1–31"></div>
+            <div class="field"><label>Año</label><input class="input" inputMode="numeric" placeholder="Recurrente"></div>
+          </div>
+          <div style="font-size:12px;color:#75798c">No se valida duplicado exacto: la carga anual es de bajo volumen y queda a tu criterio. Un día 31 en abril se muestra como 30.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Crear vencimiento</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.gasto }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="25b Nuevo registro" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Nuevo gasto / ingreso propio</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field"><label>Tipo <span style="color:#9184d9">*</span></label><div class="seg"><label class="seg-opt"><input type="radio" name="gtipo" defaultChecked="{{ true }}">Gasto</label><label class="seg-opt"><input type="radio" name="gtipo">Ingreso</label></div></div>
+            <div class="field"><label>Fecha <span style="color:#9184d9">*</span></label><input class="input" type="date" defaultValue="2026-09-11"></div>
+            <div class="field" style="grid-column:1 / -1"><label>Concepto <span style="color:#9184d9">*</span></label><input class="input" placeholder="ej: Aportes CJPPU setiembre"></div>
+            <div class="field"><label>Importe <span style="color:#9184d9">*</span></label><div style="position:relative"><span style="position:absolute;left:10px;top:8px;font-size:14px;color:#9397ab">$</span><input class="input" inputMode="numeric" style="padding-left:24px" placeholder="0"></div></div>
+            <div class="field"><label>Categoría <span style="color:#9184d9">*</span></label><select class="input" defaultValue="cjppu"><option value="cjppu">CJPPU</option><option value="aportes_bps">Aportes BPS</option><option value="gasto_operativo">Gasto operativo</option><option value="otro">Otro</option></select></div>
+            <div class="field" style="grid-column:1 / -1"><label>Notas</label><input class="input" placeholder="Opcional"></div>
+          </div>
+          <div style="font-size:12px;color:#75798c">Importe mayor a cero, fecha no futura. Los cobros de clientes no se cargan acá.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Guardar</button></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ form.adhoc }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="19 Tarea ad-hoc" style="display:flex;flex-direction:column;gap:14px">
+          <span class="dialog-title">Nueva tarea ad-hoc</span>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field" style="grid-column:1 / -1"><label>Servicio contratado <span style="color:#9184d9">*</span></label><select class="input" defaultValue=""><option value="">Elegí cliente y servicio…</option><option>Verdulería El Sol · Liquidación mensual</option><option>Verdulería El Sol · DDJJ IVA anual</option><option>Pereira, Ana · Certificado de ingresos</option></select></div>
+            <div class="field" style="grid-column:1 / -1"><label>Nombre <span style="color:#9184d9">*</span></label><input class="input" placeholder="ej: Pedir nota de crédito de agosto"></div>
+            <div class="field"><label>Período <span style="color:#9184d9">*</span></label><input class="input" type="month" defaultValue="2026-09"></div>
+            <div class="field" style="align-self:end"><label class="radio" style="min-height:36px"><input type="checkbox"><span class="dot" style="border-radius:4px"></span>Requiere info del cliente</label></div>
+            <div class="field" style="grid-column:1 / -1"><label>Notas</label><input class="input" placeholder="Opcional"></div>
+          </div>
+          <div style="font-size:12px;color:#75798c">Se crea pendiente, sin template. Aparece al final del grupo del cliente en la vista de tareas.</div>
+          <div class="dialog-actions"><button onClick="{{ cerrar }}" class="btn btn-secondary">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary">Crear tarea</button></div>
+        </div>
+        </sc-if>
+
+      </div>
+    </div>
+    </sc-if>
+
+    <main style="padding:24px 28px 48px;display:flex;flex-direction:column;gap:20px;min-width:0">
+
+      <!-- ── 24 Histórico + proyección ── -->
+      <sc-if value="{{ is.finanzas }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="24 Histórico y proyección" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
+        <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px"><a href="#" onClick="{{ go.dashboard }}" style="color:inherit;text-decoration:none">Dashboard</a> / Finanzas</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Histórico mensual y proyección</h1></div>
+        <nav style="display:flex;gap:22px;border-bottom:1px solid #292b31"><a href="#" onClick="{{ finTab.historico }}" style="{{ finStyle.historico }}">Histórico · últimos 12 meses</a><a href="#" onClick="{{ finTab.proyeccion }}" style="{{ finStyle.proyeccion }}">Proyección · próximos 6 meses</a></nav>
+        <sc-if value="{{ finOn.historico }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0;overflow-x:auto">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span style="font-size:13px;color:#9397ab">Esperado con el honorario vigente de cada mes; cobrado por fecha de cobro.</span><div style="display:inline-flex;align-items:center;border:1px solid rgba(233,233,237,.16);border-radius:8px;overflow:hidden"><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-left"></i></button><span style="font-size:13px;padding:0 10px;min-width:150px;text-align:center">oct 2025 – set 2026</span><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0" disabled="{{ true }}"><i class="ph ph-caret-right"></i></button></div></div>
+          <table class="table" style="min-width:820px">
+            <thead><tr><th>Mes</th><th style="text-align:right">Esperado</th><th style="text-align:right">Cobrado</th><th style="width:90px"></th><th style="text-align:right">Diferencia</th><th style="text-align:right;white-space:nowrap">Ing. propios</th><th style="text-align:right">Gastos</th><th style="text-align:right;white-space:nowrap">Saldo neto</th></tr></thead>
+            <tbody><sc-for list="{{ hist }}" as="r" hint-placeholder-count="12">
+              <tr style="{{ r.rowStyle }}"><td style="white-space:nowrap">{{ r.mes }}</td><td style="text-align:right;white-space:nowrap">{{ r.espFmt }}</td><td style="text-align:right;white-space:nowrap">{{ r.cobFmt }}</td><td style="min-width:80px"><div style="display:flex;align-items:center;gap:6px"><div style="flex:1;min-width:0;height:4px;border-radius:2px;background:#292b31;overflow:hidden"><div style="{{ r.barStyle }}"></div></div><span style="font-size:11px;color:#75798c;width:34px;text-align:right;white-space:nowrap">{{ r.pctTxt }}</span></div></td><td style="text-align:right;white-space:nowrap"><span style="{{ r.difStyle }}">{{ r.difFmt }}</span></td><td style="text-align:right;color:#b2b6ca;white-space:nowrap">{{ r.propFmt }}</td><td style="text-align:right;color:#b2b6ca;white-space:nowrap">{{ r.gasFmt }}</td><td style="text-align:right;white-space:nowrap"><span style="{{ r.netoStyle }}">{{ r.netoFmt }}</span></td></tr>
+            </sc-for></tbody>
+          </table>
+          <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">Solo lectura. Junio incluye las DDJJ anuales (mes de generación 6). Diferencia negativa = se cobró más de lo esperado (atrasos, trabajos únicos). El mes en curso se muestra parcial.</p>
+        </div>
+        </sc-if>
+        <sc-if value="{{ finOn.proyeccion }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:720px">
+          <table class="table" style="min-width:820px">
+            <thead><tr><th>Mes</th><th style="text-align:right">Ingreso esperado proyectado</th><th>Observación</th></tr></thead>
+            <tbody><sc-for list="{{ proy }}" as="p" hint-placeholder-count="6"><tr><td>{{ p.mes }}</td><td style="text-align:right">{{ p.espFmt }}</td><td style="font-size:13px"><span style="{{ p.notaStyle }}">{{ p.notaTxt }}</span></td></tr></sc-for></tbody>
+          </table>
+          <div style="display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d;font-size:13px;color:#b2b6ca"><i class="ph ph-info" style="color:#9184d9;flex:none;margin-top:2px"></i>Proyección basada en la cartera actual. No incluye trabajos únicos ni cambios futuros.</div>
+          <p style="font-size:12px;color:#75798c;margin:0">Contratos activos × honorarios vigentes (incluye cambios ya registrados con vigencia futura); anuales en su mes de generación si cae en la ventana. No proyecta gastos.</p>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- ── 25 Gastos e ingresos propios ── -->
+      <sc-if value="{{ is.gastos }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="25 Gastos e ingresos propios" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px"><a href="#" onClick="{{ go.dashboard }}" style="color:inherit;text-decoration:none">Dashboard</a> / Finanzas</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Gastos e ingresos propios</h1></div>
+          <button onClick="{{ abrir.gasto }}" class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo registro</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div style="display:inline-flex;align-items:center;border:1px solid rgba(233,233,237,.16);border-radius:8px;overflow:hidden"><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-left"></i></button><span style="font-size:13px;padding:0 10px;min-width:110px;text-align:center">setiembre 2026</span><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-right"></i></button></div>
+          <div class="seg"><label class="seg-opt"><input type="radio" name="gt" defaultChecked="{{ true }}">Todos</label><label class="seg-opt"><input type="radio" name="gt">Gastos</label><label class="seg-opt"><input type="radio" name="gt">Ingresos</label></div>
+          <select class="input" style="width:auto;min-height:34px"><option>Todas las categorías</option><option>CJPPU</option><option>Aportes BPS</option><option>Gasto operativo</option><option>Otro</option></select>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:600px">
+          <div class="card" style="gap:2px"><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Ingresos propios</span><span style="font-size:22px;font-weight:500">{{ totIngresos }}</span></div>
+          <div class="card" style="gap:2px"><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Gastos</span><span style="font-size:22px;font-weight:500">{{ totGastos }}</span></div>
+          <div class="card" style="gap:2px"><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Neto del filtro</span><span style="font-size:22px;font-weight:500"><span style="{{ totNetoStyle }}">{{ totNeto }}</span></span></div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Categoría</th><th style="text-align:right">Importe</th><th>Notas</th><th></th></tr></thead>
+          <tbody><sc-for list="{{ gastos }}" as="g" hint-placeholder-count="4">
+            <tr><td style="color:#b2b6ca;white-space:nowrap">{{ g.fecha }}</td><td><span class="tag" style="{{ g.tipoStyle }}">{{ g.tipoLabel }}</span></td><td>{{ g.concepto }}</td><td style="font-size:13px;color:#b2b6ca;white-space:nowrap">{{ g.catLabel }}</td><td style="text-align:right;white-space:nowrap">{{ g.importeFmt }}</td><td style="font-size:13px;color:#9397ab">{{ g.notasFmt }}</td><td style="text-align:right;white-space:nowrap"><button onClick="{{ abrir.gasto }}" class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Editar"><i class="ph ph-pencil-simple"></i></button><button class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Eliminar"><i class="ph ph-trash"></i></button></td></tr>
+          </sc-for></tbody>
+        </table>
+        <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">"Ingreso" es solo lo que no viene de clientes (intereses, trabajos fuera del sistema); los cobros de F5 ya cuentan como ingresos y no se duplican acá. Eliminación física con confirmación.</p>
+      </div>
+      </sc-if>
+
+      <!-- ── 20–23 Configuración ── -->
+      <sc-if value="{{ is.config }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="20-23 Configuración" style="display:flex;flex-direction:column;gap:20px">
+        <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px">Configuración</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Catálogos y ajustes</h1></div>
+        <nav style="display:flex;gap:22px;border-bottom:1px solid #292b31;flex-wrap:wrap">
+          <a href="#" onClick="{{ cfg.servicios }}" style="{{ cfgStyle.servicios }}">Servicios</a>
+          <a href="#" onClick="{{ cfg.templates }}" style="{{ cfgStyle.templates }}">Templates de tareas</a>
+          <a href="#" onClick="{{ cfg.vencimientos }}" style="{{ cfgStyle.vencimientos }}">Vencimientos</a>
+          <a href="#" onClick="{{ cfg.notificaciones }}" style="{{ cfgStyle.notificaciones }}">Notificaciones</a>
+        </nav>
+
+        <!-- 20 Servicios -->
+        <sc-if value="{{ cfgOn.servicios }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="20 Servicios" style="display:flex;flex-direction:column;gap:12px;max-width:900px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span style="font-size:13px;color:#9397ab">Catálogo de lo que se vende. Los precios viven en cada contrato.</span><button onClick="{{ abrir.servicio }}" class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo servicio</button></div>
+          <table class="table">
+            <thead><tr><th>Nombre</th><th>Frecuencia</th><th>Contratos activos</th><th>Estado</th><th></th></tr></thead>
+            <tbody><sc-for list="{{ servicios }}" as="x" hint-placeholder-count="8">
+              <tr style="{{ x.rowStyle }}"><td>{{ x.nombre }}</td><td><span class="tag tag-accent">{{ x.frecLabel }}</span></td><td style="color:#b2b6ca;font-size:13px">{{ x.contratosTxt }}</td><td style="font-size:13px">{{ x.estado }}</td><td style="text-align:right;white-space:nowrap"><a href="#" onClick="{{ abrir.servicio }}" class="btn btn-ghost" style="font-size:13px">Editar</a><a href="#" onClick="{{ x.toggle }}" class="btn btn-ghost" style="font-size:13px;color:#9397ab">{{ x.accion }}</a></td></tr>
+            </sc-for></tbody>
+          </table>
+          <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">Orden: frecuencia y luego nombre. Desactivar no pide confirmación y no toca contratos existentes; el servicio deja de aparecer al contratar. Sin eliminación desde la app.</p>
+        </div>
+        </sc-if>
+
+        <!-- 21 Templates -->
+        <sc-if value="{{ cfgOn.templates }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="21 Templates de tareas" style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="display:flex;gap:8px;align-items:center"><select class="input" style="width:auto;min-height:34px"><option>Todos los servicios</option><option>Liquidación mensual</option><option>DDJJ FONASA</option><option>DDJJ IVA anual</option></select><select class="input" style="width:auto;min-height:34px"><option>Todos los regímenes</option><option>Todos (genérico)</option><option>Unipersonal profesional</option><option>Régimen general</option><option>Monotributo</option></select></div>
+            <button onClick="{{ abrir.template }}" class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo template</button>
+          </div>
+          <table class="table">
+            <thead><tr><th>Servicio</th><th>Régimen</th><th style="width:36px;text-align:right">#</th><th>Tarea</th><th>Mes gen.</th><th>Estado</th><th></th></tr></thead>
+            <tbody><sc-for list="{{ templates }}" as="x" hint-placeholder-count="10">
+              <tr style="{{ x.rowStyle }}"><td style="font-size:13px;color:#b2b6ca">{{ x.serv }}</td><td><span class="tag tag-neutral">{{ x.regLabel }}</span></td><td style="text-align:right;color:#9397ab">{{ x.orden }}</td><td>{{ x.nombre }}</td><td style="color:#b2b6ca;font-size:13px">{{ x.mesLabel }}</td><td style="font-size:13px">{{ x.estado }}</td><td style="text-align:right;white-space:nowrap"><a href="#" onClick="{{ abrir.template }}" class="btn btn-ghost" style="font-size:13px">Editar</a><a href="#" onClick="{{ x.toggle }}" class="btn btn-ghost" style="font-size:13px;color:#9397ab">{{ x.accion }}</a></td></tr>
+            </sc-for></tbody>
+          </table>
+          <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">Orden: servicio → régimen → orden. "Todos" aplica a cualquier régimen del servicio. Mes de generación solo en servicios anuales. Los cambios rigen para generaciones futuras.</p>
+        </div>
+        </sc-if>
+
+        <!-- 22 Vencimientos -->
+        <sc-if value="{{ cfgOn.vencimientos }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="22 Vencimientos" style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="display:flex;gap:8px;align-items:center"><select class="input" style="width:auto;min-height:34px"><option>2026 + recurrentes</option><option>2025</option><option>Todos los años</option></select><select class="input" style="width:auto;min-height:34px"><option>Todos los organismos</option><option>DGI</option><option>BPS</option><option>Otro</option></select><select class="input" style="width:auto;min-height:34px"><option>Todos los regímenes</option></select></div>
+            <button onClick="{{ abrir.vencimiento }}" class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo vencimiento</button>
+          </div>
+          <table class="table">
+            <thead><tr><th>Descripción</th><th>Organismo</th><th>Régimen</th><th>Mes</th><th style="text-align:right">Día</th><th>Año</th><th>Estado</th><th></th></tr></thead>
+            <tbody><sc-for list="{{ vencCfg }}" as="x" hint-placeholder-count="8">
+              <tr style="{{ x.rowStyle }}"><td>{{ x.desc }}</td><td><span class="tag tag-neutral" style="{{ x.orgTagStyle }}">{{ x.orgLabel }}</span></td><td style="font-size:13px;color:#b2b6ca;max-width:260px">{{ x.regLabel }}</td><td style="color:#b2b6ca">{{ x.mesLabel }}</td><td style="text-align:right">{{ x.dia }}</td><td style="{{ x.anioStyle }}">{{ x.anioLabel }}</td><td style="font-size:13px">{{ x.estado }}</td><td style="text-align:right;white-space:nowrap"><a href="#" onClick="{{ abrir.vencimiento }}" class="btn btn-ghost" style="font-size:13px">Editar</a><a href="#" onClick="{{ x.toggle }}" class="btn btn-ghost" style="font-size:13px;color:#9397ab">{{ x.accion }}</a></td></tr>
+            </sc-for></tbody>
+          </table>
+          <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">Carga manual una vez al año desde los calendarios oficiales DGI/BPS. Mes vacío = todos los meses; año vacío = recurrente. Un día 31 en un mes corto se muestra el último día real.</p>
+        </div>
+        </sc-if>
+
+        <!-- 23 Notificaciones -->
+        <sc-if value="{{ cfgOn.notificaciones }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="23 Notificaciones" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:20px;max-width:900px;align-items:start">
+          <section class="card" style="gap:14px;padding:16px 18px">
+            <div class="card-kicker">Email resumen diario</div>
+            <div class="field"><label>Dirección de destino <span style="color:#9184d9">*</span></label><input class="input" type="email" defaultValue="contador@outlook.com"></div>
+            <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary">Guardar</button></div>
+            <div class="card-meta">Cambiar la casilla no toca código. La infraestructura de envío se configura por variables de entorno.</div>
+          </section>
+          <section class="card" style="gap:10px;padding:16px 18px">
+            <div class="card-kicker">Cómo funciona</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#b2b6ca">
+              <div style="display:flex;gap:10px"><i class="ph ph-clock" style="color:#9184d9;flex:none;margin-top:2px"></i>Un único email por día, a las 06:00, solo si hay recordatorios activos sin silenciar.</div>
+              <div style="display:flex;gap:10px"><i class="ph ph-list-dashes" style="color:#9184d9;flex:none;margin-top:2px"></i>Agrupado como el panel: vencimientos próximos → tareas atrasadas → cobros pendientes.</div>
+              <div style="display:flex;gap:10px"><i class="ph ph-bell" style="color:#9184d9;flex:none;margin-top:2px"></i>El panel de la app es la fuente; el email es un espejo. Si falla el envío, el ciclo diario sigue.</div>
+            </div>
+            <div style="height:1px;background:linear-gradient(to right,transparent,rgba(233,233,237,.16) 48px,rgba(233,233,237,.16) calc(100% - 48px),transparent)"></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#9397ab">Último envío</span><span>hoy 06:00 · 4 recordatorios</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#9397ab">Proceso diario</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.66 0.125 150)"></span>ok · 06:00</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#9397ab">Proceso mensual</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.66 0.125 150)"></span>ok · 01/09 06:00</span></div>
+          </section>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- ── Índice de formularios (referencia) ── -->
+      <sc-if value="{{ is.formularios }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="13-19 Índice de formularios" style="display:flex;flex-direction:column;gap:20px;max-width:760px">
+        <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px">Referencia · Etapa 1</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Formularios y flujos</h1><p style="font-size:13px;color:#9397ab;margin:6px 0 0;max-width:600px;text-wrap:pretty">En la app cada formulario se abre desde su contexto (ficha, listado, tareas). Este índice existe solo para revisarlos de a uno.</p></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+          <a href="#" onClick="{{ abrir.cliente }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">13 · F1</span><span class="card-title">Crear / editar cliente</span><span class="card-body">Con flujo de cambio de régimen</span></a>
+          <a href="#" onClick="{{ abrir.credencial }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">14 · F2</span><span class="card-title">Crear / editar credencial</span><span class="card-body">Validación "al menos usuario o contraseña"</span></a>
+          <a href="#" onClick="{{ abrir.contratar }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">15 · F4</span><span class="card-title">Contratar servicio</span><span class="card-body">Elegí "Liquidación mensual" para ver el duplicado</span></a>
+          <a href="#" onClick="{{ abrir.finalizar }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">15b · F4</span><span class="card-title">Finalizar servicio</span><span class="card-body">Fecha de fin y consecuencias</span></a>
+          <a href="#" onClick="{{ abrir.cobro }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">16 · F5</span><span class="card-title">Registrar cobro</span><span class="card-body">Multi-período; convención para únicos</span></a>
+          <a href="#" onClick="{{ abrir.descuento }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">16b · F5</span><span class="card-title">Registrar descuento</span><span class="card-body">Solo desde la ficha</span></a>
+          <a href="#" onClick="{{ abrir.honorario }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">17 · F6</span><span class="card-title">Cambio individual de honorario</span><span class="card-body">Probá 7000 o una fecha pasada</span></a>
+          <a href="#" onClick="{{ go.aumento }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">18 · F6</span><span class="card-title">Aumento global — 3 pasos</span><span class="card-body">Vista completa, redondeo a múltiplo de 10</span></a>
+          <a href="#" onClick="{{ abrir.adhoc }}" class="card" style="text-decoration:none;color:inherit;gap:4px;box-shadow:0 0 0 1px #3f424d" style-hover="box-shadow:0 0 0 1px #9184d9"><span class="card-kicker">19 · F7</span><span class="card-title">Tarea ad-hoc</span><span class="card-body">Sin template, período por defecto en curso</span></a>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ── 18 Aumento global ── -->
+      <sc-if value="{{ is.aumento }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="18 Aumento global de honorarios" style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px"><a href="#" onClick="{{ go.cobros }}" style="color:inherit;text-decoration:none">Cobros</a> / Honorarios</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Aumento global de honorarios</h1></div>
+          <ol style="display:flex;gap:18px;margin:0;padding:0;list-style:none;font-size:13px"><li style="{{ pasoStyle.1 }}"><span style="display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid currentColor;font-size:11px;margin-right:6px">1</span>Parámetros</li><li style="{{ pasoStyle.2 }}"><span style="display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid currentColor;font-size:11px;margin-right:6px">2</span>Selección</li><li style="{{ pasoStyle.3 }}"><span style="display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid currentColor;font-size:11px;margin-right:6px">3</span>Confirmar</li></ol>
+        </div>
+
+        <sc-if value="{{ pasoDone }}" hint-placeholder-val="{{ false }}">
+          <section class="card" style="gap:12px;padding:20px;max-width:560px;box-shadow:0 0 0 1px oklch(0.66 0.125 150)">
+            <div style="display:flex;align-items:center;gap:10px;font-size:17px;font-weight:500"><i class="ph ph-check-circle" style="font-size:22px;color:oklch(0.66 0.125 150)"></i>Aumento aplicado a {{ nSel }} contratos</div>
+            <div style="font-size:14px;color:#b2b6ca">Vigencia {{ vigFmt }}. Se cerró el honorario vigente de cada contrato y se abrió el nuevo. Los saldos se recalcularon.</div>
+            <div style="display:flex;gap:8px"><a href="#" onClick="{{ go.cobros }}" class="btn btn-primary">Ir a cobros</a><a href="#" onClick="{{ reiniciarAumento }}" class="btn btn-secondary">Volver a empezar (prototipo)</a></div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ paso1 }}" hint-placeholder-val="{{ true }}">
+        <section class="card" style="gap:16px;padding:20px;max-width:560px">
+          <div class="card-kicker">Paso 1 · Parámetros</div>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div class="field"><label>Porcentaje de aumento <span style="color:#9184d9">*</span></label><div style="position:relative"><input class="input" inputMode="decimal" value="{{ pct }}" onChange="{{ setPct }}" style="padding-right:28px"><span style="position:absolute;right:10px;top:8px;font-size:14px;color:#9397ab">%</span></div><div style="font-size:11px;color:#75798c;margin-top:4px">Uso típico: IPC + margen en enero.</div></div>
+            <div class="field"><label>Fecha de vigencia <span style="color:#9184d9">*</span></label><select class="input" value="{{ vig }}" onChange="{{ setVig }}"><option value="2026-10-01">01/10/2026</option><option value="2026-11-01">01/11/2026</option><option value="2026-12-01">01/12/2026</option><option value="2027-01-01">01/01/2027</option></select><div style="font-size:11px;color:#75798c;margin-top:4px">Primer día de mes; aplica a todos los seleccionados.</div></div>
+          </div>
+          <div style="font-size:13px;color:#b2b6ca">Fórmula: honorario nuevo = redondeo hacia arriba de vigente × (1 + %) al múltiplo de 10. Ej.: $ 5.700 × 1,085 = $ 6.184,50 → <span style="color:#e9e9ed">$ 6.190</span>.</div>
+          <div style="display:flex;justify-content:flex-end"><a href="#" onClick="{{ irPaso.2 }}" class="btn btn-primary" disabled="{{ pctBad }}">Continuar<i class="ph ph-arrow-right"></i></a></div>
+        </section>
+        </sc-if>
+
+        <sc-if value="{{ paso2 }}" hint-placeholder-val="{{ false }}">
+        <section style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="display:flex;gap:12px;align-items:center;font-size:13px;color:#9397ab"><span class="card-kicker">Paso 2 · Selección</span><span>{{ pct }} % · vigencia {{ vigFmt }}</span><span><span style="color:#e9e9ed">{{ nSel }}</span> seleccionados</span></div>
+            <div style="display:flex;gap:6px"><a href="#" onClick="{{ selAll }}" class="btn btn-ghost" style="font-size:13px">Seleccionar todos</a><a href="#" onClick="{{ selNone }}" class="btn btn-ghost" style="font-size:13px;color:#9397ab">Deseleccionar todos</a></div>
+          </div>
+          <table class="table">
+            <thead><tr><th style="width:36px"></th><th>Cliente</th><th>Servicio</th><th>Frecuencia</th><th style="text-align:right">Vigente</th><th style="text-align:right">Nuevo</th><th></th></tr></thead>
+            <tbody><sc-for list="{{ filasA }}" as="f" hint-placeholder-count="8">
+              <tr style="{{ f.rowStyle }}">
+                <td><label class="radio" style="min-height:24px"><input type="checkbox" checked="{{ f.checked }}" onChange="{{ f.toggle }}" disabled="{{ f.invalido }}"><span class="dot" style="border-radius:4px"></span></label></td>
+                <td>{{ f.cliente }}</td><td>{{ f.serv }}</td><td><span class="tag tag-accent">{{ f.frecLabel }}</span></td>
+                <td style="text-align:right;color:#b2b6ca">{{ f.honorFmt }}</td>
+                <td style="text-align:right"><div style="position:relative;display:inline-block;width:110px"><span style="position:absolute;left:10px;top:6px;font-size:13px;color:#9397ab">$</span><input class="input" inputMode="numeric" value="{{ f.nuevoStr }}" onChange="{{ f.setManual }}" disabled="{{ f.invalido }}" style="min-height:32px;padding:4px 8px 4px 22px;text-align:right;font-size:13px"></div></td>
+                <td style="font-size:12px;color:#9397ab;white-space:nowrap"><sc-if value="{{ f.invalido }}" hint-placeholder-val="{{ false }}"><span style="color:oklch(0.78 0.1 25);display:inline-flex;align-items:center;gap:4px"><i class="ph ph-warning-circle"></i>Vigencia anterior a su honorario vigente ({{ f.desdeFmt }})</span></sc-if><sc-if value="{{ f.editado }}" hint-placeholder-val="{{ false }}"><span style="color:#d2cefd">editado a mano</span></sc-if></td>
+              </tr>
+            </sc-for></tbody>
+          </table>
+          <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">Solo contratos activos mensuales y anuales; los únicos quedan afuera. Por defecto ninguno seleccionado. El importe editado reemplaza al calculado sin redondeo adicional.</p>
+          <div style="display:flex;justify-content:space-between"><a href="#" onClick="{{ irPaso.1 }}" class="btn btn-secondary"><i class="ph ph-arrow-left"></i>Parámetros</a><a href="#" onClick="{{ irPaso.3 }}" class="btn btn-primary" disabled="{{ sinSel }}">Revisar<i class="ph ph-arrow-right"></i></a></div>
+        </section>
+        </sc-if>
+
+        <sc-if value="{{ paso3 }}" hint-placeholder-val="{{ false }}">
+        <section style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+          <div class="card-kicker">Paso 3 · Confirmar</div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+            <div class="card" style="gap:2px"><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Contratos</span><span style="font-size:22px;font-weight:500">{{ nSel }}</span></div>
+            <div class="card" style="gap:2px"><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Vigencia</span><span style="font-size:22px;font-weight:500">{{ vigFmt }}</span></div>
+            <div class="card" style="gap:2px"><span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Total mensual+anual</span><span style="font-size:22px;font-weight:500">{{ totalVigente }} <span style="color:#9397ab;font-size:14px">→</span> {{ totalNuevo }}</span></div>
+          </div>
+          <table class="table">
+            <thead><tr><th>Cliente</th><th>Servicio</th><th style="text-align:right">Vigente</th><th style="text-align:right">Nuevo</th></tr></thead>
+            <tbody><sc-for list="{{ seleccionadas }}" as="f" hint-placeholder-count="3"><tr><td>{{ f.cliente }}</td><td>{{ f.serv }}</td><td style="text-align:right;color:#b2b6ca">{{ f.honorFmt }}</td><td style="text-align:right">{{ f.nuevoFmt }}</td></tr></sc-for></tbody>
+          </table>
+          <div style="display:flex;justify-content:space-between"><a href="#" onClick="{{ irPaso.2 }}" class="btn btn-secondary"><i class="ph ph-arrow-left"></i>Selección</a><a href="#" onClick="{{ confirmarAumento }}" class="btn btn-primary"><i class="ph ph-check"></i>Confirmar aumento</a></div>
+        </section>
+        </sc-if>
+      </div>
+      </sc-if>
+
+
+      <!-- ── 01 Dashboard ── -->
+      <sc-if value="{{ is.dashboard }}" hint-placeholder-val="{{ true }}">
+      <div data-screen-label="01 Dashboard" style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px">Dashboard</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Setiembre 2026</h1></div>
+          <div style="display:flex;gap:8px"><a href="#" onClick="{{ abrir.cobro }}" class="btn btn-primary"><i class="ph ph-plus"></i>Registrar cobro</a></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px">
+          <!-- Bloque 1 -->
+          <section class="card" style="gap:14px;padding:16px 18px">
+            <div class="card-kicker">Ingresos del mes</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+              <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Esperado</div><div style="font-size:26px;font-weight:500;letter-spacing:-.02em">$ 71.700</div></div>
+              <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Cobrado</div><div style="font-size:26px;font-weight:500;letter-spacing:-.02em;color:oklch(0.72 0.125 150)">$ 44.300</div></div>
+              <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Diferencia</div><div style="font-size:26px;font-weight:500;letter-spacing:-.02em;color:oklch(0.72 0.125 25)">$ 27.400</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:6px;border-radius:3px;background:#292b31;overflow:hidden"><div style="width:62%;height:100%;border-radius:3px;background:linear-gradient(to right,#5d5294,#9184d9);box-shadow:0 0 12px rgba(145,132,217,.5)"></div></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#9397ab"><span>62 % cobrado</span><span>día 11 de 30</span></div></div>
+          </section>
+          <!-- Bloque 2 -->
+          <section class="card" style="gap:14px;padding:16px 18px">
+            <div class="card-kicker">P&amp;L del mes</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:14px">
+              <div style="display:flex;justify-content:space-between"><span style="color:#b2b6ca">Cobros de clientes</span><span>$ 44.300</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#b2b6ca">Ingresos propios</span><span style="color:#75798c">$ 0</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#b2b6ca">Gastos <span style="color:#75798c;font-size:12px">CJPPU 12.400 · BPS 4.100 · operativos 1.750</span></span><span>− $ 18.250</span></div>
+              <div style="height:1px;background:linear-gradient(to right,transparent,rgba(233,233,237,.16) 48px,rgba(233,233,237,.16) calc(100% - 48px),transparent)"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:500">Saldo neto</span><span style="display:flex;align-items:center;gap:8px;font-size:22px;font-weight:500;color:oklch(0.72 0.125 150)"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.125 150)"></span>$ 26.050</span></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><a href="#" onClick="{{ go.finanzas }}" class="btn btn-ghost" style="font-size:12px"><i class="ph ph-chart-line-up"></i>Histórico y proyección</a><a href="#" onClick="{{ go.gastos }}" class="btn btn-ghost" style="font-size:12px"><i class="ph ph-receipt"></i>Gastos e ingresos propios</a></div>
+          </section>
+        </div>
+
+        <!-- Bloque 3 -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+          <section class="card" style="gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="card-kicker">Próximos vencimientos</span><a href="#" onClick="{{ go.calendario }}" class="btn btn-ghost" style="font-size:12px">Calendario</a></div>
+            <sc-for list="{{ proximos }}" as="v" hint-placeholder-count="3">
+              <div style="display:flex;gap:10px;align-items:center;font-size:13px;padding:6px 0"><span style="width:6px;height:6px;border-radius:50%;flex:none" style-hover="" data-org="{{ v.org }}"></span><span style="width:52px;color:#b2b6ca;flex:none">{{ v.fecha }}</span><span style="flex:1;min-width:0">{{ v.desc }}</span><span class="tag tag-neutral" style="{{ v.orgTagStyle }}">{{ v.orgLabel }}</span><span style="color:#9397ab;font-size:12px;flex:none">{{ v.nClientes }} cl.</span></div>
+            </sc-for>
+          </section>
+          <section class="card" style="gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="card-kicker">Tareas del período</span><a href="#" onClick="{{ go.tareas }}" class="btn btn-ghost" style="font-size:12px">Ver tareas</a></div>
+            <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:26px;font-weight:500;letter-spacing:-.02em">{{ pendientesTotal }}</span><span style="font-size:13px;color:#9397ab">pendientes de {{ totalTareas }}</span></div>
+            <sc-for list="{{ gruposResumen }}" as="g" hint-placeholder-count="3">
+              <div style="display:flex;gap:10px;align-items:center;font-size:13px;padding:4px 0"><span style="{{ g.dotStyle }}"></span><span style="flex:1;min-width:0">{{ g.nombre }}</span><span style="color:#9397ab;font-size:12px">{{ g.progreso }}</span></div>
+            </sc-for>
+          </section>
+          <section class="card" style="gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="card-kicker">Mayor saldo deudor</span><a href="#" onClick="{{ go.cobros }}" class="btn btn-ghost" style="font-size:12px">Cobros</a></div>
+            <sc-for list="{{ deudores }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex;gap:10px;align-items:center;font-size:13px;padding:6px 0"><span style="flex:1;min-width:0">{{ c.nombre }}</span><span style="color:#9397ab;font-size:12px">{{ c.regLabel }}</span><span style="color:oklch(0.72 0.125 25);min-width:72px;text-align:right">{{ c.saldoFmt }}</span></div>
+            </sc-for>
+          </section>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ── 02 Clientes ── -->
+      <sc-if value="{{ is.clientes }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="02 Clientes" style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px">Clientes</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Listado de clientes</h1></div>
+          <div style="display:flex;gap:12px;align-items:center"><label onClick="{{ toggleInactivos }}" style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#b2b6ca;cursor:pointer;user-select:none"><span style="{{ toggleTrack }}"><span style="{{ toggleKnob }}"></span></span>Mostrar inactivos</label><button onClick="{{ abrir.cliente }}" class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo cliente</button></div>
+        </div>
+        <section style="display:flex;flex-direction:column;gap:8px">
+          <h2 style="font-size:17px;font-weight:500;margin:0;display:flex;align-items:baseline;gap:8px">Clientes mensuales <span style="font-size:12px;color:#9397ab">{{ nMensuales }}</span></h2>
+          <table class="table">
+            <thead><tr><th>Nombre</th><th>Régimen</th><th>RUT</th><th>Tipo</th><th>Estado</th><th></th></tr></thead>
+            <tbody><sc-for list="{{ mensuales }}" as="c" hint-placeholder-count="6">
+              <tr><td>{{ c.nombre }}</td><td><span class="tag tag-neutral">{{ c.regLabel }}</span></td><td style="color:#b2b6ca">{{ c.rutFmt }}</td><td><span class="tag tag-outline">Mensual</span></td><td style="font-size:13px;color:#b2b6ca">{{ c.estado }}</td><td style="text-align:right"><a href="#" onClick="{{ go.ficha }}" class="btn btn-ghost" style="font-size:13px">Ver ficha</a></td></tr>
+            </sc-for></tbody>
+          </table>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:8px">
+          <h2 style="font-size:17px;font-weight:500;margin:0;display:flex;align-items:baseline;gap:8px">Clientes eventuales <span style="font-size:12px;color:#9397ab">{{ nEventuales }}</span></h2>
+          <table class="table">
+            <thead><tr><th>Nombre</th><th>Régimen</th><th>RUT</th><th>Tipo</th><th>Estado</th><th></th></tr></thead>
+            <tbody><sc-for list="{{ eventuales }}" as="c" hint-placeholder-count="2">
+              <tr><td>{{ c.nombre }}</td><td><span class="tag tag-neutral">{{ c.regLabel }}</span></td><td style="color:#b2b6ca">{{ c.rutFmt }}</td><td><span class="tag tag-outline">Eventual</span></td><td style="font-size:13px;color:#b2b6ca">{{ c.estado }}</td><td style="text-align:right"><a href="#" onClick="{{ go.ficha }}" class="btn btn-ghost" style="font-size:13px">Ver ficha</a></td></tr>
+            </sc-for></tbody>
+          </table>
+        </section>
+        <p style="font-size:12px;color:#75798c;margin:0;max-width:640px">Mensual / eventual es derivado: un cliente es mensual si tiene al menos un servicio mensual activo. Orden: mensuales por régimen y luego id; eventuales por id.</p>
+      </div>
+      </sc-if>
+
+      <!-- ── 03 Cobros (vista global) ── -->
+      <sc-if value="{{ is.cobros }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="03 Cobros" style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px">Cobros</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Registro de cobros</h1></div>
+          <div style="display:flex;gap:16px;align-items:center;font-size:13px;color:#9397ab;flex-wrap:wrap"><a href="#" onClick="{{ go.aumento }}" class="btn btn-secondary" style="font-size:13px"><i class="ph ph-trend-up"></i>Aumento global de honorarios</a><span>Total adeudado <span style="color:oklch(0.72 0.125 25);font-size:17px;font-weight:500;margin-left:6px">{{ totalDeuda }}</span></span><span>A favor <span style="color:oklch(0.72 0.125 150);font-size:17px;font-weight:500;margin-left:6px">{{ totalFavor }}</span></span></div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Cliente</th><th>Régimen</th><th style="text-align:right">Saldo vigente</th><th>Situación</th><th></th></tr></thead>
+          <tbody><sc-for list="{{ porSaldo }}" as="c" hint-placeholder-count="8">
+            <tr><td>{{ c.nombre }}</td><td style="white-space:nowrap"><span class="tag tag-neutral">{{ c.regLabel }}</span></td><td style="text-align:right"><span style="{{ c.saldoStyle }}">{{ c.saldoFmt }}</span></td><td style="font-size:13px;color:#9397ab;white-space:nowrap">{{ c.situacion }}</td><td style="text-align:right;white-space:nowrap"><a href="#" onClick="{{ abrir.cobro }}" class="btn btn-primary" style="font-size:13px;padding:4px 10px"><i class="ph ph-plus"></i>Registrar cobro</a></td></tr>
+          </sc-for></tbody>
+        </table>
+        <p style="font-size:12px;color:#75798c;margin:0;max-width:640px">Solo clientes activos, ordenados por saldo descendente. "Registrar cobro" abre el formulario con el cliente preseleccionado.</p>
+      </div>
+      </sc-if>
+
+      <!-- ── 04 Tareas del período ── -->
+      <sc-if value="{{ is.tareas }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="04 Tareas" style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px">Tareas</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Tareas del período</h1></div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <div style="display:inline-flex;align-items:center;border:1px solid rgba(233,233,237,.16);border-radius:8px;overflow:hidden"><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-left"></i></button><span style="font-size:13px;padding:0 10px;min-width:110px;text-align:center">setiembre 2026</span><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-right"></i></button></div>
+            <select class="input" style="width:auto;min-height:34px"><option>Todos los clientes</option></select>
+            <div class="seg"><label class="seg-opt" onClick="{{ filtro.todas }}"><input type="radio" name="f" checked="{{ filtroEs.todas }}" readOnly="{{ true }}">Todas</label><label class="seg-opt" onClick="{{ filtro.pendientes }}"><input type="radio" name="f" checked="{{ filtroEs.pendientes }}" readOnly="{{ true }}">Pendientes</label><label class="seg-opt" onClick="{{ filtro.completadas }}"><input type="radio" name="f" checked="{{ filtroEs.completadas }}" readOnly="{{ true }}">Completadas</label></div>
+            <button onClick="{{ abrir.adhoc }}" class="btn btn-primary"><i class="ph ph-plus"></i>Tarea ad-hoc</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:center;font-size:13px;color:#9397ab"><span><span style="color:#e9e9ed;font-size:17px;font-weight:500">{{ progresoTotal }}</span> completadas</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.125 150)"></span>al día</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.76 0.125 80)"></span>&gt; 5 días</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.125 25)"></span>≤ 5 días o vencido</span></div>
+
+        <sc-for list="{{ grupos }}" as="g" hint-placeholder-count="4">
+          <section style="border-radius:14px;background:#232532;overflow:hidden;box-shadow:0 0 0 1px #3f424d">
+            <header style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#1b1d2b">
+              <span style="{{ g.dotStyle }}"></span>
+              <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:500">{{ g.nombre }} <span style="color:#9397ab;font-weight:400;font-size:13px">· {{ g.regLabel }} · {{ g.servicio }}</span></div><div style="{{ g.limiteStyle }}">{{ g.limite }}</div></div>
+              <span style="font-size:13px;color:#9397ab">{{ g.progreso }}</span>
+            </header>
+            <table class="table">
+              <thead><tr><th style="width:44%">Tarea</th><th>Estado</th><th>Info cliente</th><th>Notas</th><th></th></tr></thead>
+              <tbody><sc-for list="{{ g.tareas }}" as="t" hint-placeholder-count="3">
+                <tr>
+                  <td><span style="{{ t.nombreStyle }}">{{ t.nombre }}</span><span style="font-size:11px;color:#75798c;margin-left:8px">{{ t.origen }}</span></td>
+                  <td><button onClick="{{ t.cycle }}" class="tag" style="{{ t.tagStyle }}" title="Clic para avanzar el estado">{{ t.estadoLabel }}</button></td>
+                  <td style="font-size:13px;color:#b2b6ca">{{ t.infoLabel }}</td>
+                  <td style="font-size:13px;color:#9397ab">{{ t.notas }}</td>
+                  <td style="text-align:right;white-space:nowrap"><button class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Editar"><i class="ph ph-pencil-simple"></i></button><button onClick="{{ t.cancelar }}" class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Cancelar tarea"><i class="ph ph-x-circle"></i></button></td>
+                </tr>
+              </sc-for></tbody>
+            </table>
+          </section>
+        </sc-for>
+        <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">Un clic en el estado avanza pendiente → en proceso → completada (sin confirmación). Cancelar pide confirmación. Completadas y canceladas pueden reabrirse con un clic. La fecha límite es el vencimiento aplicable más próximo del período; sin vencimientos, no hay semáforo.</p>
+      </div>
+      </sc-if>
+
+      <!-- ── 05 Calendario ── -->
+      <sc-if value="{{ is.calendario }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="05 Calendario" style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:4px">Vencimientos</div><h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">Calendario de vencimientos</h1></div>
+          <div style="display:flex;gap:8px;align-items:center"><div style="display:inline-flex;align-items:center;border:1px solid rgba(233,233,237,.16);border-radius:8px;overflow:hidden"><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-left"></i></button><span style="font-size:13px;padding:0 10px;min-width:110px;text-align:center">setiembre 2026</span><button class="btn btn-icon" style="width:32px;height:32px;border-radius:0"><i class="ph ph-caret-right"></i></button></div><a href="#" onClick="{{ irVencCfg }}" class="btn btn-secondary" style="font-size:13px"><i class="ph ph-gear-six"></i>Administrar</a></div>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#75798c;padding:0 4px"><span>lun</span><span>mar</span><span>mié</span><span>jue</span><span>vie</span><span>sáb</span><span>dom</span></div>
+            <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px">
+              <sc-for list="{{ celdas }}" as="d" hint-placeholder-count="35">
+                <div style="{{ d.style }}">
+                  <div style="{{ d.numStyle }}">{{ d.num }}</div>
+                  <sc-for list="{{ d.eventos }}" as="e" hint-placeholder-count="0">
+                    <button onClick="{{ e.sel }}" style="{{ e.style }}">{{ e.desc }}</button>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:16px;font-size:12px;color:#9397ab;padding:6px 4px"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:2px;background:#9184d9"></span>DGI</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:2px;background:#b2b6ca"></span>BPS</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:2px;background:#75798c"></span>Otro</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <section class="card" style="gap:10px;box-shadow:0 0 0 1px #595d6c">
+              <div class="card-kicker">Detalle</div>
+              <div style="font-size:17px;font-weight:500">{{ vencSel.desc }}</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-neutral" style="{{ vencSel.orgTagStyle }}">{{ vencSel.orgLabel }}</span><span class="tag tag-outline">{{ vencSel.fechaLarga }}</span></div>
+              <div style="font-size:12px;color:#9397ab">Regímenes alcanzados</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ vencSel.regs }}" as="r" hint-placeholder-count="2"><span class="tag tag-neutral">{{ r }}</span></sc-for></div>
+              <div style="font-size:12px;color:#9397ab">Clientes activos alcanzados · {{ vencSel.nClientes }}</div>
+              <div style="display:flex;flex-direction:column;gap:4px;font-size:13px"><sc-for list="{{ vencSel.clientes }}" as="c" hint-placeholder-count="3"><span>{{ c }}</span></sc-for></div>
+            </section>
+            <section class="card" style="gap:8px">
+              <div class="card-kicker">Próximos 15 días</div>
+              <sc-for list="{{ proximos }}" as="v" hint-placeholder-count="3">
+                <button onClick="{{ v.sel }}" style="display:flex;gap:10px;align-items:center;font-size:13px;padding:6px 0;background:none;border:0;color:inherit;text-align:left;cursor:pointer;font:inherit"><span style="width:44px;color:#b2b6ca;flex:none">{{ v.fecha }}</span><span style="flex:1;min-width:0">{{ v.desc }}</span><span style="color:#9397ab;font-size:12px;flex:none">{{ v.nClientes }} cl.</span></button>
+              </sc-for>
+            </section>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ── 07–12 Ficha del cliente ── -->
+      <sc-if value="{{ is.ficha }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="07-12 Ficha del cliente" style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab"><a href="#" onClick="{{ go.clientes }}" style="color:inherit;text-decoration:none">Clientes</a> / Ficha</div>
+            <h1 style="font-size:25px;font-weight:500;margin:0;letter-spacing:-.015em">{{ ficha.nombre }}</h1>
+            <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-neutral">{{ fichaReg }}</span><span class="tag tag-outline">Mensual</span><span style="font-size:13px;color:#b2b6ca;align-self:center">Cliente desde {{ ficha.inicio }}</span></div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+            <div style="padding:10px 14px;border-radius:8px;background:#1b1d2b;box-shadow:0 0 0 1px #3f424d;min-width:150px"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab">Saldo</div><div style="display:flex;align-items:center;gap:8px;font-size:22px;font-weight:500;color:oklch(0.72 0.125 25)"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.125 25)"></span>$ 16.800</div><div style="font-size:12px;color:#9397ab">Debe · 3 períodos</div></div>
+            <div style="display:flex;gap:8px"><button class="btn btn-secondary"><i class="ph ph-pencil-simple"></i>Editar</button><button class="btn btn-secondary" style="color:#9397ab"><i class="ph ph-power"></i>Desactivar</button></div>
+          </div>
+        </div>
+
+        <nav style="display:flex;gap:22px;border-bottom:1px solid #292b31;flex-wrap:wrap">
+          <a href="#" onClick="{{ tab.datos }}" style="{{ tabStyle.datos }}">Datos generales</a>
+          <a href="#" onClick="{{ tab.servicios }}" style="{{ tabStyle.servicios }}">Servicios contratados <span style="font-size:12px;color:#75798c">{{ nContratos }}</span></a>
+          <a href="#" onClick="{{ tab.credenciales }}" style="{{ tabStyle.credenciales }}">Credenciales <span style="font-size:12px;color:#75798c">{{ nCred }}</span></a>
+          <a href="#" onClick="{{ tab.cuenta }}" style="{{ tabStyle.cuenta }}">Estado de cuenta</a>
+          <a href="#" onClick="{{ tab.honorarios }}" style="{{ tabStyle.honorarios }}">Historial de honorarios</a>
+          <a href="#" onClick="{{ tab.vencimientos }}" style="{{ tabStyle.vencimientos }}">Próximos vencimientos <span style="font-size:12px;color:#75798c">{{ nVencCliente }}</span></a>
+        </nav>
+
+        <!-- 07 Datos generales + historial de regímenes -->
+        <sc-if value="{{ tabOn.datos }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="07 Datos generales" style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px;align-items:start">
+          <section class="card" style="gap:14px;padding:16px 18px">
+            <div class="card-kicker">Datos generales</div>
+            <dl style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px;margin:0;font-size:14px">
+              <div><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Régimen vigente</dt><dd style="margin:0">{{ fichaReg }}</dd></div>
+              <div><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Estado</dt><dd style="margin:0;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.66 0.125 150)"></span>Activo</dd></div>
+              <div><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">RUT</dt><dd style="margin:0">{{ ficha.rut }}</dd></div>
+              <div><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">CI</dt><dd style="margin:0">{{ ficha.ci }}</dd></div>
+              <div><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Fecha de nacimiento</dt><dd style="margin:0">{{ ficha.nac }}</dd></div>
+              <div><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Fecha de inicio</dt><dd style="margin:0">{{ ficha.inicio }}</dd></div>
+              <div><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Email</dt><dd style="margin:0"><a href="#">{{ ficha.email }}</a></dd></div>
+              <div><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Teléfono</dt><dd style="margin:0">{{ ficha.tel }}</dd></div>
+              <div style="grid-column:1 / -1"><dt style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Notas</dt><dd style="margin:0;color:#b2b6ca;text-wrap:pretty">{{ ficha.notas }}</dd></div>
+            </dl>
+          </section>
+          <section class="card" style="gap:10px;padding:16px 18px">
+            <div class="card-kicker">Historial de regímenes</div>
+            <table class="table">
+              <thead><tr><th>Régimen</th><th>Desde</th><th>Hasta</th></tr></thead>
+              <tbody><sc-for list="{{ regHist }}" as="r" hint-placeholder-count="2"><tr><td>{{ r.regLabel }}</td><td style="color:#b2b6ca">{{ r.desde }}</td><td style="{{ r.hastaStyle }}">{{ r.hastaFmt }}</td></tr></sc-for></tbody>
+            </table>
+            <div class="card-meta">Solo lectura. Se escribe desde el flujo de cambio de régimen al editar el cliente.</div>
+          </section>
+        </div>
+        </sc-if>
+
+        <!-- 08 Servicios contratados -->
+        <sc-if value="{{ tabOn.servicios }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="08 Servicios contratados" style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <label onClick="{{ toggleFinalizados }}" style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#b2b6ca;cursor:pointer;user-select:none"><span style="{{ finTrack }}"><span style="{{ finKnob }}"></span></span>Mostrar finalizados <span style="color:#75798c">({{ nFinalizados }})</span></label>
+            <button onClick="{{ abrir.contratar }}" class="btn btn-primary"><i class="ph ph-plus"></i>Contratar servicio</button>
+          </div>
+          <table class="table">
+            <thead><tr><th>Servicio</th><th>Frecuencia</th><th style="text-align:right">Honorario vigente</th><th>Inicio</th><th>Fin</th><th></th></tr></thead>
+            <tbody><sc-for list="{{ contratos }}" as="c" hint-placeholder-count="2">
+              <tr style="{{ c.rowStyle }}"><td>{{ c.servicio }}</td><td><span class="tag tag-accent">{{ c.frecLabel }}</span></td><td style="text-align:right">{{ c.honorFmt }}</td><td style="color:#b2b6ca">{{ c.inicio }}</td><td style="color:#b2b6ca">{{ c.finFmt }}</td>
+                <td style="text-align:right;white-space:nowrap"><sc-if value="{{ c.activo }}" hint-placeholder-val="{{ true }}"><a href="#" class="btn btn-ghost" style="font-size:13px">Detalle</a><a href="#" onClick="{{ abrir.honorario }}" class="btn btn-ghost" style="font-size:13px">Cambiar honorario</a><a href="#" onClick="{{ abrir.finalizar }}" class="btn btn-ghost" style="font-size:13px;color:#9397ab">Finalizar</a></sc-if></td></tr>
+            </sc-for></tbody>
+          </table>
+          <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">Orden: mensual → anual → único, luego inicio descendente. Finalizados (adenda B2): solo lectura, con su fecha de fin — en los únicos representa la duración real del trabajo.</p>
+        </div>
+        </sc-if>
+
+        <!-- 09 Vault de credenciales -->
+        <sc-if value="{{ tabOn.credenciales }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="09 Credenciales" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,640px),1fr));gap:20px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span style="font-size:13px;color:#9397ab;display:inline-flex;align-items:center;gap:6px"><i class="ph ph-lock-key"></i>Cifradas en reposo. Se descifran en el servidor solo al revelar.</span><button onClick="{{ abrir.credencial }}" class="btn btn-primary"><i class="ph ph-plus"></i>Nueva credencial</button></div>
+            <table class="table">
+              <thead><tr><th>Tipo</th><th>Usuario</th><th>Contraseña</th><th>Actualizada</th><th></th></tr></thead>
+              <tbody><sc-for list="{{ credenciales }}" as="c" hint-placeholder-count="3">
+                <tr style="{{ c.selStyle }}"><td><span class="tag tag-neutral">{{ c.tipo }}</span></td><td>{{ c.usuario }}</td><td><span style="display:inline-flex;align-items:center;gap:8px"><span style="{{ c.passStyle }}">{{ c.shown }}</span><button onClick="{{ c.toggle }}" class="btn btn-icon" style="width:28px;height:28px;color:#9397ab" aria-label="Revelar"><i class="{{ c.eye }}"></i></button></span></td><td style="color:#b2b6ca">{{ c.act }}</td>
+                  <td style="text-align:right;white-space:nowrap"><a href="#" onClick="{{ c.abrir }}" class="btn btn-ghost" style="font-size:13px">Detalle</a><button class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Editar"><i class="ph ph-pencil-simple"></i></button><button class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Eliminar"><i class="ph ph-trash"></i></button></td></tr>
+              </sc-for></tbody>
+            </table>
+          </div>
+          <sc-if value="{{ hasCred }}" hint-placeholder-val="{{ false }}">
+          <section class="card" style="gap:12px;box-shadow:0 0 0 1px #595d6c;padding:16px 18px;max-width:520px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="card-kicker">Detalle de credencial</span><button onClick="{{ cerrarCred }}" class="btn btn-icon" style="width:28px;height:28px;color:#9397ab" aria-label="Cerrar"><i class="ph ph-x"></i></button></div>
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:14px">
+              <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Tipo</div><span class="tag tag-neutral">{{ credSel.tipo }}</span></div>
+              <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Usuario</div>{{ credSel.usuario }}</div>
+              <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Contraseña</div><span style="display:inline-flex;align-items:center;gap:8px"><span style="{{ credSel.passStyle }}">{{ credSel.shown }}</span><button onClick="{{ credSel.toggle }}" class="btn btn-icon" style="width:28px;height:28px;color:#9397ab" aria-label="Revelar"><i class="{{ credSel.eye }}"></i></button></span></div>
+              <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Notas</div><span style="color:#b2b6ca">{{ credSel.notasFmt }}</span></div>
+              <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Última actualización</div>{{ credSel.act }}</div>
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn btn-secondary"><i class="ph ph-pencil-simple"></i>Editar</button><button class="btn" style="color:oklch(0.72 0.125 25);border-color:oklch(0.66 0.125 25)"><i class="ph ph-trash"></i>Eliminar</button></div>
+          </section>
+          </sc-if>
+                  </div>
+        </sc-if>
+
+        <!-- 10 Estado de cuenta -->
+        <sc-if value="{{ tabOn.cuenta }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="10 Estado de cuenta" style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:16px;align-items:stretch">
+            <section class="card" style="gap:12px;padding:16px 18px;box-shadow:0 0 0 1px #3f424d">
+              <div class="card-kicker">Saldo vigente</div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:32px;font-weight:500;letter-spacing:-.02em;color:oklch(0.72 0.125 25)"><span style="width:10px;height:10px;border-radius:50%;background:oklch(0.66 0.125 25);box-shadow:0 0 10px oklch(0.66 0.125 25 / .6)"></span>$ 16.800</div>
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+                <div style="display:flex;justify-content:space-between"><span style="color:#b2b6ca">Esperado impago · jul, ago, set 2026</span><span>$ 21.000</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="color:#b2b6ca">Descuentos aplicados</span><span>− $ 4.200</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="color:#b2b6ca">Cobros sobre esos períodos</span><span>− $ 0</span></div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:auto"><button onClick="{{ abrir.cobro }}" class="btn btn-primary"><i class="ph ph-plus"></i>Registrar cobro</button><button onClick="{{ abrir.descuento }}" class="btn btn-secondary"><i class="ph ph-minus"></i>Descuento</button></div>
+            </section>
+            <section class="card" style="gap:10px;padding:16px 18px">
+              <div class="card-kicker">Períodos · Liquidación mensual 2026</div>
+              <div style="display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:6px">
+                <div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 150);color:oklch(0.92 0.06 150)">ene</div><div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 150);color:oklch(0.92 0.06 150)">feb</div><div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 150);color:oklch(0.92 0.06 150)">mar</div><div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 150);color:oklch(0.92 0.06 150)">abr</div><div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 150);color:oklch(0.92 0.06 150)">may</div><div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 150);color:oklch(0.92 0.06 150)">jun</div><div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 25);color:oklch(0.92 0.06 25)">jul</div><div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 25);color:oklch(0.92 0.06 25)">ago</div><div style="padding:8px 4px;border-radius:6px;text-align:center;font-size:11px;background:oklch(0.34 0.06 25);color:oklch(0.92 0.06 25);box-shadow:0 0 0 1px oklch(0.66 0.125 25)">set</div>
+              </div>
+              <div class="card-meta">Verde: período cubierto por cobros. Rojo: impago. El honorario esperado de cada período usa el vigente en ese mes ($ 7.000 desde ene 2026).</div>
+            </section>
+          </div>
+          <section style="display:flex;flex-direction:column;gap:8px">
+            <h2 style="font-size:17px;font-weight:500;margin:0">Cobros</h2>
+            <table class="table">
+              <thead><tr><th>Fecha</th><th>Servicio</th><th>Período</th><th style="text-align:right">Importe</th><th>Forma</th><th>Comprobante</th><th>Notas</th><th></th></tr></thead>
+              <tbody><sc-for list="{{ cobrosF }}" as="c" hint-placeholder-count="4">
+                <tr><td style="color:#b2b6ca">{{ c.fecha }}</td><td>{{ c.serv }}</td><td>{{ c.periodo }}</td><td style="text-align:right">{{ c.importeFmt }}</td><td style="color:#b2b6ca">{{ c.forma }}</td><td><span class="tag tag-neutral">{{ c.comp }}</span></td><td style="font-size:13px;color:#9397ab">{{ c.notasFmt }}</td><td style="text-align:right;white-space:nowrap"><button class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Editar"><i class="ph ph-pencil-simple"></i></button><button class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Eliminar"><i class="ph ph-trash"></i></button></td></tr>
+              </sc-for></tbody>
+            </table>
+          </section>
+          <section style="display:flex;flex-direction:column;gap:8px">
+            <h2 style="font-size:17px;font-weight:500;margin:0">Descuentos</h2>
+            <table class="table">
+              <thead><tr><th>Fecha</th><th>Servicio</th><th style="text-align:right">Importe</th><th>Motivo</th><th></th></tr></thead>
+              <tbody><sc-for list="{{ descF }}" as="d" hint-placeholder-count="1">
+                <tr><td style="color:#b2b6ca">{{ d.fecha }}</td><td>{{ d.serv }}</td><td style="text-align:right">{{ d.importeFmt }}</td><td style="color:#b2b6ca">{{ d.motivo }}</td><td style="text-align:right;white-space:nowrap"><button class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Editar"><i class="ph ph-pencil-simple"></i></button><button class="btn btn-icon" style="width:30px;height:30px;color:#9397ab" title="Eliminar"><i class="ph ph-trash"></i></button></td></tr>
+              </sc-for></tbody>
+            </table>
+          </section>
+        </div>
+        </sc-if>
+
+        <!-- 11 Historial de honorarios -->
+        <sc-if value="{{ tabOn.honorarios }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="11 Historial de honorarios" style="display:flex;flex-direction:column;gap:12px">
+          <table class="table">
+            <thead><tr><th>Servicio</th><th style="text-align:right">Honorario</th><th>Desde</th><th>Hasta</th></tr></thead>
+            <tbody><sc-for list="{{ honF }}" as="h" hint-placeholder-count="5">
+              <tr><td>{{ h.serv }}</td><td style="text-align:right">{{ h.honorFmt }}</td><td style="color:#b2b6ca">{{ h.desde }}</td><td style="{{ h.hastaStyle }}">{{ h.hastaFmt }}</td></tr>
+            </sc-for></tbody>
+          </table>
+          <p style="font-size:12px;color:#75798c;margin:0;max-width:720px">Consolidado de todos los contratos (activos y finalizados), ordenado por fecha desde descendente. Solo lectura: los cambios se hacen desde "Cambiar honorario" en el contrato o desde el aumento global.</p>
+        </div>
+        </sc-if>
+
+        <!-- 12 Próximos vencimientos -->
+        <sc-if value="{{ tabOn.vencimientos }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="12 Próximos vencimientos del cliente" style="display:flex;flex-direction:column;gap:12px;max-width:720px">
+          <table class="table">
+            <thead><tr><th>Fecha</th><th>Descripción</th><th>Organismo</th></tr></thead>
+            <tbody><sc-for list="{{ vencCliente }}" as="v" hint-placeholder-count="2">
+              <tr><td style="color:#b2b6ca">{{ v.fechaLarga }}</td><td>{{ v.desc }}</td><td><span class="tag tag-neutral" style="{{ v.orgTagStyle }}">{{ v.orgLabel }}</span></td></tr>
+            </sc-for></tbody>
+          </table>
+          <p style="font-size:12px;color:#75798c;margin:0">Aplicables por régimen vigente ({{ fichaReg }}), próximos 30 días. Solo lectura.</p>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+    </main>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ 26 LOGIN ═══ -->
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="26 Login" style="min-height:100vh;display:grid;place-items:center;padding:32px 16px;background:radial-gradient(ellipse at 30% 20%,#1d2036 0,#161826 55%)">
+  <div style="width:min(380px,100%);display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:20px;font-weight:500;letter-spacing:-.015em"><span style="width:10px;height:10px;border-radius:2px;background:#9184d9;box-shadow:0 0 12px rgba(145,132,217,.6);display:inline-block"></span>Estudio</div>
+    <div class="card" style="gap:16px;padding:22px;box-shadow:0 0 0 1px #3f424d">
+      <div><div style="font-size:17px;font-weight:500">Ingresar</div><div style="font-size:13px;color:#9397ab">Usuario único. La sesión dura 7 días sin uso.</div></div>
+      <div class="field"><label>Usuario</label><input class="input" style="min-height:40px" defaultValue="contador" autoComplete="username"></div>
+      <div class="field"><label>Contraseña</label><div style="position:relative"><input class="input" type="password" style="min-height:40px;padding-right:40px" defaultValue="••••••••••" autoComplete="current-password"><button class="btn btn-icon" style="position:absolute;right:2px;top:2px;width:36px;height:36px;color:#9397ab" aria-label="Revelar"><i class="ph ph-eye"></i></button></div></div>
+      <a href="#" onClick="{{ go.dashboard }}" class="btn btn-primary btn-block" style="min-height:40px;margin-top:0">Ingresar</a>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#75798c"><i class="ph ph-lock-key"></i>5 intentos fallidos bloquean el acceso 15 minutos.</div>
+    </div>
+    <div style="font-size:12px;color:#595d6c;text-align:center">Sin recuperación de contraseña: el reseteo es por intervención directa en la base.</div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ MÓVIL (dashboard, tareas, cobros) ═══ -->
+<sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:100vh;display:grid;place-items:start center;padding:32px 16px;background:#161826">
+  <div style="width:390px;height:844px;border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px #595d6c,0 16px 40px rgba(0,0,0,.65);background:#161826;display:flex;flex-direction:column;position:relative">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:52px 20px 10px"><span style="font-size:22px;font-weight:500;letter-spacing:-.015em">{{ mTitulo }}</span><button class="btn btn-icon btn-secondary" style="position:relative;width:40px;height:40px" aria-label="Recordatorios"><i class="ph ph-bell" style="font-size:18px"></i><span style="position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#9184d9;color:#161826;font-size:11px;font-weight:600;display:grid;place-items:center">{{ recCount }}</span></button></div>
+    <div style="flex:1;overflow:auto;padding:8px 16px 24px;display:flex;flex-direction:column;gap:12px;min-height:0">
+
+      <sc-if value="{{ is.dashboard }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="01m Dashboard" style="display:flex;flex-direction:column;gap:12px">
+          <section class="card" style="gap:12px;padding:14px 16px">
+            <div class="card-kicker">Ingresos · setiembre</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:30px;font-weight:500;letter-spacing:-.02em;color:oklch(0.72 0.125 150)">$ 44.300</span><span style="font-size:13px;color:#9397ab">de $ 71.700</span></div>
+            <div style="height:6px;border-radius:3px;background:#292b31;overflow:hidden"><div style="width:62%;height:100%;border-radius:3px;background:linear-gradient(to right,#5d5294,#9184d9)"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#9397ab">Falta cobrar</span><span style="color:oklch(0.72 0.125 25)">$ 27.400</span></div>
+          </section>
+          <section class="card" style="gap:8px;padding:14px 16px">
+            <div class="card-kicker">P&amp;L del mes</div>
+            <div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:#b2b6ca">Ingresos</span><span>$ 44.300</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:#b2b6ca">Gastos</span><span>− $ 18.250</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px"><span style="font-weight:500">Saldo neto</span><span style="display:flex;align-items:center;gap:8px;font-size:20px;font-weight:500;color:oklch(0.72 0.125 150)"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.125 150)"></span>$ 26.050</span></div>
+          </section>
+          <section class="card" style="gap:8px;padding:14px 16px">
+            <div class="card-kicker">Próximos vencimientos</div>
+            <sc-for list="{{ proximos }}" as="v" hint-placeholder-count="3"><div style="display:flex;gap:10px;align-items:center;font-size:14px;min-height:44px"><span style="width:48px;color:#b2b6ca;flex:none">{{ v.fecha }}</span><span style="flex:1;min-width:0">{{ v.desc }}</span><span style="color:#9397ab;font-size:12px">{{ v.nClientes }} cl.</span></div></sc-for>
+          </section>
+          <section class="card" style="gap:8px;padding:14px 16px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="card-kicker">Tareas</span><span style="font-size:13px;color:#9397ab">{{ pendientesTotal }} pendientes</span></div>
+            <sc-for list="{{ gruposResumen }}" as="g" hint-placeholder-count="3"><div style="display:flex;gap:10px;align-items:center;font-size:14px;min-height:44px"><span style="{{ g.dotStyle }}"></span><span style="flex:1;min-width:0">{{ g.nombre }}</span><span style="color:#9397ab;font-size:12px">{{ g.progreso }}</span></div></sc-for>
+          </section>
+          <section class="card" style="gap:8px;padding:14px 16px">
+            <div class="card-kicker">Mayor saldo deudor</div>
+            <sc-for list="{{ deudores }}" as="c" hint-placeholder-count="3"><div style="display:flex;gap:10px;align-items:center;font-size:14px;min-height:44px"><span style="flex:1;min-width:0">{{ c.nombre }}</span><span style="color:oklch(0.72 0.125 25)">{{ c.saldoFmt }}</span></div></sc-for>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ is.tareas }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="04m Tareas" style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:8px;align-items:center"><div style="display:inline-flex;align-items:center;border:1px solid rgba(233,233,237,.16);border-radius:8px;overflow:hidden;flex:1"><button class="btn btn-icon" style="width:44px;height:44px;border-radius:0"><i class="ph ph-caret-left"></i></button><span style="font-size:14px;flex:1;text-align:center">setiembre 2026</span><button class="btn btn-icon" style="width:44px;height:44px;border-radius:0"><i class="ph ph-caret-right"></i></button></div></div>
+          <div class="seg" style="display:flex"><label class="seg-opt" onClick="{{ filtro.todas }}" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="fm" checked="{{ filtroEs.todas }}" readOnly="{{ true }}">Todas</label><label class="seg-opt" onClick="{{ filtro.pendientes }}" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="fm" checked="{{ filtroEs.pendientes }}" readOnly="{{ true }}">Pendientes</label><label class="seg-opt" onClick="{{ filtro.completadas }}" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="fm" checked="{{ filtroEs.completadas }}" readOnly="{{ true }}">Completadas</label></div>
+          <sc-for list="{{ grupos }}" as="g" hint-placeholder-count="3">
+            <section style="border-radius:14px;background:#232532;overflow:hidden;box-shadow:0 0 0 1px #3f424d">
+              <header style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#1b1d2b"><span style="{{ g.dotStyle }}"></span><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:500">{{ g.nombre }}</div><div style="{{ g.limiteStyle }}">{{ g.limite }}</div></div><span style="font-size:13px;color:#9397ab">{{ g.progreso }}</span></header>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ g.tareas }}" as="t" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;min-height:52px;border-top:1px solid #292b31"><div style="flex:1;min-width:0"><div style="{{ t.nombreStyle }}">{{ t.nombre }}</div><div style="font-size:12px;color:#9397ab">{{ t.subMovil }}</div></div><button onClick="{{ t.cycle }}" class="tag" style="{{ t.tagStyleM }}">{{ t.estadoLabel }}</button></div>
+                </sc-for>
+              </div>
+            </section>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ is.cobros }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="03m Cobros" style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:12px;font-size:13px;color:#9397ab"><span>Adeudado <span style="color:oklch(0.72 0.125 25);font-size:17px;font-weight:500;margin-left:4px">{{ totalDeuda }}</span></span><span>A favor <span style="color:oklch(0.72 0.125 150);font-size:17px;font-weight:500;margin-left:4px">{{ totalFavor }}</span></span></div>
+          <sc-for list="{{ porSaldo }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:#232532;min-height:60px"><div style="flex:1;min-width:0"><div style="font-size:15px">{{ c.nombre }}</div><div style="font-size:12px;color:#9397ab">{{ c.regLabel }} · {{ c.situacion }}</div></div><span style="{{ c.saldoStyle }}">{{ c.saldoFmt }}</span><button onClick="{{ abrir.cobro }}" class="btn btn-primary btn-icon" style="width:44px;height:44px" aria-label="Registrar cobro"><i class="ph ph-plus" style="font-size:18px"></i></button></div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ formMovil }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="16m Registrar cobro" style="position:absolute;inset:0;z-index:6;background:#161826;display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:52px 12px 10px 20px"><span style="font-size:22px;font-weight:500;letter-spacing:-.015em">Registrar cobro</span><button onClick="{{ cerrar }}" class="btn btn-icon" style="width:44px;height:44px;color:#9397ab" aria-label="Cerrar"><i class="ph ph-x" style="font-size:20px"></i></button></div>
+          <div style="flex:1;overflow:auto;padding:8px 20px 24px;display:flex;flex-direction:column;gap:14px">
+            <div class="field"><label>Cliente <span style="color:#9184d9">*</span></label><select class="input" style="min-height:44px" defaultValue="8"><option value="8">Verdulería El Sol</option><option value="11">Rodríguez, Martín</option></select></div>
+            <div class="field"><label>Servicio contratado</label><select class="input" style="min-height:44px" defaultValue="mensual"><option value="">Sin servicio específico</option><option value="mensual">Liquidación mensual</option><option value="anual">DDJJ IVA anual</option></select></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label>Período desde</label><input class="input" style="min-height:44px" type="date" defaultValue="2026-07-01"></div><div class="field"><label>Período hasta</label><input class="input" style="min-height:44px" type="date" defaultValue="2026-08-31"></div></div>
+            <div class="field"><label>Importe <span style="color:#9184d9">*</span></label><div style="position:relative"><span style="position:absolute;left:12px;top:12px;font-size:16px;color:#9397ab">$</span><input class="input" inputMode="numeric" style="min-height:44px;padding-left:28px;font-size:18px" defaultValue="14.000"></div></div>
+            <div class="field"><label>Fecha de cobro <span style="color:#9184d9">*</span></label><input class="input" style="min-height:44px" type="date" defaultValue="2026-09-11"></div>
+            <div class="field"><label>Forma de pago <span style="color:#9184d9">*</span></label><div class="seg" style="display:flex"><label class="seg-opt" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="fpm" defaultChecked="{{ true }}">Transferencia</label><label class="seg-opt" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="fpm">Efectivo</label><label class="seg-opt" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="fpm">Otro</label></div></div>
+            <div class="field"><label>Comprobante <span style="color:#9184d9">*</span></label><div class="seg" style="display:flex"><label class="seg-opt" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="tcm" defaultChecked="{{ true }}">e-Ticket</label><label class="seg-opt" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="tcm">No gravado</label><label class="seg-opt" style="flex:1;justify-content:center;min-height:44px"><input type="radio" name="tcm">Sin comp.</label></div></div>
+            <div class="field"><label>Notas</label><input class="input" style="min-height:44px" placeholder="Opcional"></div>
+          </div>
+          <div style="padding:12px 20px 32px;border-top:1px solid #292b31;display:flex;gap:8px"><button onClick="{{ cerrar }}" class="btn btn-secondary" style="flex:1;min-height:48px">Cancelar</button><button onClick="{{ cerrar }}" class="btn btn-primary" style="flex:2;min-height:48px">Registrar cobro</button></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ is.ficha }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="09m Vault" style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:15px;font-weight:500">{{ ficha.nombre }}</div><div style="display:flex;gap:6px;align-items:center"><span class="tag tag-neutral">{{ fichaReg }}</span><span style="font-size:12px;color:#9397ab;display:inline-flex;align-items:center;gap:4px"><i class="ph ph-lock-key"></i>cifradas</span></div></div>
+          <sc-for list="{{ credenciales }}" as="c" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:8px;background:#232532">
+              <div style="display:flex;align-items:center;gap:10px;min-height:44px"><span class="tag tag-neutral">{{ c.tipo }}</span><span style="flex:1;min-width:0;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.usuario }}</span><a href="#" onClick="{{ c.abrir }}" class="btn btn-icon" style="width:44px;height:44px;color:#9397ab" aria-label="Detalle"><i class="ph ph-caret-right" style="font-size:18px"></i></a></div>
+              <div style="display:flex;align-items:center;gap:10px;min-height:44px;padding:0 4px;border-radius:8px;background:#1b1d2b"><span style="{{ c.passStyle }};flex:1;padding-left:8px">{{ c.shown }}</span><button onClick="{{ c.toggle }}" class="btn btn-icon" style="width:44px;height:44px;color:#9184d9" aria-label="Revelar"><i class="{{ c.eye }}" style="font-size:20px"></i></button></div>
+            </div>
+          </sc-for>
+          <button class="btn btn-primary btn-block" style="min-height:44px"><i class="ph ph-plus"></i>Nueva credencial</button>
+          <sc-if value="{{ hasCred }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;background:rgba(41,43,49,.6);display:flex;align-items:flex-end;z-index:5">
+              <div style="width:100%;padding:16px 16px 32px;border-radius:20px 20px 0 0;background:#232532;box-shadow:0 0 0 1px #595d6c;display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:17px;font-weight:500">Credencial {{ credSel.tipo }}</span><button onClick="{{ cerrarCred }}" class="btn btn-icon" style="width:44px;height:44px;color:#9397ab" aria-label="Cerrar"><i class="ph ph-x" style="font-size:20px"></i></button></div>
+                <div style="display:flex;flex-direction:column;gap:12px;font-size:15px">
+                  <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Usuario</div>{{ credSel.usuario }}</div>
+                  <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Contraseña</div><span style="display:flex;align-items:center;gap:8px"><span style="{{ credSel.passStyle }};font-size:15px;flex:1">{{ credSel.shown }}</span><button onClick="{{ credSel.toggle }}" class="btn btn-icon" style="width:44px;height:44px;color:#9184d9" aria-label="Revelar"><i class="{{ credSel.eye }}" style="font-size:20px"></i></button></span></div>
+                  <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Notas</div><span style="color:#b2b6ca">{{ credSel.notasFmt }}</span></div>
+                  <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9397ab;margin-bottom:2px">Última actualización</div>{{ credSel.act }}</div>
+                </div>
+                <div style="display:flex;gap:8px"><button class="btn btn-secondary" style="flex:1;min-height:44px"><i class="ph ph-pencil-simple"></i>Editar</button><button class="btn" style="flex:1;min-height:44px;color:oklch(0.72 0.125 25);border-color:oklch(0.66 0.125 25)"><i class="ph ph-trash"></i>Eliminar</button></div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+    <nav style="display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid #292b31;background:#1b1d2b;padding:6px 4px 22px">
+      <a href="#" onClick="{{ go.dashboard }}" aria-current="{{ cur.dashboard }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:48px"><i class="ph ph-squares-four" style="font-size:22px"></i>Inicio</a>
+      <a href="#" onClick="{{ go.tareas }}" aria-current="{{ cur.tareas }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:48px"><i class="ph ph-check-square" style="font-size:22px"></i>Tareas</a>
+      <a href="#" onClick="{{ go.cobros }}" aria-current="{{ cur.cobros }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:48px"><i class="ph ph-currency-dollar" style="font-size:22px"></i>Cobros</a>
+      <a href="#" onClick="{{ go.ficha }}" aria-current="{{ cur.ficha }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:48px"><i class="ph ph-users" style="font-size:22px"></i>Clientes</a>
+      <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;color:#9397ab;text-decoration:none;min-height:48px"><i class="ph ph-dots-three-outline" style="font-size:22px"></i>Más</a>
+    </nav>
+  </div>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pantalla&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;escritorio&quot;,&quot;options&quot;:[&quot;escritorio&quot;,&quot;móvil&quot;],&quot;tsType&quot;:&quot;'escritorio'|'móvil'&quot;,&quot;section&quot;:&quot;Vista&quot;},&quot;vistaInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;dashboard&quot;,&quot;options&quot;:[&quot;dashboard&quot;,&quot;clientes&quot;,&quot;cobros&quot;,&quot;tareas&quot;,&quot;calendario&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Vista&quot;}}">
+const OK='oklch(0.66 0.125 150)',OKT='oklch(0.72 0.125 150)',WARN='oklch(0.76 0.125 80)',DAN='oklch(0.66 0.125 25)',DANT='oklch(0.72 0.125 25)';
+const REG={unipersonal_prof:'Unipersonal profesional',unipersonal_no_prof:'Unipersonal no profesional',monotributo:'Monotributo',pequena_empresa:'Pequeña empresa',regimen_general:'Régimen general',persona_fisica:'Persona física'};
+const CLIENTES=[
+ [1,'Fernández, Lucía','unipersonal_prof','217894560012',true,true,0],
+ [2,'Castro, Diego','unipersonal_prof','218001230015',true,true,0],
+ [3,'Méndez, Sofía','unipersonal_prof','216554320011',true,true,5700],
+ [4,'Ortiz, Valentina','unipersonal_prof','219876540013',true,true,0],
+ [5,'Silva, Andrés','unipersonal_prof','215432100018',true,true,0],
+ [6,'Techera, Rubén','unipersonal_no_prof','217123450016',true,true,0],
+ [7,'Acosta, Nahuel','unipersonal_no_prof','218765430019',true,true,4200],
+ [8,'Verdulería El Sol','regimen_general','218855430017',true,true,16800],
+ [9,'Taller Norte SRL','regimen_general','216789010014',true,true,0],
+ [10,'Pérez, Gonzalo','regimen_general','219012340010',true,true,-6500],
+ [11,'Rodríguez, Martín','monotributo','217654320012',true,true,11400],
+ [12,'Bentancor, Carla','monotributo','218234560015',true,true,0],
+ [13,'Panadería La Espiga','pequena_empresa','219345670011',true,true,0],
+ [14,'Pereira, Ana','persona_fisica',null,false,true,0],
+ [15,'García, Julián','persona_fisica',null,false,true,3500],
+ [16,'Núñez, Florencia','persona_fisica',null,false,false,0],
+].map(([id,nombre,reg,rut,mensual,activo,saldo])=>({id,nombre,reg,rut,mensual,activo,saldo}));
+const VENC=[
+ {id:1,desc:'Aportes mensuales',org:'bps',dia:15,regs:['monotributo','regimen_general','pequena_empresa']},
+ {id:2,desc:'IVA mínimo',org:'dgi',dia:22,regs:['pequena_empresa']},
+ {id:3,desc:'IVA e IRPF mensual',org:'dgi',dia:24,regs:['unipersonal_prof','unipersonal_no_prof','regimen_general']},
+ {id:4,desc:'FONASA profesionales',org:'bps',dia:28,regs:['unipersonal_prof']},
+];
+const ORG={dgi:['DGI','#9184d9','#423a6a','#f5f4ff'],bps:['BPS','#b2b6ca','#3f424d','#e4e7f5'],otro:['Otro','#75798c','#292b31','#b2b6ca']};
+const GRUPOS=[
+ {cli:1,servicio:'Liquidación mensual',venc:3,tareas:[[1,'Solicitar facturas emitidas','completada',true,''],[2,'Verificar facturas a favor en DGI','completada',false,''],[3,'Calcular IVA e IRPF','completada',false,''],[4,'Emitir y enviar boletos','completada',false,'']]},
+ {cli:6,servicio:'Liquidación mensual',venc:3,tareas:[[5,'Solicitar facturas emitidas','completada',true,''],[6,'Verificar facturas a favor en DGI','pendiente',false,''],[7,'Emitir y enviar boletos','pendiente',false,'']]},
+ {cli:8,servicio:'Liquidación mensual',venc:1,tareas:[[8,'Descargar info del facturador electrónico','completada',false,''],[9,'Verificar facturas a favor en DGI','completada',false,''],[10,'Liquidar IVA','en_proceso',false,'Falta nota de crédito de agosto'],[11,'Emitir boletos DGI','pendiente',false,''],[12,'Emitir boleto BPS','pendiente',false,''],[13,'Enviar boletos al cliente','pendiente',false,'']]},
+ {cli:11,servicio:'Liquidación mensual',venc:1,tareas:[[14,'Emitir boleto BPS monotributo','pendiente',false,''],[15,'Enviar boleto al cliente','pendiente',false,''],[16,'Confirmar pago','pendiente',true,'']]},
+ {cli:14,servicio:'Certificado de ingresos',venc:null,tareas:[[17,'Reunir comprobantes de ingresos','pendiente',true,'Pidió plazo hasta el 20'],[18,'Redactar y firmar certificado','pendiente',false,'']],adhoc:true},
+];
+const FICHA={id:8,nombre:'Verdulería El Sol',reg:'regimen_general',rut:'218855430017',ci:'4.512.336-7',nac:'14/03/1979',email:'elsol.verduleria@gmail.com',tel:'099 123 456',inicio:'01/04/2023',notas:'Manda las facturas por WhatsApp los primeros días del mes. Facturador propio con acceso directo.',
+ regHist:[{reg:'regimen_general',desde:'01/01/2025',hasta:null},{reg:'monotributo',desde:'01/04/2023',hasta:'31/12/2024'}],
+ contratos:[{id:1,servicio:'Liquidación mensual',frec:'mensual',honor:7000,inicio:'01/04/2023',fin:null},{id:2,servicio:'DDJJ IVA anual',frec:'anual',honor:12000,inicio:'01/06/2025',fin:null},{id:3,servicio:'Gestión ante BPS',frec:'unico',honor:4500,inicio:'10/02/2026',fin:'27/02/2026'}],
+ credenciales:[{id:1,tipo:'DGI',usuario:'218855430017',pass:'Sol*2024dgi',notas:'',act:'12/01/2026'},{id:2,tipo:'BPS',usuario:'218855430017',pass:'elsol1979',notas:'La contraseña es el nombre más el año de nacimiento.',act:'03/03/2025'},{id:3,tipo:'Facturador',usuario:'elsol.verduleria@gmail.com',pass:'Fact.2026!',notas:'Acceso directo para descargar los CFE del mes.',act:'20/08/2026'}],
+ cobros:[{fecha:'05/09/2026',serv:'Liquidación mensual',periodo:'jun 2026',importe:7000,forma:'Transferencia',comp:'e-Ticket',notas:''},{fecha:'08/07/2026',serv:'Liquidación mensual',periodo:'abr – may 2026',importe:14000,forma:'Transferencia',comp:'e-Ticket',notas:'Pagó dos meses juntos'},{fecha:'02/06/2026',serv:'DDJJ IVA anual',periodo:'jun 2026',importe:12000,forma:'Efectivo',comp:'Sin comprobante',notas:''},{fecha:'27/02/2026',serv:'Gestión ante BPS',periodo:'27/02/2026',importe:4500,forma:'Efectivo',comp:'No gravado',notas:''}],
+ descuentos:[{fecha:'15/08/2026',serv:'Liquidación mensual',importe:4200,motivo:'Bonificación por demora en la entrega de agosto'}],
+ honorarios:[{serv:'Liquidación mensual',honor:7000,desde:'01/01/2026',hasta:null},{serv:'Gestión ante BPS',honor:4500,desde:'10/02/2026',hasta:'27/02/2026'},{serv:'DDJJ IVA anual',honor:12000,desde:'01/06/2025',hasta:null},{serv:'Liquidación mensual',honor:6200,desde:'01/01/2025',hasta:'31/12/2025'},{serv:'Liquidación mensual',honor:5500,desde:'01/04/2023',hasta:'31/12/2024'}]};
+const CONTRATOS_G=[[1,1,'Liquidación mensual','mensual',5700,'2026-01-01'],[2,2,'Liquidación mensual','mensual',5700,'2026-01-01'],[3,3,'Liquidación mensual','mensual',5700,'2026-11-01'],[4,4,'Liquidación mensual','mensual',6200,'2026-01-01'],[5,5,'Liquidación mensual','mensual',5700,'2026-01-01'],[6,6,'Liquidación mensual','mensual',4800,'2026-01-01'],[7,7,'Liquidación mensual','mensual',4800,'2026-01-01'],[8,8,'Liquidación mensual','mensual',7000,'2026-01-01'],[9,9,'Liquidación mensual','mensual',8500,'2026-01-01'],[10,10,'Liquidación mensual','mensual',7500,'2026-01-01'],[11,11,'Liquidación mensual','mensual',3900,'2026-01-01'],[12,12,'Liquidación mensual','mensual',3900,'2026-01-01'],[13,13,'Liquidación mensual','mensual',6500,'2026-03-01'],[14,8,'DDJJ IVA anual','anual',12000,'2025-06-01'],[15,1,'DDJJ IRPF anual','anual',9000,'2025-06-01'],[16,3,'DDJJ IRPF anual','anual',9000,'2025-06-01']].map(([id,cli,serv,frec,honor,desde])=>({id,cli,serv,frec,honor,desde}));
+const MESES=['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const mesLabel=iso=>{const [y,m]=iso.split('-');return `${MESES[+m-1]} ${y}`};
+const SERVICIOS=[['Liquidación mensual','mensual',true],['DDJJ IVA anual','anual',true],['DDJJ IRPF anual','anual',true],['DDJJ FONASA','anual',true],['Declaración IRPF persona física','anual',true],['Certificado de ingresos','unico',true],['Gestión ante DGI','unico',true],['Gestión ante BPS','unico',false]].map(([nombre,frec,activo],i)=>({id:i+1,nombre,frec,activo,contratos:i===0?13:i===1?1:0}));
+const TEMPLATES=[
+ ['Liquidación mensual','todos','Verificar facturas a favor en DGI',1,null,true],
+ ['Liquidación mensual','unipersonal_prof','Solicitar facturas emitidas',1,null,true],['Liquidación mensual','unipersonal_prof','Calcular IVA e IRPF',2,null,true],['Liquidación mensual','unipersonal_prof','Emitir y enviar boletos',3,null,true],
+ ['Liquidación mensual','unipersonal_no_prof','Solicitar facturas emitidas',1,null,true],['Liquidación mensual','unipersonal_no_prof','Emitir y enviar boletos',2,null,true],
+ ['Liquidación mensual','regimen_general','Descargar info del facturador electrónico',1,null,true],['Liquidación mensual','regimen_general','Liquidar IVA',2,null,true],['Liquidación mensual','regimen_general','Emitir boletos DGI',3,null,true],['Liquidación mensual','regimen_general','Emitir boleto BPS',4,null,true],['Liquidación mensual','regimen_general','Enviar boletos al cliente',5,null,true],
+ ['Liquidación mensual','monotributo','Emitir boleto BPS monotributo',1,null,true],['Liquidación mensual','monotributo','Enviar boleto al cliente',2,null,true],['Liquidación mensual','monotributo','Confirmar pago',3,null,false],
+ ['DDJJ FONASA','unipersonal_prof','Preparar y presentar DDJJ FONASA',1,2,true],
+ ['DDJJ IVA anual','regimen_general','Armar y presentar DDJJ IVA anual',1,6,true],
+].map(([serv,reg,nombre,orden,mes,activo],i)=>({id:i+1,serv,reg,nombre,orden,mes,activo}));
+const VENC_CFG=[
+ {desc:'Aportes mensuales',org:'bps',reg:'monotributo, regimen_general, pequena_empresa',mes:null,dia:15,anio:null,activo:true},
+ {desc:'IVA mínimo',org:'dgi',reg:'pequena_empresa',mes:null,dia:22,anio:null,activo:true},
+ {desc:'IVA e IRPF mensual',org:'dgi',reg:'unipersonal_prof, unipersonal_no_prof, regimen_general',mes:null,dia:24,anio:null,activo:true},
+ {desc:'FONASA profesionales',org:'bps',reg:'unipersonal_prof',mes:null,dia:28,anio:null,activo:true},
+ {desc:'DDJJ FONASA anual',org:'bps',reg:'unipersonal_prof',mes:2,dia:28,anio:2026,activo:true},
+ {desc:'DDJJ IVA anual',org:'dgi',reg:'regimen_general',mes:6,dia:24,anio:2026,activo:true},
+ {desc:'DDJJ IRPF personas físicas',org:'dgi',reg:'persona_fisica',mes:6,dia:30,anio:2026,activo:true},
+ {desc:'DDJJ IRPF personas físicas',org:'dgi',reg:'persona_fisica',mes:6,dia:30,anio:2025,activo:false},
+];
+const HIST=[['oct 2025',68400,66100,0,17300],['nov 2025',68400,62300,0,17300],['dic 2025',68400,74900,1500,17900],['ene 2026',75900,61200,0,18250],['feb 2026',75900,79400,0,18250],['mar 2026',75900,70000,0,18250],['abr 2026',75900,68900,0,18250],['may 2026',75900,75900,2000,18250],['jun 2026',105900,96400,0,18250],['jul 2026',75900,64400,0,18250],['ago 2026',71700,58200,0,18250],['set 2026',71700,44300,0,18250]].map(([mes,esp,cob,prop,gas])=>({mes,esp,cob,prop,gas}));
+const PROY=[['oct 2026',75900,''],['nov 2026',76400,'Méndez, Sofía: honorario nuevo desde 01/11'],['dic 2026',76400,''],['ene 2027',76400,''],['feb 2027',76400,''],['mar 2027',76400,'']].map(([mes,esp,nota])=>({mes,esp,nota}));
+const GASTOS=[['05/09/2026','gasto','Aportes CJPPU setiembre','cjppu',12400,''],['10/09/2026','gasto','Aportes BPS','aportes_bps',4100,''],['02/09/2026','gasto','Suscripción facturador electrónico','gasto_operativo',1150,'Plan anual prorrateado'],['08/09/2026','gasto','Hosting de la app','gasto_operativo',600,'']].map(([fecha,tipo,concepto,cat,importe,notas],i)=>({id:i+1,fecha,tipo,concepto,cat,importe,notas}));
+const CAT={cjppu:'CJPPU',aportes_bps:'Aportes BPS',gasto_operativo:'Gasto operativo',otro:'Otro'};
+const FREC={mensual:'Mensual',anual:'Anual',unico:'Único'};
+const EST={pendiente:['Pendiente','#3f424d','#e4e7f5'],en_proceso:['En proceso','#423a6a','#f5f4ff'],completada:['Completada','oklch(0.34 0.06 150)','oklch(0.92 0.06 150)'],cancelada:['Cancelada','#292b31','#9397ab']};
+const HOY=11, MES='09/2026';
+const fmt=n=>(n<0?'−':'')+'$ '+Math.abs(n).toLocaleString('es-UY');
+const dot=c=>`width:10px;height:10px;border-radius:50%;flex:none;background:${c};box-shadow:0 0 10px ${c.replace(')',' / .6)')}`;
+
+class Component extends DCLogic {
+  state={view:null,bell:false,sil:null,venc:1,filtro:'todas',inactivos:false,tab:'datos',finalizados:false,reveal:{},cred:null,form:null,attempt:false,regCambio:false,cu:'',cp:'',servSel:'',hNuevo:'7500',hVig:'2026-10-01',paso:1,pct:'8,5',vig:'2026-10-01',sel:{},manual:{},done:false,cobroServ:'mensual',cfg:'servicios',tplAnual:false,fin:'historico',srvActivo:{},tplActivo:{},vencActivo:{},est:Object.fromEntries(GRUPOS.flatMap(g=>g.tareas.map(t=>[t[0],t[2]])))};
+  renderVals(){
+    const s=this.state,p=this.props;
+    const view=s.view??(p.vistaInicial??'dashboard');
+    const views=['dashboard','clientes','cobros','tareas','calendario','ficha','formularios','aumento','config','finanzas','gastos','login'];
+    const go=Object.fromEntries(views.map(v=>[v,e=>{e.preventDefault();this.setState({view:v,bell:false})}]));
+    const cur=Object.fromEntries(views.map(v=>[v,view===v?'page':undefined]));
+    const is=Object.fromEntries(views.map(v=>[v,view===v]));
+    const byId=Object.fromEntries(CLIENTES.map(c=>[c.id,c]));
+    const clienteVals=c=>({...c,regLabel:REG[c.reg],rutFmt:c.rut||'—',estado:c.activo?'Activo':'Inactivo',saldoFmt:fmt(c.saldo),saldoStyle:`color:${c.saldo>0?DANT:OKT}`,situacion:c.saldo>0?`Debe · ${Math.max(1,Math.round(c.saldo/5700))} período${c.saldo>5700?'s':''}`:c.saldo<0?'Saldo a favor':'Al día'});
+    const ordenReg=['monotributo','pequena_empresa','regimen_general','unipersonal_no_prof','unipersonal_prof'];
+    const vis=CLIENTES.filter(c=>s.inactivos||c.activo);
+    const mensuales=vis.filter(c=>c.mensual).sort((a,b)=>ordenReg.indexOf(a.reg)-ordenReg.indexOf(b.reg)||a.id-b.id).map(clienteVals);
+    const eventuales=vis.filter(c=>!c.mensual).map(clienteVals);
+    const activos=CLIENTES.filter(c=>c.activo);
+    const porSaldo=[...activos].sort((a,b)=>b.saldo-a.saldo).map(clienteVals);
+    const deudores=porSaldo.filter(c=>c.saldo>0).slice(0,3);
+    // vencimientos
+    const clientesDe=v=>activos.filter(c=>v.regs.includes(c.reg));
+    const vencVals=v=>({...v,fecha:`${String(v.dia).padStart(2,'0')}/09`,fechaLarga:`${String(v.dia).padStart(2,'0')}/09/2026`,orgLabel:ORG[v.org][0],orgTagStyle:`background:${ORG[v.org][2]};color:${ORG[v.org][3]}`,regs:v.regs.map(r=>REG[r]),clientes:clientesDe(v).map(c=>c.nombre),nClientes:clientesDe(v).length,sel:e=>{e&&e.preventDefault&&e.preventDefault();this.setState({venc:v.id,view:'calendario'})}});
+    const proximos=VENC.filter(v=>v.dia>=HOY&&v.dia<=HOY+15).map(vencVals);
+    const vencSel=vencVals(VENC.find(v=>v.id===s.venc)||VENC[0]);
+    const celdas=[];
+    for(let i=0;i<1;i++)celdas.push({num:'',style:'min-height:88px',numStyle:'',eventos:[]});
+    for(let d=1;d<=30;d++){const evs=VENC.filter(v=>v.dia===d);const hoy=d===HOY;celdas.push({num:String(d),style:`min-height:88px;padding:6px;border-radius:8px;background:${hoy?'#232532':'#1b1d2b'};box-shadow:0 0 0 1px ${hoy?'#9184d9':'#292b31'};display:flex;flex-direction:column;gap:4px`,numStyle:`font-size:12px;color:${hoy?'#9184d9':d<HOY?'#595d6c':'#b2b6ca'};font-weight:${hoy?600:400}`,eventos:evs.map(v=>({desc:v.desc,sel:()=>this.setState({venc:v.id}),style:`text-align:left;font:inherit;font-size:11px;line-height:1.3;padding:3px 6px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:4px;border:0;cursor:pointer;background:${ORG[v.org][2]};color:${ORG[v.org][3]};border-left:2px solid ${ORG[v.org][1]};${s.venc===v.id?'outline:1px solid '+ORG[v.org][1]:''}`}))});}
+    while(celdas.length%7)celdas.push({num:'',style:'min-height:88px',numStyle:'',eventos:[]});
+    // tareas
+    let done=0,total=0,pend=0;
+    const grupos=GRUPOS.map(g=>{
+      const c=byId[g.cli];const v=VENC.find(x=>x.id===g.venc);
+      const all=g.tareas.map(([id,nombre,_e,info,notas])=>{const est=s.est[id];return {id,nombre,est,info,notas};});
+      const noCanc=all.filter(t=>t.est!=='cancelada');const comp=noCanc.filter(t=>t.est==='completada').length;const pendN=noCanc.length-comp;
+      done+=comp;total+=noCanc.length;pend+=pendN;
+      let color=null,limite='Sin vencimientos aplicables en el período',limColor='#75798c';
+      if(v){const dias=v.dia-HOY;limite=`Fecha límite: ${String(v.dia).padStart(2,'0')}/09 — ${ORG[v.org][0]}`+(pendN?` · ${dias<0?'vencida':'faltan '+dias+' días'}`:'');color=pendN===0?OK:dias>5?WARN:DAN;limColor=color===DAN?'oklch(0.78 0.1 25)':'#9397ab';}
+      const tareas=all.filter(t=>s.filtro==='todas'||(s.filtro==='pendientes'?(t.est==='pendiente'||t.est==='en_proceso'):t.est==='completada')).map(t=>{const [label,bg,fg]=EST[t.est];const cyc={pendiente:'en_proceso',en_proceso:'completada',completada:'pendiente',cancelada:'pendiente'};return {...t,estadoLabel:label,tagStyle:`background:${bg};color:${fg};border:0;cursor:pointer;font:inherit;font-size:11px;${t.est==='cancelada'?'text-decoration:line-through':''}`,tagStyleM:`background:${bg};color:${fg};border:0;cursor:pointer;font:inherit;font-size:12px;min-height:36px;padding:0 12px;${t.est==='cancelada'?'text-decoration:line-through':''}`,nombreStyle:`font-size:14px;${t.est==='cancelada'?'color:#75798c;text-decoration:line-through':t.est==='completada'?'color:#9397ab':''}`,origen:g.adhoc?'ad-hoc':'',infoLabel:t.info?'Esperando al cliente':'—',subMovil:[g.servicio,t.info?'esperando al cliente':'',t.notas].filter(Boolean).join(' · '),cycle:()=>this.setState(st=>({est:{...st.est,[t.id]:cyc[t.est]}})),cancelar:()=>{if(confirm('¿Confirmás que querés cancelar esta tarea?'))this.setState(st=>({est:{...st.est,[t.id]:'cancelada'}}))}}});
+      return {nombre:c.nombre,regLabel:REG[c.reg],servicio:g.servicio,limite,limiteStyle:`font-size:12px;color:${limColor}`,dotStyle:color?dot(color):'width:10px;height:10px;flex:none',progreso:`${comp} de ${noCanc.length}`,tareas,hasVisible:tareas.length>0};
+    });
+    const filtroSet=f=>e=>{e.preventDefault();this.setState({filtro:f})};
+    // recordatorios
+    const recs=[
+      {tipo:'venc',mensaje:'Aportes mensuales (BPS) vence el 15/09/2026 — faltan 5 días. Afecta a 6 clientes.',antiguedad:'hace 1 día',accion:'Ver calendario',ir:go.calendario,sil7off:true},
+      {tipo:'tarea',mensaje:'La tarea Liquidar IVA de Verdulería El Sol lleva 10 días sin completarse.',antiguedad:'hoy',accion:'Ver tarea',ir:go.tareas,sil7off:true},
+      {tipo:'cobro',mensaje:'Rodríguez, Martín tiene pendiente el pago de jul 2026. Saldo actual: $ 11.400.',antiguedad:'hace 10 días',accion:'Registrar cobro',ir:go.cobros,sil7off:false},
+      {tipo:'cobro',mensaje:'Verdulería El Sol tiene pendiente el pago de jul 2026. Saldo actual: $ 16.800.',antiguedad:'hace 10 días',accion:'Registrar cobro',ir:go.cobros,sil7off:false},
+    ].map((r,i)=>{const ic={venc:['ph ph-calendar-blank','#9184d9'],tarea:['ph ph-check-square',WARN],cobro:['ph ph-currency-dollar',DAN]}[r.tipo];return {...r,icon:ic[0],iconStyle:`font-size:18px;color:${ic[1]};flex:none;margin-top:2px`,silOpen:s.sil===i,silenciar:e=>{e.preventDefault();this.setState({sil:s.sil===i?null:i})}};});
+    // ficha
+    const tabs=['datos','servicios','credenciales','cuenta','honorarios','vencimientos'];
+    const tab=Object.fromEntries(tabs.map(t=>[t,e=>{e.preventDefault();this.setState({tab:t})}]));
+    const tabOn=Object.fromEntries(tabs.map(t=>[t,s.tab===t]));
+    const tabStyle=Object.fromEntries(tabs.map(t=>[t,`padding:8px 2px;font-size:14px;text-decoration:none;border-bottom:2px solid ${s.tab===t?'#9184d9':'transparent'};color:${s.tab===t?'#e9e9ed':'#9397ab'}`]));
+    const F=FICHA;
+    const contratos=F.contratos.filter(c=>s.finalizados||!c.fin).map(c=>({...c,frecLabel:FREC[c.frec],honorFmt:fmt(c.honor),finFmt:c.fin||'—',activo:!c.fin,rowStyle:c.fin?'color:#9397ab':''}));
+    const nFinalizados=F.contratos.filter(c=>c.fin).length;
+    const credenciales=F.credenciales.map(c=>{const on=!!s.reveal[c.id];return {...c,shown:on?c.pass:'••••••••',passStyle:`font-family:ui-monospace,SFMono-Regular,monospace;font-size:13px;color:${on?'#e9e9ed':'#75798c'}`,eye:on?'ph ph-eye-slash':'ph ph-eye',toggle:e=>{e.preventDefault();this.setState(st=>({reveal:{...st.reveal,[c.id]:!st.reveal[c.id]}}))},abrir:e=>{e.preventDefault();this.setState({cred:c.id})},notasFmt:c.notas||'—',selStyle:s.cred===c.id?'box-shadow:inset 3px 0 0 #9184d9':''};});
+    const credSel=credenciales.find(c=>c.id===s.cred)||null;
+    const cobrosF=F.cobros.map(c=>({...c,importeFmt:fmt(c.importe),notasFmt:c.notas||'—'}));
+    const descF=F.descuentos.map(d=>({...d,importeFmt:'− '+fmt(d.importe)}));
+    const honF=F.honorarios.map(x=>({...x,honorFmt:fmt(x.honor),hastaFmt:x.hasta||'vigente',hastaStyle:x.hasta?'':'color:oklch(0.72 0.125 150)'}));
+    const regHist=F.regHist.map(r=>({...r,regLabel:REG[r.reg],hastaFmt:r.hasta||'vigente',hastaStyle:r.hasta?'':'color:oklch(0.72 0.125 150)'}));
+    const vencCliente=VENC.filter(v=>v.regs.includes(F.reg)&&v.dia>=HOY).map(vencVals);
+    const toggleFin=s.finalizados;
+    // formularios
+    const formsL=['cliente','credencial','contratar','finalizar','cobro','descuento','honorario','adhoc','servicio','template','vencimiento','gasto'];
+    const abrir=Object.fromEntries(formsL.map(f=>[f,e=>{e&&e.preventDefault&&e.preventDefault();this.setState({form:f,attempt:false})}]));
+    const form=Object.fromEntries(formsL.map(f=>[f,s.form===f]));
+    const credErr=s.attempt&&!s.cu&&!s.cp;
+    const hNum=parseInt(s.hNuevo)||0;
+    const hIgual=hNum===7000;
+    const hRetro=s.hVig<'2026-09-01';
+    const mesesVig=['2026-06-01','2026-07-01','2026-08-01','2026-09-01','2026-10-01','2026-11-01','2026-12-01','2027-01-01'].map(v=>({v,label:'01/'+v.slice(5,7)+'/'+v.slice(0,4)}));
+    // aumento global
+    const pctNum=parseFloat(String(s.pct).replace(',','.'))||0;
+    const filasA=[...CONTRATOS_G].sort((a,b)=>(a.frec==='anual')-(b.frec==='anual')||byId[a.cli].nombre.localeCompare(byId[b.cli].nombre)).map(c=>{const calc=Math.ceil(c.honor*(1+pctNum/100)/10)*10;const nuevo=s.manual[c.id]!==undefined?(parseInt(s.manual[c.id])||0):calc;const invalido=c.desde>s.vig;return {...c,cliente:byId[c.cli].nombre,frecLabel:FREC[c.frec],honorFmt:fmt(c.honor),nuevo,nuevoStr:String(nuevo),nuevoFmt:fmt(nuevo),checked:!!s.sel[c.id]&&!invalido,invalido,desdeFmt:c.desde.slice(8,10)+'/'+c.desde.slice(5,7)+'/'+c.desde.slice(0,4),toggle:()=>{if(!invalido)this.setState(st=>({sel:{...st.sel,[c.id]:!st.sel[c.id]}}))},setManual:e=>{const v=e.target.value;this.setState(st=>({manual:{...st.manual,[c.id]:v}}))},rowStyle:invalido?'opacity:.55':'',editado:s.manual[c.id]!==undefined&&nuevo!==calc};});
+    const seleccionadas=filasA.filter(f=>f.checked);
+    // configuración
+    const cfgL=['servicios','templates','vencimientos','notificaciones'];
+    const cfg=Object.fromEntries(cfgL.map(t=>[t,e=>{e.preventDefault();this.setState({cfg:t})}]));
+    const cfgOn=Object.fromEntries(cfgL.map(t=>[t,s.cfg===t]));
+    const cfgStyle=Object.fromEntries(cfgL.map(t=>[t,`padding:8px 2px;font-size:14px;text-decoration:none;border-bottom:2px solid ${s.cfg===t?'#9184d9':'transparent'};color:${s.cfg===t?'#e9e9ed':'#9397ab'}`]));
+    const frecOrd={anual:0,mensual:1,unico:2};
+    const servicios=[...SERVICIOS].sort((a,b)=>frecOrd[a.frec]-frecOrd[b.frec]||a.nombre.localeCompare(b.nombre)).map(x=>{const act=s.srvActivo[x.id]??x.activo;return {...x,frecLabel:FREC[x.frec],activo:act,estado:act?'Activo':'Inactivo',rowStyle:act?'':'color:#9397ab',accion:act?'Desactivar':'Reactivar',toggle:e=>{e.preventDefault();this.setState(st=>({srvActivo:{...st.srvActivo,[x.id]:!act}}))},bloqueado:x.contratos>0,contratosTxt:x.contratos?`${x.contratos} activos`:'—'};});
+    const regOrdT=['todos','monotributo','pequena_empresa','regimen_general','unipersonal_no_prof','unipersonal_prof'];
+    const templates=[...TEMPLATES].sort((a,b)=>a.serv.localeCompare(b.serv)||regOrdT.indexOf(a.reg)-regOrdT.indexOf(b.reg)||a.orden-b.orden).map(x=>{const act=s.tplActivo[x.id]??x.activo;return {...x,regLabel:x.reg==='todos'?'Todos':REG[x.reg],mesLabel:x.mes?MESES[x.mes-1]:'—',activo:act,estado:act?'Activo':'Inactivo',rowStyle:act?'':'color:#9397ab',accion:act?'Desactivar':'Reactivar',toggle:e=>{e.preventDefault();this.setState(st=>({tplActivo:{...st.tplActivo,[x.id]:!act}}))}};});
+    const vencCfg=[...VENC_CFG].map((x,i)=>({...x,id:i+1})).sort((a,b)=>(a.mes??0)-(b.mes??0)||a.dia-b.dia).map(x=>{const act=s.vencActivo[x.id]??x.activo;return {...x,orgLabel:ORG[x.org][0],orgTagStyle:`background:${ORG[x.org][2]};color:${ORG[x.org][3]}`,regLabel:x.reg.split(', ').map(r=>REG[r]||r).join(', '),mesLabel:x.mes?MESES[x.mes-1]:'todos',anioLabel:x.anio??'recurrente',anioStyle:x.anio?'':'color:#9397ab',activo:act,estado:act?'Activo':'Inactivo',rowStyle:act?'':'color:#9397ab',accion:act?'Desactivar':'Reactivar',toggle:e=>{e.preventDefault();this.setState(st=>({vencActivo:{...st.vencActivo,[x.id]:!act}}))}};});
+    // finanzas
+    const hist=[...HIST].reverse().map(r=>{const dif=r.esp-r.cob;const neto=r.cob+r.prop-r.gas;const pct=Math.min(100,Math.round(r.cob/r.esp*100));return {...r,espFmt:fmt(r.esp),cobFmt:fmt(r.cob),difFmt:fmt(dif),difStyle:`color:${dif>0?DANT:OKT}`,propFmt:r.prop?fmt(r.prop):'—',gasFmt:fmt(r.gas),netoFmt:fmt(neto),netoStyle:`font-weight:500;color:${neto>=0?OKT:DANT}`,barStyle:`width:${pct}%;height:100%;border-radius:2px;background:${pct>=100?OK:'#9184d9'}`,pctTxt:pct+' %',rowStyle:r.mes==='set 2026'?'color:#b2b6ca':''};});
+    const proy=PROY.map(p=>({...p,espFmt:fmt(p.esp),notaStyle:p.nota?'color:#d2cefd':'color:#75798c',notaTxt:p.nota||'sin cambios'}));
+    const finL=['historico','proyeccion'];const finTab=Object.fromEntries(finL.map(t=>[t,e=>{e.preventDefault();this.setState({fin:t})}]));const finOn=Object.fromEntries(finL.map(t=>[t,s.fin===t]));const finStyle=Object.fromEntries(finL.map(t=>[t,`padding:8px 2px;font-size:14px;text-decoration:none;border-bottom:2px solid ${s.fin===t?'#9184d9':'transparent'};color:${s.fin===t?'#e9e9ed':'#9397ab'}`]));
+    const gastos=GASTOS.map(g=>({...g,catLabel:CAT[g.cat],tipoLabel:g.tipo==='gasto'?'Gasto':'Ingreso',tipoStyle:g.tipo==='gasto'?'background:#3f424d;color:#e4e7f5':`background:oklch(0.34 0.06 150);color:oklch(0.92 0.06 150)`,importeFmt:(g.tipo==='gasto'?'− ':'')+fmt(g.importe),notasFmt:g.notas||'—'}));
+    const totG=GASTOS.filter(g=>g.tipo==='gasto').reduce((a,g)=>a+g.importe,0),totI=GASTOS.filter(g=>g.tipo==='ingreso').reduce((a,g)=>a+g.importe,0);
+    const irVencCfg=e=>{e.preventDefault();this.setState({view:'config',cfg:'vencimientos'})};
+    const paso=s.paso;
+    const totalDeuda=fmt(activos.filter(c=>c.saldo>0).reduce((a,c)=>a+c.saldo,0));
+    const totalFavor=fmt(-activos.filter(c=>c.saldo<0).reduce((a,c)=>a+c.saldo,0));
+    const qs=new URLSearchParams(location.search).get('pantalla');
+    const isMobile=(qs??p.pantalla??'escritorio')==='móvil';
+    const isLogin=view==='login';
+    const on=s.inactivos;
+    return {
+      isDesktop:!isMobile&&!isLogin,isMobile:isMobile&&!isLogin,isLogin,go,cur,is,view,
+      mTitulo:{dashboard:'Setiembre 2026',tareas:'Tareas',cobros:'Cobros',ficha:'Credenciales'}[view]||'Estudio',
+      bellOpen:s.bell,toggleBell:()=>this.setState({bell:!s.bell,sil:null}),recordatorios:recs,recCount:recs.length,
+      mensuales,eventuales,nMensuales:mensuales.length,nEventuales:eventuales.length,
+      toggleInactivos:e=>{e.preventDefault();this.setState({inactivos:!on})},
+      toggleTrack:`width:30px;height:16px;border-radius:8px;background:${on?'#9184d9':'#3f424d'};position:relative;display:inline-block;transition:background .15s`,
+      toggleKnob:`position:absolute;top:2px;left:${on?16:2}px;width:12px;height:12px;border-radius:6px;background:${on?'#161826':'#b2b6ca'};transition:left .15s`,
+      porSaldo,deudores,totalDeuda,totalFavor,
+      grupos:grupos.filter(g=>g.hasVisible),gruposResumen:grupos.filter(g=>g.dotStyle.includes('background')).slice(0,4),progresoTotal:`${done}/${total}`,pendientesTotal:pend,totalTareas:total,
+      filtro:{todas:filtroSet('todas'),pendientes:filtroSet('pendientes'),completadas:filtroSet('completadas')},
+      filtroEs:{todas:s.filtro==='todas',pendientes:s.filtro==='pendientes',completadas:s.filtro==='completadas'},
+      proximos,vencSel,celdas,
+      abrir,form,formOpen:!!s.form&&!isMobile,formMovil:!!s.form&&isMobile,cerrar:e=>{e&&e.preventDefault&&e.preventDefault();this.setState({form:null})},
+      regCambio:s.regCambio,onRegimen:e=>this.setState({regCambio:e.target.value!=='regimen_general'}),
+      credErr,setCu:e=>this.setState({cu:e.target.value}),setCp:e=>this.setState({cp:e.target.value}),intentar:e=>{e.preventDefault();this.setState({attempt:true})},
+      servDup:s.servSel==='Liquidación mensual',onServ:e=>this.setState({servSel:e.target.value}),
+      hNuevo:s.hNuevo,setHNuevo:e=>this.setState({hNuevo:e.target.value}),hIgual,hRetro,hRetroMsg:`Estás aplicando un cambio retroactivo desde ${mesLabel(s.hVig)}. El saldo del cliente se recalculará.`,hVig:s.hVig,setHVig:e=>this.setState({hVig:e.target.value}),mesesVig,hOk:!hIgual&&hNum>0,
+      cobroUnico:s.cobroServ==='unico',onCobroServ:e=>this.setState({cobroServ:e.target.value}),
+      paso1:paso===1,paso2:paso===2,paso3:paso===3,pasoDone:s.done,pasoStyle:{1:`color:${paso===1?'#9184d9':paso>1?'#e9e9ed':'#75798c'}`,2:`color:${paso===2?'#9184d9':paso>2?'#e9e9ed':'#75798c'}`,3:`color:${paso===3?'#9184d9':'#75798c'}`},
+      pct:s.pct,setPct:e=>this.setState({pct:e.target.value}),vig:s.vig,setVig:e=>this.setState({vig:e.target.value}),vigFmt:'01/'+s.vig.slice(5,7)+'/'+s.vig.slice(0,4),pctBad:!(pctNum>0),sinSel:seleccionadas.length===0,
+      filasA,nSel:seleccionadas.length,seleccionadas,haySel:seleccionadas.length>0,selAll:e=>{e.preventDefault();this.setState({sel:Object.fromEntries(filasA.filter(f=>!f.invalido).map(f=>[f.id,true]))})},selNone:e=>{e.preventDefault();this.setState({sel:{}})},
+      irPaso:{1:e=>{e.preventDefault();this.setState({paso:1})},2:e=>{e.preventDefault();this.setState({paso:2})},3:e=>{e.preventDefault();this.setState({paso:3})}},confirmarAumento:e=>{e.preventDefault();this.setState({done:true})},reiniciarAumento:e=>{e.preventDefault();this.setState({done:false,paso:1,sel:{},manual:{}})},
+      totalNuevo:fmt(seleccionadas.reduce((a,f)=>a+f.nuevo,0)),totalVigente:fmt(seleccionadas.reduce((a,f)=>a+f.honor,0)),
+      hist,proy,finTab,finOn,finStyle,gastos,totGastos:fmt(totG),totIngresos:fmt(totI),totNeto:fmt(totI-totG),totNetoStyle:`color:${totI-totG>=0?OKT:DANT}`,
+      cfg,cfgOn,cfgStyle,servicios,templates,vencCfg,irVencCfg,tplAnual:s.tplAnual,onTplServ:e=>this.setState({tplAnual:/anual|DDJJ|FONASA/i.test(e.target.value)}),
+      ficha:F,tab,tabOn,tabStyle,contratos,nFinalizados,nContratos:F.contratos.filter(c=>!c.fin).length,nCred:F.credenciales.length,credenciales,credSel,hasCred:!!credSel,cerrarCred:e=>{e.preventDefault();this.setState({cred:null})},cobrosF,descF,honF,regHist,vencCliente,nVencCliente:vencCliente.length,fichaReg:REG[F.reg],
+      toggleFinalizados:e=>{e.preventDefault();this.setState({finalizados:!toggleFin})},
+      finTrack:`width:30px;height:16px;border-radius:8px;background:${toggleFin?'#9184d9':'#3f424d'};position:relative;display:inline-block;transition:background .15s`,
+      finKnob:`position:absolute;top:2px;left:${toggleFin?16:2}px;width:12px;height:12px;border-radius:6px;background:${toggleFin?'#161826':'#b2b6ca'};transition:left .15s`,
+    };
+  }
+}
+</script>
+</body>
+</html>
