@@ -42,14 +42,19 @@ def test_migracion_inicial_crea_las_16_tablas(monkeypatch):
         config.set_main_option("script_location", str(RAIZ_PROYECTO / "alembic"))
         command.upgrade(config, "head")
 
+        # try/finally: el engine se libera SIEMPRE (aunque un assert falle)
+        # antes de salir del `with`, porque Windows no puede borrar el
+        # directorio temporal si el archivo SQLite sigue en uso.
         engine = create_engine(url)
-        tablas = set(inspect(engine).get_table_names())
-        engine.dispose()
+        try:
+            tablas = set(inspect(engine).get_table_names())
 
-        assert TABLAS_ESPERADAS <= tablas, (
-            f"Faltan tablas: {TABLAS_ESPERADAS - tablas}"
-        )
-        assert len(TABLAS_ESPERADAS) == 16
+            assert TABLAS_ESPERADAS <= tablas, (
+                f"Faltan tablas: {TABLAS_ESPERADAS - tablas}"
+            )
+            assert len(TABLAS_ESPERADAS) == 16
+        finally:
+            engine.dispose()
 
 
 def test_esquema_de_modelos_coincide_con_16_tablas():

@@ -10,6 +10,8 @@ itsdangerous>=2.2,<3.0       # firma de la cookie de sesión
 bcrypt>=4.1,<5.0             # hash de la contraseña de login
 pydantic>=2.7,<3.0
 pydantic-settings>=2.3,<3.0  # lectura de variables de entorno / .env
+tzdata>=2024.1               # base de zonas horarias: en Windows, zoneinfo no
+                             # encuentra America/Montevideo sin este paquete
 
 # Testing
 pytest>=8.0,<9.0
