@@ -1,0 +1,48 @@
+{% extends "ficha_servicios.html" %}
+
+{% block titulo %}Contratar servicio · {{ cliente.nombre }} — Estudio Contable{% endblock %}
+
+{# Diálogo de contratar servicio (vista 15a). #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="/clientes/{{ cliente.id }}/servicios/contratar" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">Contratar servicio · {{ cliente.nombre }}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Servicio <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="servicio_id" required>
+          <option value="" {% if not valores.get('servicio_id') %}selected{% endif %}>Elegí un servicio…</option>
+          {% for servicio in servicios_activos %}
+          <option value="{{ servicio.id }}" {% if valores.get('servicio_id') == servicio.id | string %}selected{% endif %}>{{ servicio.nombre }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('servicio_id') }}
+      </div>
+      <div class="field">
+        <label>Fecha de inicio <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" type="date" name="fecha_inicio" value="{{ valores.get('fecha_inicio', '') }}" required>
+        {{ error_campo('fecha_inicio') }}
+      </div>
+      <div class="field">
+        <label>Honorario <span style="color: rgb(145,132,217);">*</span></label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 10px; top: 8px; font-size: 14px; color: rgb(147,151,171);">$</span>
+          <input class="input" name="honorario" inputmode="numeric" placeholder="0" value="{{ valores.get('honorario', '') }}" style="padding-left: 24px;" required>
+        </div>
+        {{ error_campo('honorario') }}
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140); text-wrap: pretty;">Al guardar se crea el primer honorario del historial y, si el servicio es mensual, las tareas del período en curso. Los únicos generan tareas solo si hay templates.</div>
+    <div class="dialog-actions">
+      <a href="/clientes/{{ cliente.id }}/servicios" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Contratar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

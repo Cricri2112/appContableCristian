@@ -1,0 +1,39 @@
+{# Encabezado de la ficha del cliente (vistas 07-12): título, tags, acciones
+   y pestañas. Espera: cliente, es_mensual, conteos_contratos, pestana.
+   El saldo (F5) y las pestañas de etapas futuras se habilitan en E3-E5. #}
+
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171);"><a href="/clientes" style="color: inherit; text-decoration: none;">Clientes</a> / Ficha</div>
+    <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">{{ cliente.nombre }}</h1>
+    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+      <span class="tag tag-neutral">{{ cliente.regimen | regimen }}</span>
+      <span class="tag tag-outline">{{ 'Mensual' if es_mensual else 'Eventual' }}</span>
+      {% if not cliente.activo %}<span class="tag tag-neutral" style="color: rgb(147,151,171);">Inactivo</span>{% endif %}
+      <span style="font-size: 13px; color: rgb(178,182,202); align-self: center;">Cliente desde {{ cliente.fecha_inicio | fecha }}</span>
+    </div>
+  </div>
+  <div style="display: flex; gap: 8px; align-items: center;">
+    <a href="/clientes/{{ cliente.id }}/editar" class="btn btn-secondary"><i class="ph ph-pencil-simple"></i>Editar</a>
+    <form method="post" action="/clientes/{{ cliente.id }}/activo" style="margin: 0;">
+      <button type="submit" class="btn btn-secondary" style="color: rgb(147,151,171);"><i class="ph ph-power"></i>{{ 'Desactivar' if cliente.activo else 'Reactivar' }}</button>
+    </form>
+  </div>
+</div>
+
+{% macro pestana_item(url, etiqueta, activa, conteo=None, habilitada=True) %}
+  {% if habilitada %}
+  <a href="{{ url }}" style="padding: 8px 2px; font-size: 14px; text-decoration: none; border-bottom: 2px solid {{ 'rgb(145,132,217)' if activa else 'transparent' }}; color: {{ 'rgb(233,233,237)' if activa else 'rgb(147,151,171)' }};">{{ etiqueta }}{% if conteo is not none %} <span style="font-size: 12px; color: rgb(117,121,140);">{{ conteo }}</span>{% endif %}</a>
+  {% else %}
+  <span title="Disponible en una etapa posterior" style="padding: 8px 2px; font-size: 14px; border-bottom: 2px solid transparent; color: rgb(89,93,108);">{{ etiqueta }}</span>
+  {% endif %}
+{% endmacro %}
+
+<nav style="display: flex; gap: 22px; border-bottom: 1px solid rgb(41,43,49); flex-wrap: wrap;">
+  {{ pestana_item('/clientes/' ~ cliente.id, 'Datos generales', pestana == 'datos') }}
+  {{ pestana_item('/clientes/' ~ cliente.id ~ '/servicios', 'Servicios contratados', pestana == 'servicios', conteo=conteos_contratos.activos) }}
+  {{ pestana_item('#', 'Credenciales', False, habilitada=False) }}
+  {{ pestana_item('#', 'Estado de cuenta', False, habilitada=False) }}
+  {{ pestana_item('#', 'Historial de honorarios', False, habilitada=False) }}
+  {{ pestana_item('#', 'Próximos vencimientos', False, habilitada=False) }}
+</nav>

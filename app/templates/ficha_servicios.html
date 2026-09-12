@@ -1,0 +1,49 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}{{ cliente.nombre }} · Servicios — Estudio Contable{% endblock %}
+
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% include "_ficha_encabezado.html" %}
+
+  {# Vista 08: servicios contratados, con toggle "mostrar finalizados" (adenda B2). #}
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <a href="/clientes/{{ cliente.id }}/servicios{{ '' if mostrar_finalizados else '?finalizados=1' }}"
+         style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: rgb(178,182,202); text-decoration: none; user-select: none;">
+        <span style="width: 30px; height: 16px; border-radius: 8px; background: {{ 'rgb(145,132,217)' if mostrar_finalizados else 'rgb(63,66,77)' }}; position: relative; display: inline-block;">
+          <span style="position: absolute; top: 2px; left: {{ '16px' if mostrar_finalizados else '2px' }}; width: 12px; height: 12px; border-radius: 6px; background: {{ 'rgb(22,24,38)' if mostrar_finalizados else 'rgb(178,182,202)' }};"></span>
+        </span>
+        Mostrar finalizados <span style="color: rgb(117,121,140);">({{ conteos_contratos.finalizados }})</span>
+      </a>
+      <a href="/clientes/{{ cliente.id }}/servicios/contratar" class="btn btn-primary"><i class="ph ph-plus"></i>Contratar servicio</a>
+    </div>
+
+    <table class="table">
+      <thead><tr><th>Servicio</th><th>Frecuencia</th><th style="text-align: right;">Honorario vigente</th><th>Inicio</th><th>Fin</th><th></th></tr></thead>
+      <tbody>
+        {% for fila in filas_contratos %}
+        <tr {% if not fila.contrato.activo %}style="color: rgb(147,151,171);"{% endif %}>
+          <td>{{ fila.servicio.nombre }}</td>
+          <td><span class="tag tag-accent">{{ fila.servicio.frecuencia | frecuencia }}</span></td>
+          <td style="text-align: right;">{{ fila.honorario_vigente | importe }}</td>
+          <td style="color: rgb(178,182,202);">{{ fila.contrato.fecha_inicio | fecha }}</td>
+          <td style="color: rgb(178,182,202);">{{ fila.contrato.fecha_fin | fecha }}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            {% if fila.contrato.activo %}
+            <a href="/contratos/{{ fila.contrato.id }}" class="btn btn-ghost" style="font-size: 13px;">Detalle</a>
+            {# Cambiar honorario (H-07) llega con F6 en la Etapa 3. #}
+            <button class="btn btn-ghost" style="font-size: 13px;" disabled title="Disponible en la Etapa 3">Cambiar honorario</button>
+            <a href="/contratos/{{ fila.contrato.id }}/finalizar" class="btn btn-ghost" style="font-size: 13px; color: rgb(147,151,171);">Finalizar</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" style="color: rgb(147,151,171);">Sin servicios contratados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: rgb(117,121,140); margin: 0; max-width: 720px;">Orden: mensual → anual → único, luego inicio descendente. Finalizados: solo lectura, con su fecha de fin — en los únicos representa la duración real del trabajo.</p>
+  </div>
+</div>
+{% endblock %}

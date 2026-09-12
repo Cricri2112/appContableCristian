@@ -1,0 +1,50 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Configuración · Servicios — Estudio Contable{% endblock %}
+
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  <div>
+    <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;">Configuración</div>
+    <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Catálogos y ajustes</h1>
+  </div>
+
+  {# Pestañas de configuración. Templates de tareas y Vencimientos llegan en E5; Notificaciones en E6. #}
+  <nav style="display: flex; gap: 22px; border-bottom: 1px solid rgb(41,43,49); flex-wrap: wrap;">
+    <a href="/configuracion/servicios" style="padding: 8px 2px; font-size: 14px; text-decoration: none; border-bottom: 2px solid rgb(145,132,217); color: rgb(233,233,237);">Servicios</a>
+    <span title="Disponible en una etapa posterior" style="padding: 8px 2px; font-size: 14px; border-bottom: 2px solid transparent; color: rgb(89,93,108);">Templates de tareas</span>
+    <span title="Disponible en una etapa posterior" style="padding: 8px 2px; font-size: 14px; border-bottom: 2px solid transparent; color: rgb(89,93,108);">Vencimientos</span>
+    <span title="Disponible en una etapa posterior" style="padding: 8px 2px; font-size: 14px; border-bottom: 2px solid transparent; color: rgb(89,93,108);">Notificaciones</span>
+  </nav>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; max-width: 900px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+      <span style="font-size: 13px; color: rgb(147,151,171);">Catálogo de lo que se vende. Los precios viven en cada contrato.</span>
+      <a href="/configuracion/servicios/nuevo" class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo servicio</a>
+    </div>
+    <table class="table">
+      <thead><tr><th>Nombre</th><th>Frecuencia</th><th>Contratos activos</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        {% for fila in filas %}
+        {% set servicio = fila.servicio %}
+        <tr {% if not servicio.activo %}style="color: rgb(147,151,171);"{% endif %}>
+          <td>{{ servicio.nombre }}</td>
+          <td><span class="tag tag-accent">{{ servicio.frecuencia | frecuencia }}</span></td>
+          <td style="color: rgb(178,182,202); font-size: 13px;">{{ fila.contratos_activos ~ ' activos' if fila.contratos_activos else '—' }}</td>
+          <td style="font-size: 13px;">{{ 'Activo' if servicio.activo else 'Inactivo' }}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <a href="/configuracion/servicios/{{ servicio.id }}/editar" class="btn btn-ghost" style="font-size: 13px;">Editar</a>
+            <form method="post" action="/configuracion/servicios/{{ servicio.id }}/activo" style="display: inline; margin: 0;">
+              <button type="submit" class="btn btn-ghost" style="font-size: 13px; color: rgb(147,151,171);">{{ 'Desactivar' if servicio.activo else 'Reactivar' }}</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="color: rgb(147,151,171);">Sin servicios cargados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: rgb(117,121,140); margin: 0; max-width: 720px;">Orden: frecuencia y luego nombre. Desactivar no pide confirmación y no toca contratos existentes; el servicio deja de aparecer al contratar. Sin eliminación desde la app.</p>
+  </div>
+</div>
+{% endblock %}
