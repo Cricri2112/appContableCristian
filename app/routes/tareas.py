@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import Tarea
 from app.plantillas import templates
-from app.services import fechas, tareas
+from app.services import fechas, tareas, vencimientos
 from app.services.errores import ErrorValidacion
 
 router = APIRouter()
@@ -39,15 +39,16 @@ def _query(filtros: dict, **cambios) -> str:
 def _contexto_vista(db: Session, filtros: dict) -> dict:
     periodo = filtros["periodo"]
     completadas, total = tareas.progreso_periodo(db, periodo)
+    grupos = tareas.grupos_del_periodo(db, periodo, filtros["cliente_id"], filtros["estado"])
+    # F8: fecha límite y semáforo por cliente (derivados al consultar).
+    vencimientos.completar_grupos_con_limite(db, grupos, periodo)
     return {
         "seccion": "tareas",
         "filtros": filtros,
         "query": _query(filtros),
         "query_anterior": _query(filtros, periodo=fechas.mes_anterior(periodo).strftime("%Y-%m")),
         "query_siguiente": _query(filtros, periodo=fechas.mes_siguiente(periodo).strftime("%Y-%m")),
-        "grupos": tareas.grupos_del_periodo(
-            db, periodo, filtros["cliente_id"], filtros["estado"]
-        ),
+        "grupos": grupos,
         "clientes_filtro": tareas.clientes_con_tareas(db, periodo),
         "completadas_periodo": completadas,
         "total_periodo": total,
@@ -78,6 +79,8 @@ def _respuesta_grupo(request: Request, db: Session, tarea: Tarea, filtros: dict)
     incluidos) y el contador del menú lateral."""
     cliente = tareas.cliente_de_tarea(db, tarea)
     grupo = tareas.grupo_de_cliente(db, tarea.periodo, cliente.id, filtros["estado"])
+    if grupo is not None:
+        vencimientos.completar_grupos_con_limite(db, [grupo], tarea.periodo)
     return templates.TemplateResponse(request, "_grupo_tareas_respuesta.html", {
         "grupo": grupo,
         "cliente_id": cliente.id,

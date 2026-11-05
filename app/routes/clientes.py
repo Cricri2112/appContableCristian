@@ -21,6 +21,7 @@ from app.services import (
     cuentas,
     honorarios,
     vault,
+    vencimientos,
 )
 from app.services.errores import ErrorValidacion
 
@@ -94,6 +95,7 @@ def _contexto_ficha(db: Session, cliente_id: int) -> dict | None:
         "es_mensual": clientes.es_mensual(db, cliente_id),
         "conteos_contratos": contratos.contar_contratos(db, cliente_id),
         "conteo_credenciales": vault.contar_credenciales(db, cliente_id),
+        "conteo_vencimientos": len(vencimientos.proximos_del_cliente(db, cliente)),
         # Saldo del encabezado de la ficha (F5, vista 07): rojo si debe.
         "saldo": desglose["saldo"],
         "situacion_saldo": cuentas.situacion(

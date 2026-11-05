@@ -1,0 +1,96 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Vencimientos — Estudio Contable{% endblock %}
+
+{# Vista 05: grilla del mes + panel lateral con el detalle del vencimiento
+   elegido y la lista de los próximos 15 días (hallazgo H-05). #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+    <div>
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;">Vencimientos</div>
+      <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Calendario de vencimientos</h1>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <div style="display: inline-flex; align-items: center; border: 1px solid rgba(233,233,237,0.16); border-radius: 8px; overflow: hidden;">
+        <a href="/vencimientos?periodo={{ mes_anterior }}" class="btn btn-icon" aria-label="Mes anterior" style="width: 32px; height: 32px; border-radius: 0;"><i class="ph ph-caret-left"></i></a>
+        <span style="font-size: 13px; padding: 0 10px; min-width: 110px; text-align: center;">{{ mes | mes_largo }}</span>
+        <a href="/vencimientos?periodo={{ mes_siguiente }}" class="btn btn-icon" aria-label="Mes siguiente" style="width: 32px; height: 32px; border-radius: 0;"><i class="ph ph-caret-right"></i></a>
+      </div>
+      <a href="/configuracion/vencimientos" class="btn btn-secondary" style="font-size: 13px;"><i class="ph ph-gear-six"></i>Administrar</a>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 20px; align-items: start;">
+    {# Grilla del mes; el panel de detalle queda a la derecha (300px). #}
+    <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 6px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(117,121,140); padding: 0 4px;">
+        <span>lun</span><span>mar</span><span>mié</span><span>jue</span><span>vie</span><span>sáb</span><span>dom</span>
+      </div>
+      {% for semana in semanas %}
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 6px;">
+        {% for dia in semana %}
+        {% if dia is none %}
+        <div style="min-height: 88px;"></div>
+        {% else %}
+        {% set es_hoy = dia == fecha_hoy %}
+        <div style="min-height: 88px; padding: 6px; border-radius: 8px; background: {{ 'rgb(35,37,50)' if es_hoy else 'rgb(27,29,43)' }}; box-shadow: {{ 'rgb(145,132,217)' if es_hoy else 'rgb(41,43,49)' }} 0 0 0 1px; display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+          <div style="font-size: 12px; color: {{ 'rgb(145,132,217)' if es_hoy else ('rgb(89,93,108)' if dia < fecha_hoy else 'rgb(178,182,202)') }}; font-weight: {{ 600 if es_hoy else 400 }};">{{ dia.day }}</div>
+          {% for o in por_dia.get(dia, []) %}
+          {% set org = o.vencimiento.organismo.value %}
+          {% set elegido = seleccionada and seleccionada.vencimiento.id == o.vencimiento.id and seleccionada.fecha == o.fecha %}
+          <a href="/vencimientos?periodo={{ mes.strftime('%Y-%m') }}&sel={{ o.vencimiento.id }}&dia={{ o.fecha.isoformat() }}"
+             title="{{ o.descripcion }} ({{ o.organismo }})"
+             style="font-size: 11px; text-decoration: none; padding: 3px 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px; border-left: 2px solid var(--color-org-{{ org }}); background: var(--color-org-{{ org }}-bg); color: var(--color-org-{{ org }}-on); {{ 'outline: 1px solid var(--color-org-' ~ org ~ ');' if elegido }}">{{ o.descripcion }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endfor %}
+      {% if not por_dia %}
+      <div style="font-size: 13px; color: rgb(147,151,171); padding: 4px;">Sin vencimientos cargados para {{ mes | mes_largo }}. Se cargan en Configuración → Vencimientos.</div>
+      {% endif %}
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+      {% if seleccionada %}
+      <section class="card" style="gap: 10px; padding: 16px 18px; box-shadow: rgb(89,93,108) 0 0 0 1px;">
+        <div class="card-kicker">Detalle</div>
+        <div style="font-size: 17px; font-weight: 500;">{{ seleccionada.descripcion }}</div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          {% with org=seleccionada.vencimiento.organismo.value %}{% include "_tag_organismo.html" %}{% endwith %}
+          <span class="tag tag-outline">{{ seleccionada.fecha | fecha }}</span>
+        </div>
+        <div style="font-size: 12px; color: rgb(147,151,171);">Regímenes alcanzados</div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          {% for r in seleccionada.regimenes %}<span class="tag tag-neutral">{{ r | regimen }}</span>{% endfor %}
+        </div>
+        <div style="font-size: 12px; color: rgb(147,151,171);">Clientes activos alcanzados · {{ seleccionada.clientes | length }}</div>
+        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
+          {% for c in seleccionada.clientes %}
+          <a href="/clientes/{{ c.id }}/vencimientos" style="color: inherit; text-decoration: none;">{{ c.nombre }}</a>
+          {% else %}
+          <span style="color: rgb(147,151,171);">Ninguno.</span>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="card" style="gap: 8px; padding: 16px 18px;">
+        <div class="card-kicker">Próximos 15 días</div>
+        {% for o in proximos %}
+        <a href="/vencimientos?periodo={{ o.fecha.strftime('%Y-%m') }}&sel={{ o.vencimiento.id }}&dia={{ o.fecha.isoformat() }}"
+           style="display: flex; gap: 10px; align-items: center; padding: 6px 0; color: inherit; text-decoration: none; font-size: 14px;">
+          <span style="width: 44px; color: rgb(178,182,202); flex: 0 0 auto;">{{ o.fecha.strftime('%d/%m') }}</span>
+          <span style="flex: 1 1 0%; min-width: 0;">{{ o.descripcion }} <span style="color: rgb(117,121,140); font-size: 12px;">· {{ o.organismo }}</span></span>
+          <span style="color: rgb(147,151,171); font-size: 12px; flex: 0 0 auto;">{{ o.clientes | length }} cl.</span>
+        </a>
+        {% else %}
+        <div style="font-size: 13px; color: rgb(147,151,171);">No hay vencimientos en los próximos 15 días.</div>
+        {% endfor %}
+      </section>
+    </div>
+  </div>
+</div>
+{% endblock %}

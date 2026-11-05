@@ -74,3 +74,47 @@ def test_templates_crear_desde_la_web(sesion, db_temporal):
     listado = sesion.get("/configuracion/templates")
     assert "Preparar DDJJ" in listado.text
     assert "junio" in listado.text
+
+
+# ---------- Corte 5b: vencimientos ----------
+
+def _vencimiento(db, dia, regimen="todos", organismo="dgi"):
+    from app.models import VencimientoCalendario
+    v = VencimientoCalendario(descripcion="IVA e IRPF mensual", regimen=regimen,
+                              organismo=organismo, dia_vencimiento=dia, activo=True)
+    db.add(v)
+    db.commit()
+    return v
+
+
+def test_tareas_muestran_fecha_limite_y_semaforo(sesion, db_temporal):
+    _con_tarea(db_temporal)
+    _vencimiento(db_temporal, dia=31)  # último día del mes en curso: nunca pasó
+    pagina = sesion.get("/tareas")
+    assert "Fecha límite:" in pagina.text
+    assert 'title="Semáforo"' in pagina.text
+
+
+def test_calendario_y_proximos(sesion, db_temporal):
+    crear_cliente_directo(db_temporal, nombre="Cliente Alcanzado")
+    _vencimiento(db_temporal, dia=31)
+    pagina = sesion.get("/vencimientos")
+    assert pagina.status_code == 200
+    assert "IVA e IRPF mensual" in pagina.text
+    assert "Cliente Alcanzado" in pagina.text  # panel de detalle
+
+
+def test_calendario_vacio_muestra_literal(sesion, db_temporal):
+    pagina = sesion.get("/vencimientos")
+    assert "No hay vencimientos en los próximos 15 días." in pagina.text
+
+
+def test_crear_vencimiento_y_ver_en_la_ficha(sesion, db_temporal):
+    cliente = crear_cliente_directo(db_temporal, regimen="monotributo")
+    respuesta = sesion.post("/configuracion/vencimientos/nuevo", data={
+        "descripcion": "Aportes mensuales", "organismo": "bps", "regimen": "monotributo",
+        "mes": "", "dia_vencimiento": "31", "anio": "",
+    }, follow_redirects=False)
+    assert respuesta.status_code == 303
+    ficha = sesion.get(f"/clientes/{cliente.id}/vencimientos")
+    assert "Aportes mensuales" in ficha.text

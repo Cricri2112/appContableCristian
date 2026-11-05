@@ -23,6 +23,7 @@ from app.routes import (
     inicio,
     tareas,
     templates_tareas,
+    vencimientos,
 )
 from app.config import settings
 from app.services import cifrado, scheduler
@@ -90,3 +91,4 @@ app.include_router(honorarios.router)
 app.include_router(credenciales.router)
 app.include_router(tareas.router)
 app.include_router(templates_tareas.router)
+app.include_router(vencimientos.router)

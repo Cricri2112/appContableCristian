@@ -1,0 +1,3 @@
+{# Tag de organismo con su color (pico-map.css): DGI acento, BPS neutro claro,
+   Otro neutro medio. Espera `org` = valor del enum ("dgi", "bps", "otro"). #}
+<span class="tag tag-neutral" style="background: var(--color-org-{{ org }}-bg); color: var(--color-org-{{ org }}-on);">{{ {'dgi': 'DGI', 'bps': 'BPS', 'otro': 'Otro'}[org] }}</span>

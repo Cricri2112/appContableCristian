@@ -47,5 +47,5 @@
   {{ pestana_item('/clientes/' ~ cliente.id ~ '/credenciales', 'Credenciales', pestana == 'credenciales', conteo=conteo_credenciales) }}
   {{ pestana_item('/clientes/' ~ cliente.id ~ '/cuenta', 'Estado de cuenta', pestana == 'cuenta') }}
   {{ pestana_item('/clientes/' ~ cliente.id ~ '/honorarios', 'Historial de honorarios', pestana == 'honorarios') }}
-  {{ pestana_item('#', 'Próximos vencimientos', False, habilitada=False) }}
+  {{ pestana_item('/clientes/' ~ cliente.id ~ '/vencimientos', 'Próximos vencimientos', pestana == 'vencimientos', conteo=conteo_vencimientos) }}
 </nav>

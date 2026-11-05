@@ -26,7 +26,7 @@
     {% set progreso = progreso_tareas() %}
     {% set contador %}<span id="nav-progreso" style="margin-left: auto; font-size: 11px; color: rgb(147,151,171);">{% if progreso and progreso[1] %}{{ progreso[0] }}/{{ progreso[1] }}{% endif %}</span>{% endset %}
     {{ item_nav('/tareas', 'ph-check-square', 'Tareas', seccion == 'tareas', extra=contador) }}
-    {{ item_nav('#', 'ph-calendar-blank', 'Vencimientos', False, habilitada=False) }}
+    {{ item_nav('/vencimientos', 'ph-calendar-blank', 'Vencimientos', seccion == 'vencimientos') }}
     <div style="flex: 1;"></div>
     {{ item_nav('/configuracion/servicios', 'ph-gear-six', 'Configuración', seccion == 'configuracion') }}
   </aside>
