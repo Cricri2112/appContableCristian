@@ -1,0 +1,55 @@
+{% extends "tareas_periodo.html" %}
+
+{% block titulo %}Nueva tarea ad-hoc — Estudio Contable{% endblock %}
+
+{# Diálogo de tarea ad-hoc (vista 19). Los campos f_* conservan los filtros
+   de la vista para volver al mismo lugar. #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="/tareas/nueva" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <input type="hidden" name="f_periodo" value="{{ filtros.periodo.strftime('%Y-%m') }}">
+    <input type="hidden" name="f_cliente" value="{{ filtros.cliente_id or '' }}">
+    <input type="hidden" name="f_estado" value="{{ filtros.estado }}">
+    <span class="dialog-title">Nueva tarea ad-hoc</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Servicio contratado <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="servicio_contratado_id">
+          <option value="">Elegí cliente y servicio…</option>
+          {% for fila in contratos %}
+          <option value="{{ fila.contrato.id }}" {% if valores.get('servicio_contratado_id') == fila.contrato.id | string %}selected{% endif %}>{{ fila.cliente.nombre }} · {{ fila.servicio.nombre }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('servicio_contratado_id') }}
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Nombre <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" name="nombre" placeholder="ej: Pedir nota de crédito de agosto" value="{{ valores.get('nombre', '') }}">
+        {{ error_campo('nombre') }}
+      </div>
+      <div class="field">
+        <label>Período <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" type="month" name="periodo" value="{{ valores.get('periodo', '') }}">
+        {{ error_campo('periodo') }}
+      </div>
+      <div class="field" style="align-self: end;">
+        <label class="radio" style="min-height: 36px;"><input type="checkbox" name="requiere_info_cliente" value="1" {% if valores.get('requiere_info_cliente') == '1' %}checked{% endif %}><span class="dot" style="border-radius: 4px;"></span>Requiere info del cliente</label>
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Notas</label>
+        <input class="input" name="notas" placeholder="Opcional" value="{{ valores.get('notas', '') }}">
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140);">Se crea pendiente, sin template. Aparece al final del grupo del cliente en la vista de tareas.</div>
+    <div class="dialog-actions">
+      <a href="/tareas?{{ query }}" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Crear tarea</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

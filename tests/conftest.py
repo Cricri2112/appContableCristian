@@ -16,6 +16,8 @@ os.environ["SECRET_KEY"] = "secreto-solo-para-tests"
 # Clave Fernet generada para la corrida de tests (nunca una clave real).
 from cryptography.fernet import Fernet  # noqa: E402
 os.environ["FERNET_KEY"] = Fernet.generate_key().decode()
+# Los tests nunca arrancan el scheduler real.
+os.environ["SCHEDULER_ACTIVO"] = "false"
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -63,7 +65,10 @@ def cliente_web(db_temporal):
     from app.database import get_db
     from app.main import app
 
-    def get_db_de_prueba():
+    from fastapi import Request
+
+    def get_db_de_prueba(request: Request):
+        request.state.db = db_temporal
         yield db_temporal
 
     app.dependency_overrides[get_db] = get_db_de_prueba

@@ -1,9 +1,11 @@
-"""Arranque de la aplicación FastAPI — Etapa 0.
+"""Arranque de la aplicación FastAPI.
 
 Incluye el middleware que exige sesión en toda ruta salvo el login
-(criterio de terminado 4 de la Etapa 0).
+(criterio de terminado 4 de la Etapa 0) y el arranque del scheduler de
+procesos programados (Etapa 5).
 """
 
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request
@@ -19,15 +21,30 @@ from app.routes import (
     credenciales,
     honorarios,
     inicio,
+    tareas,
+    templates_tareas,
 )
-from app.services import cifrado
+from app.config import settings
+from app.services import cifrado, scheduler
 from app.services.autenticacion import generar_token_sesion, verificar_token_sesion
 
 # Sin FERNET_KEY válida la app NO arranca (Chat 5, Etapa 4): así nunca se
 # guarda una credencial sin cifrar ni se intenta descifrar sin clave.
 cifrado.verificar_clave()
 
-app = FastAPI(title="App de gestión del estudio contable")
+
+@asynccontextmanager
+async def ciclo_de_vida(app: FastAPI):
+    """Al arrancar: recupera el proceso mensual si no corrió este mes y
+    arranca el scheduler. Al apagar: lo detiene."""
+    if settings.scheduler_activo:
+        scheduler.iniciar()
+    yield
+    if settings.scheduler_activo:
+        scheduler.detener()
+
+
+app = FastAPI(title="App de gestión del estudio contable", lifespan=ciclo_de_vida)
 
 # Rutas que NO exigen sesión.
 RUTAS_PUBLICAS = {"/login"}
@@ -71,3 +88,5 @@ app.include_router(configuracion.router)
 app.include_router(cobros.router)
 app.include_router(honorarios.router)
 app.include_router(credenciales.router)
+app.include_router(tareas.router)
+app.include_router(templates_tareas.router)

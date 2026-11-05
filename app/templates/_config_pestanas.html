@@ -1,0 +1,19 @@
+{# Pestañas de Configuración. Espera `pestana_config`.
+   Notificaciones llega en la Etapa 6. #}
+{% macro pestana_config(url, etiqueta, activa, habilitada=True) %}
+  {% if habilitada %}
+  <a href="{{ url }}" style="padding: 8px 2px; font-size: 14px; text-decoration: none; border-bottom: 2px solid {{ 'rgb(145,132,217)' if activa else 'transparent' }}; color: {{ 'rgb(233,233,237)' if activa else 'rgb(147,151,171)' }};">{{ etiqueta }}</a>
+  {% else %}
+  <span title="Disponible en una etapa posterior" style="padding: 8px 2px; font-size: 14px; border-bottom: 2px solid transparent; color: rgb(89,93,108);">{{ etiqueta }}</span>
+  {% endif %}
+{% endmacro %}
+<div>
+  <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;">Configuración</div>
+  <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Catálogos y ajustes</h1>
+</div>
+<nav style="display: flex; gap: 22px; border-bottom: 1px solid rgb(41,43,49); flex-wrap: wrap;">
+  {{ pestana_config('/configuracion/servicios', 'Servicios', pestana_config_activa == 'servicios') }}
+  {{ pestana_config('/configuracion/templates', 'Templates de tareas', pestana_config_activa == 'templates') }}
+  {{ pestana_config('/configuracion/vencimientos', 'Vencimientos', pestana_config_activa == 'vencimientos', habilitada=False) }}
+  {{ pestana_config('#', 'Notificaciones', False, habilitada=False) }}
+</nav>

@@ -1,0 +1,76 @@
+{# Grupo de tareas de un cliente (vista 04). Espera: grupo, filtros, query.
+   El semáforo y la fecha límite (F8) van SOLO en el encabezado del grupo.
+   Los cambios de estado re-dibujan este bloque entero por HTMX. #}
+{% set colores_semaforo = {'verde': 'var(--color-ok)', 'amarillo': 'var(--color-warn)', 'rojo': 'var(--color-danger)'} %}
+{% set estilos_estado = {
+  'pendiente': 'background: var(--color-estado-pendiente-bg); color: var(--color-estado-pendiente-on);',
+  'en_proceso': 'background: var(--color-estado-proceso-bg); color: var(--color-estado-proceso-on);',
+  'completada': 'background: var(--color-ok-bg); color: var(--color-ok-on-bg);',
+  'cancelada': 'background: var(--color-estado-cancelada-bg); color: var(--color-estado-cancelada-on); text-decoration: line-through;',
+} %}
+{% set etiquetas_estado = {'pendiente': 'Pendiente', 'en_proceso': 'En proceso', 'completada': 'Completada', 'cancelada': 'Cancelada'} %}
+{% set vals_filtros = '{"periodo": "' ~ filtros.periodo.strftime('%Y-%m') ~ '", "cliente": "' ~ (filtros.cliente_id or '') ~ '", "estado": "' ~ filtros.estado ~ '"}' %}
+
+<section id="grupo-{{ grupo.cliente.id }}" style="border-radius: 14px; background: rgb(35,37,50); overflow: hidden; box-shadow: rgb(63,66,77) 0 0 0 1px;">
+  <header style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgb(27,29,43);">
+    {% if grupo.semaforo %}
+    <span title="Semáforo" style="width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; background: {{ colores_semaforo[grupo.semaforo] }};"></span>
+    {% endif %}
+    <div style="flex: 1 1 0%; min-width: 0;">
+      <div style="font-size: 15px; font-weight: 500;">
+        <a href="/clientes/{{ grupo.cliente.id }}" style="color: inherit; text-decoration: none;">{{ grupo.cliente.nombre }}</a>
+        <span style="color: rgb(147,151,171); font-weight: 400; font-size: 13px;">· {{ grupo.cliente.regimen | regimen }} · {{ grupo.servicios | join(', ') }}</span>
+      </div>
+      {% if grupo.limite %}
+      <div style="font-size: 12px; color: {{ 'var(--color-danger-text)' if grupo.semaforo == 'rojo' else 'rgb(147,151,171)' }};">
+        Fecha límite: {{ grupo.limite.fecha.strftime('%d/%m') }} — {{ grupo.limite.organismo }}{% if grupo.semaforo != 'verde' %} · {{ grupo.limite.texto_dias }}{% endif %}
+        {% if grupo.vencimientos_periodo | length > 1 %}
+        <details style="display: inline-block; margin-left: 6px;">
+          <summary style="display: inline; cursor: pointer; color: rgb(145,132,217);">ver todos ({{ grupo.vencimientos_periodo | length }})</summary>
+          <div style="display: flex; flex-direction: column; gap: 2px; padding-top: 4px;">
+            {% for v in grupo.vencimientos_periodo %}
+            <span>{{ v.fecha | fecha }} — {{ v.descripcion }} ({{ v.organismo }})</span>
+            {% endfor %}
+          </div>
+        </details>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    <span style="font-size: 13px; color: rgb(147,151,171);">{{ grupo.completadas }} de {{ grupo.total }}</span>
+  </header>
+  <div style="overflow-x: auto;">
+  <table class="table">
+    <thead><tr><th style="width: 44%;">Tarea</th><th>Estado</th><th>Info cliente</th><th>Notas</th><th></th></tr></thead>
+    <tbody>
+      {% for fila in grupo.filas %}
+      {% set t = fila.tarea %}
+      {% set terminada = t.estado.value in ('completada', 'cancelada') %}
+      <tr>
+        <td>
+          <span style="font-size: 14px; {{ 'color: rgb(147,151,171);' if terminada }}">{{ t.nombre }}</span>
+          <span style="font-size: 11px; color: rgb(117,121,140); margin-left: 8px;">{{ fila.servicio.nombre if grupo.servicios | length > 1 }}{{ ' · ad-hoc' if t.template_id is none }}</span>
+        </td>
+        <td>
+          <button type="button" class="tag" title="Clic para avanzar el estado"
+                  style="{{ estilos_estado[t.estado.value] }} border: 0; cursor: pointer; font-size: 11px;"
+                  hx-post="/tareas/{{ t.id }}/avanzar" hx-vals='{{ vals_filtros }}'
+                  hx-target="#grupo-{{ grupo.cliente.id }}" hx-swap="outerHTML">{{ etiquetas_estado[t.estado.value] }}</button>
+        </td>
+        <td style="font-size: 13px; color: rgb(178,182,202);">{{ 'Esperando al cliente' if t.requiere_info_cliente else '—' }}</td>
+        <td style="font-size: 13px; color: rgb(147,151,171);">{{ t.notas or '' }}</td>
+        <td style="text-align: right; white-space: nowrap;">
+          <a href="/tareas/{{ t.id }}/editar?{{ query }}" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147,151,171);"><i class="ph ph-pencil-simple"></i></a>
+          {% if not terminada %}
+          <button type="button" class="btn btn-icon" title="Cancelar tarea" style="width: 30px; height: 30px; color: rgb(147,151,171);"
+                  hx-post="/tareas/{{ t.id }}/cancelar" hx-vals='{{ vals_filtros }}'
+                  hx-confirm="¿Confirmás que querés cancelar esta tarea?"
+                  hx-target="#grupo-{{ grupo.cliente.id }}" hx-swap="outerHTML"><i class="ph ph-x-circle"></i></button>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</section>

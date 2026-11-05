@@ -1,5 +1,6 @@
 """Conexión a la base de datos y manejo de sesiones de SQLAlchemy."""
 
+from fastapi import Request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -15,9 +16,14 @@ engine = create_engine(
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 
-def get_db():
-    """Dependencia de FastAPI: entrega una sesión y la cierra al terminar."""
+def get_db(request: Request):
+    """Dependencia de FastAPI: entrega una sesión y la cierra al terminar.
+
+    La sesión también queda en `request.state.db` para que el cascarón
+    pueda mostrar el progreso de tareas del menú lateral (hallazgo H-02).
+    """
     db = SessionLocal()
+    request.state.db = db
     try:
         yield db
     finally:

@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     # la app web se niega a arrancar si falta (ver app/main.py).
     fernet_key: str | None = None
 
+    # Procesos programados (APScheduler). Se apaga en los tests.
+    scheduler_activo: bool = True
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 
