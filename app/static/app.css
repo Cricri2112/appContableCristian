@@ -1,0 +1,29 @@
+/* Ajustes propios de la app, cargados DESPUÉS de pico-map.css.
+
+   Pico estira los botones [type=submit]/[type=button] al 100% del ancho y
+   les agrega margen inferior. Esa regla (selector de atributo) le gana a
+   la de pico-map.css (selector de elemento), así que se neutraliza acá
+   para los botones del sistema Nocturne (.btn). */
+.btn[type="submit"],
+.btn[type="button"],
+.btn[type="reset"] {
+  width: auto;
+  margin-bottom: 0;
+}
+
+/* Los .btn-block sí ocupan todo el ancho (ej.: "Ingresar" del login). */
+.btn.btn-block[type="submit"] {
+  width: 100%;
+}
+
+/* Los botones de ícono conservan su tamaño cuadrado (ej.: "Cerrar sesión"). */
+.btn.btn-icon[type="submit"],
+.btn.btn-icon[type="button"] {
+  width: 36px;
+}
+
+/* Pico reparte los ítems de todo <nav> a lo ancho; las pestañas de la
+   ficha y de Configuración van alineadas a la izquierda (vistas 07 y 20). */
+main nav {
+  justify-content: flex-start;
+}

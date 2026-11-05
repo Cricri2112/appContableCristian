@@ -13,7 +13,15 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.plantillas import templates
 from app.schemas.clientes import FormularioCliente
-from app.services import catalogo, clientes, cobros, contratos, cuentas, honorarios
+from app.services import (
+    catalogo,
+    clientes,
+    cobros,
+    contratos,
+    cuentas,
+    honorarios,
+    vault,
+)
 from app.services.errores import ErrorValidacion
 
 router = APIRouter()
@@ -85,6 +93,7 @@ def _contexto_ficha(db: Session, cliente_id: int) -> dict | None:
         "cliente": cliente,
         "es_mensual": clientes.es_mensual(db, cliente_id),
         "conteos_contratos": contratos.contar_contratos(db, cliente_id),
+        "conteo_credenciales": vault.contar_credenciales(db, cliente_id),
         # Saldo del encabezado de la ficha (F5, vista 07): rojo si debe.
         "saldo": desglose["saldo"],
         "situacion_saldo": cuentas.situacion(

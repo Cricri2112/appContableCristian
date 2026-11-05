@@ -1,0 +1,67 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}{{ cliente.nombre }} · Credenciales — Estudio Contable{% endblock %}
+
+{# Vista 09: listado del vault + panel de detalle (si se eligió uno). #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% include "_ficha_encabezado.html" %}
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 640px), 1fr)); gap: 20px; align-items: start;">
+    <div style="display: flex; flex-direction: column; gap: 12px; min-width: 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <span style="font-size: 13px; color: rgb(147,151,171); display: inline-flex; align-items: center; gap: 6px;"><i class="ph ph-lock-key"></i>Cifradas en reposo. Se descifran en el servidor solo al revelar.</span>
+        <a href="/clientes/{{ cliente.id }}/credenciales/nueva" class="btn btn-primary"><i class="ph ph-plus"></i>Nueva credencial</a>
+      </div>
+      <div style="overflow-x: auto;">
+      <table class="table">
+        <thead><tr><th>Tipo</th><th>Usuario</th><th>Contraseña</th><th>Actualizada</th><th></th></tr></thead>
+        <tbody>
+          {% for item in credenciales %}
+          {% set c = item.credencial %}
+          <tr {% if detalle and detalle.credencial.id == c.id %}style="box-shadow: rgb(145,132,217) 3px 0 0 inset;"{% endif %}>
+            <td><span class="tag tag-neutral">{{ tipos_legibles[c.tipo.value] }}</span></td>
+            <td {% if not item.usuario_ok %}style="color: var(--color-danger-text);"{% endif %}>{{ item.usuario or '—' }}</td>
+            <td>{% with credencial=c, mostrar=False, lugar='fila' %}{% include "_password_celda.html" %}{% endwith %}</td>
+            <td style="color: rgb(178,182,202);">{{ c.ultima_actualizacion | fecha }}</td>
+            <td style="text-align: right; white-space: nowrap;">
+              <a href="/clientes/{{ cliente.id }}/credenciales?detalle={{ c.id }}" class="btn btn-ghost" style="font-size: 13px;">Detalle</a>
+              <a href="/credenciales/{{ c.id }}/editar" class="btn btn-icon" title="Editar" style="width: 30px; height: 30px; color: rgb(147,151,171);"><i class="ph ph-pencil-simple"></i></a>
+              <a href="/credenciales/{{ c.id }}/eliminar" class="btn btn-icon" title="Eliminar" style="width: 30px; height: 30px; color: rgb(147,151,171);"><i class="ph ph-trash"></i></a>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" style="color: rgb(147,151,171);">Sin credenciales cargadas.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    {% if detalle %}
+    {% set c = detalle.credencial %}
+    <section class="card" style="gap: 12px; box-shadow: rgb(89,93,108) 0 0 0 1px; padding: 16px 18px; max-width: 520px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="card-kicker">Detalle de credencial</span>
+        <a href="/clientes/{{ cliente.id }}/credenciales" class="btn btn-icon" aria-label="Cerrar" style="width: 28px; height: 28px; color: rgb(147,151,171);"><i class="ph ph-x"></i></a>
+      </div>
+      {% macro rotulo(texto) %}<div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 2px;">{{ texto }}</div>{% endmacro %}
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px;">
+        <div>{{ rotulo('Tipo') }}<span class="tag tag-neutral">{{ tipos_legibles[c.tipo.value] }}</span></div>
+        <div>{{ rotulo('Usuario') }}{{ detalle.usuario or '—' }}</div>
+        <div>{{ rotulo('Contraseña') }}{% with credencial=c, mostrar=False, lugar='detalle' %}{% include "_password_celda.html" %}{% endwith %}</div>
+        <div>{{ rotulo('Notas') }}<span style="color: rgb(178,182,202);">{{ detalle.notas or '—' }}</span></div>
+        <div>{{ rotulo('Última actualización') }}{{ c.ultima_actualizacion | fecha }}</div>
+      </div>
+      {% if not detalle.ok %}
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>No se puede descifrar: la clave FERNET_KEY no es la que se usó al guardar.</div>
+      {% endif %}
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <a href="/credenciales/{{ c.id }}/editar" class="btn btn-secondary"><i class="ph ph-pencil-simple"></i>Editar</a>
+        <a href="/credenciales/{{ c.id }}/eliminar" class="btn" style="color: var(--color-danger-text); border-color: var(--color-danger);"><i class="ph ph-trash"></i>Eliminar</a>
+      </div>
+    </section>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

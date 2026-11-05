@@ -1,0 +1,63 @@
+{% extends "ficha_credenciales.html" %}
+
+{% block titulo %}{{ 'Editar' if credencial_editada else 'Nueva' }} credencial · {{ cliente.nombre }} — Estudio Contable{% endblock %}
+
+{# Diálogo de crear/editar credencial (vista 14). Al editar, la contraseña
+   actual NO se precarga: vacío = se mantiene la que está guardada. #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+
+{% set accion = '/credenciales/' ~ credencial_editada.id ~ '/editar' if credencial_editada else '/clientes/' ~ cliente.id ~ '/credenciales/nueva' %}
+
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="{{ accion }}" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;" autocomplete="off">
+    <span class="dialog-title">{{ 'Editar credencial' if credencial_editada else 'Nueva credencial' }} · {{ cliente.nombre }}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field">
+        <label>Tipo <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="tipo">
+          {% for valor, etiqueta in [('dgi', 'DGI'), ('bps', 'BPS'), ('facturador', 'Facturador'), ('clave_dgi', 'Clave DGI (certificados)'), ('otro', 'Otro')] %}
+          <option value="{{ valor }}" {% if valores.get('tipo') == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('tipo') }}
+      </div>
+      <div class="field">
+        <label>Última actualización</label>
+        <input class="input" disabled value="{{ fecha_actualizacion | fecha }}">
+      </div>
+      <div class="field">
+        <label>Usuario</label>
+        <input class="input" name="usuario" placeholder="RUT, email o usuario" value="{{ valores.get('usuario', '') }}" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <div style="position: relative;">
+          <input class="input" type="password" id="campo-password" name="password" style="padding-right: 36px;" autocomplete="new-password"
+                 {% if credencial_editada %}placeholder="Dejá vacío para mantener la actual"{% endif %}>
+          <button type="button" class="btn btn-icon" aria-label="Revelar" style="position: absolute; right: 2px; top: 2px; width: 32px; height: 32px; color: rgb(147,151,171);"
+                  onclick="const c = document.getElementById('campo-password'); const oculta = c.type === 'password'; c.type = oculta ? 'text' : 'password'; this.firstElementChild.className = oculta ? 'ph ph-eye-slash' : 'ph ph-eye';">
+            <i class="ph ph-eye"></i>
+          </button>
+        </div>
+      </div>
+      {% if errores.get('general') %}
+      <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores['general'] }}</div>
+      {% endif %}
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Notas</label>
+        <textarea class="input" name="notas" placeholder="ej: la contraseña es la fecha de nacimiento" style="min-height: 64px;">{{ valores.get('notas', '') }}</textarea>
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140); display: flex; gap: 6px; align-items: center;"><i class="ph ph-lock-key"></i>Usuario, contraseña y notas se cifran antes de guardarse. Puede haber más de una credencial del mismo tipo.</div>
+    <div class="dialog-actions">
+      <a href="/clientes/{{ cliente.id }}/credenciales" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

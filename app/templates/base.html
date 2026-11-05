@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 {# Base HTML: orden de carga de CSS según referencia/README.md:
-   pico.min.css → nocturne.css → pico-map.css. Íconos Phosphor (regular). #}
-<html lang="es">
+   pico.min.css → nocturne.css → pico-map.css. Íconos Phosphor (regular).
+   Pico, Phosphor y HTMX se sirven desde app/static/vendor (copias fijas
+   de Pico 2.0.6, Phosphor 2.1.1 y HTMX 2.0.4): la app no depende de CDNs
+   externos para funcionar. #}
+{# data-theme="dark": Nocturne es un tema oscuro; sin esto Pico aplica su
+   tema claro según la configuración del sistema operativo. #}
+<html lang="es" data-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block titulo %}Estudio Contable{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="/static/vendor/pico.min.css">
     <link rel="stylesheet" href="/static/nocturne.css">
     <link rel="stylesheet" href="/static/pico-map.css">
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <link rel="stylesheet" href="/static/vendor/phosphor/style.css">
+    <link rel="stylesheet" href="/static/app.css">
+    {# HTMX: interacciones sin recargar la página (Chat 4, decisión 3). #}
+    <script src="/static/vendor/htmx.min.js"></script>
 </head>
 <body>
 {% block cuerpo %}{% endblock %}
