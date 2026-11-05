@@ -16,10 +16,16 @@ from app.routes import (
     clientes,
     cobros,
     configuracion,
+    credenciales,
     honorarios,
     inicio,
 )
+from app.services import cifrado
 from app.services.autenticacion import generar_token_sesion, verificar_token_sesion
+
+# Sin FERNET_KEY válida la app NO arranca (Chat 5, Etapa 4): así nunca se
+# guarda una credencial sin cifrar ni se intenta descifrar sin clave.
+cifrado.verificar_clave()
 
 app = FastAPI(title="App de gestión del estudio contable")
 
@@ -64,3 +70,4 @@ app.include_router(clientes.router)
 app.include_router(configuracion.router)
 app.include_router(cobros.router)
 app.include_router(honorarios.router)
+app.include_router(credenciales.router)

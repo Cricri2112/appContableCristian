@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     # Base SQLite en archivo único (Chat 4, decisión 2).
     database_url: str = "sqlite:///./estudio.db"
 
+    # Clave Fernet del vault de credenciales (Chat 4, decisión 6).
+    # Es opcional ACÁ para que Alembic y los scripts funcionen sin ella;
+    # la app web se niega a arrancar si falta (ver app/main.py).
+    fernet_key: str | None = None
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 

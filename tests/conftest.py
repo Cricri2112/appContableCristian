@@ -13,6 +13,9 @@ import pytest
 # La configuración se define ANTES de importar la app: los tests no dependen
 # del .env local.
 os.environ["SECRET_KEY"] = "secreto-solo-para-tests"
+# Clave Fernet generada para la corrida de tests (nunca una clave real).
+from cryptography.fernet import Fernet  # noqa: E402
+os.environ["FERNET_KEY"] = Fernet.generate_key().decode()
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

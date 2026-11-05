@@ -44,7 +44,7 @@
 <nav style="display: flex; gap: 22px; border-bottom: 1px solid rgb(41,43,49); flex-wrap: wrap;">
   {{ pestana_item('/clientes/' ~ cliente.id, 'Datos generales', pestana == 'datos') }}
   {{ pestana_item('/clientes/' ~ cliente.id ~ '/servicios', 'Servicios contratados', pestana == 'servicios', conteo=conteos_contratos.activos) }}
-  {{ pestana_item('#', 'Credenciales', False, habilitada=False) }}
+  {{ pestana_item('/clientes/' ~ cliente.id ~ '/credenciales', 'Credenciales', pestana == 'credenciales', conteo=conteo_credenciales) }}
   {{ pestana_item('/clientes/' ~ cliente.id ~ '/cuenta', 'Estado de cuenta', pestana == 'cuenta') }}
   {{ pestana_item('/clientes/' ~ cliente.id ~ '/honorarios', 'Historial de honorarios', pestana == 'honorarios') }}
   {{ pestana_item('#', 'Próximos vencimientos', False, habilitada=False) }}

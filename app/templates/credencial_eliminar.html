@@ -1,0 +1,19 @@
+{% extends "ficha_credenciales.html" %}
+
+{% block titulo %}Eliminar credencial — Estudio Contable{% endblock %}
+
+{# Confirmación de eliminación física con el literal exacto del Chat 3 (F2). #}
+{% block dialogo %}
+<div class="dialog-backdrop" style="z-index: 50;">
+  <div class="dialog">
+    <span class="dialog-title">Eliminar credencial</span>
+    <p class="dialog-body">¿Confirmás que querés eliminar esta credencial? Esta acción no se puede deshacer.</p>
+    <div class="dialog-actions">
+      <a href="/clientes/{{ cliente.id }}/credenciales" class="btn btn-secondary">Cancelar</a>
+      <form method="post" action="/credenciales/{{ credencial_a_eliminar.id }}/eliminar" style="margin: 0;">
+        <button type="submit" class="btn btn-primary" style="color: var(--color-danger-text); border-color: var(--color-danger);">Eliminar</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
