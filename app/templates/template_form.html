@@ -1,0 +1,81 @@
+{% extends "configuracion_templates.html" %}
+
+{% block titulo %}{{ 'Editar' if template_editado else 'Nuevo' }} template — Estudio Contable{% endblock %}
+
+{# Diálogo de crear/editar template (vista 21b). El mes de generación solo
+   se muestra si el servicio elegido es anual. #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+{% set accion = '/configuracion/templates/' ~ template_editado.id ~ '/editar' if template_editado else '/configuracion/templates/nuevo' %}
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="{{ accion }}" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">{{ 'Editar template de tarea' if template_editado else 'Nuevo template de tarea' }}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field">
+        <label>Servicio <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="servicio_id" id="campo-servicio">
+          <option value="">Elegí un servicio…</option>
+          {% for s in servicios_form %}
+          <option value="{{ s.id }}" data-frecuencia="{{ s.frecuencia.value }}" {% if valores.get('servicio_id') == s.id | string %}selected{% endif %}>{{ s.nombre }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('servicio_id') }}
+      </div>
+      <div class="field">
+        <label>Régimen <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="regimen">
+          {% for valor in regimenes %}
+          <option value="{{ valor }}" {% if valores.get('regimen') == valor %}selected{% endif %}>{{ valor | regimen }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('regimen') }}
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Nombre <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" name="nombre" placeholder="ej: Descargar facturas del facturador electrónico" value="{{ valores.get('nombre', '') }}">
+        {{ error_campo('nombre') }}
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Descripción</label>
+        <textarea class="input" name="descripcion" placeholder="Opcional" style="min-height: 56px;">{{ valores.get('descripcion', '') }}</textarea>
+      </div>
+      <div class="field">
+        <label>Orden <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" name="orden" inputmode="numeric" value="{{ valores.get('orden', '1') }}">
+        {{ error_campo('orden') }}
+      </div>
+      <div class="field" id="bloque-mes">
+        <label>Mes de generación <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="mes_generacion">
+          <option value="">Elegí el mes…</option>
+          {% for numero in range(1, 13) %}
+          <option value="{{ numero }}" {% if valores.get('mes_generacion') == numero | string %}selected{% endif %}>{{ numero | nombre_mes }}</option>
+          {% endfor %}
+        </select>
+        <div style="font-size: 11px; color: rgb(117,121,140); margin-top: 4px;">Solo para servicios anuales.</div>
+        {{ error_campo('mes_generacion') }}
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140);">No puede repetirse servicio + régimen + nombre entre activos. El orden puede repetirse entre combinaciones distintas.</div>
+    <div class="dialog-actions">
+      <a href="/configuracion/templates" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">{{ 'Guardar' if template_editado else 'Crear template' }}</button>
+    </div>
+  </form>
+</div>
+<script>
+  // Mes de generación visible solo para servicios anuales (Chat 3, F7).
+  const selectServicio = document.getElementById("campo-servicio");
+  const bloqueMes = document.getElementById("bloque-mes");
+  function actualizarMes() {
+    const opcion = selectServicio.selectedOptions[0];
+    bloqueMes.style.display = opcion && opcion.dataset.frecuencia === "anual" ? "" : "none";
+  }
+  selectServicio.addEventListener("change", actualizarMes);
+  actualizarMes();
+</script>
+{% endblock %}

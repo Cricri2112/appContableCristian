@@ -177,12 +177,12 @@ def contratar(
 
 
 def generar_tareas_al_contratar(db: Session, contrato: ServicioContratado) -> None:
-    """Punto de integración diferido (Chat 5, E2 → E5).
+    """Integración F4 → F7 (completada en la Etapa 5): mensual genera el
+    período en curso; único genera desde templates si existen; anual no
+    genera al contratar. Ver services/tareas.py."""
+    from app.services import tareas
 
-    En la Etapa 5 acá se generan las tareas según F7: mensual a mitad de
-    mes genera el período en curso; único genera desde templates si
-    existen; anual no genera al contratar. Por ahora no hace nada.
-    """
+    tareas.generar_al_contratar(db, contrato)
 
 
 def puede_editar_fecha_inicio(db: Session, contrato_id: int) -> bool:

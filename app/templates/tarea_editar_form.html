@@ -1,0 +1,41 @@
+{% extends "tareas_periodo.html" %}
+
+{% block titulo %}Editar tarea — Estudio Contable{% endblock %}
+
+{# Edición limitada de F7: nombre (solo ad-hoc), requiere info del cliente
+   y notas. Servicio, período y template de origen no se editan. #}
+{% block dialogo %}
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="/tareas/{{ tarea.id }}/editar" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <input type="hidden" name="f_periodo" value="{{ filtros.periodo.strftime('%Y-%m') }}">
+    <input type="hidden" name="f_cliente" value="{{ filtros.cliente_id or '' }}">
+    <input type="hidden" name="f_estado" value="{{ filtros.estado }}">
+    <span class="dialog-title">Editar tarea</span>
+    <div style="padding: 10px 12px; border-radius: 8px; background: rgb(27,29,43); font-size: 14px; display: flex; justify-content: space-between; gap: 12px;">
+      <span>{{ cliente_tarea.nombre }}</span>
+      <span style="color: rgb(147,151,171);">{{ tarea.periodo | mes_largo }}{{ ' · ad-hoc' if tarea.template_id is none else ' · desde template' }}</span>
+    </div>
+    <div class="field">
+      <label>Nombre{% if tarea.template_id is none %} <span style="color: rgb(145,132,217);">*</span>{% endif %}</label>
+      {% if tarea.template_id is none %}
+      <input class="input" name="nombre" value="{{ valores.get('nombre', '') }}">
+      {% if errores.get('nombre') %}
+      <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores['nombre'] }}</div>
+      {% endif %}
+      {% else %}
+      <input class="input" value="{{ tarea.nombre }}" disabled>
+      <div style="font-size: 11px; color: rgb(117,121,140); margin-top: 4px;">El nombre de las tareas generadas desde un template no se edita.</div>
+      {% endif %}
+    </div>
+    <label class="radio" style="min-height: 36px;"><input type="checkbox" name="requiere_info_cliente" value="1" {% if valores.get('requiere_info_cliente') %}checked{% endif %}><span class="dot" style="border-radius: 4px;"></span>Requiere info del cliente</label>
+    <div class="field">
+      <label>Notas</label>
+      <input class="input" name="notas" value="{{ valores.get('notas', '') }}" placeholder="Opcional">
+    </div>
+    <div class="dialog-actions">
+      <a href="/tareas?{{ query }}" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

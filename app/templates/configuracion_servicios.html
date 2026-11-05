@@ -4,18 +4,8 @@
 
 {% block principal %}
 <div style="display: flex; flex-direction: column; gap: 20px;">
-  <div>
-    <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;">Configuración</div>
-    <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Catálogos y ajustes</h1>
-  </div>
-
-  {# Pestañas de configuración. Templates de tareas y Vencimientos llegan en E5; Notificaciones en E6. #}
-  <nav style="display: flex; gap: 22px; border-bottom: 1px solid rgb(41,43,49); flex-wrap: wrap;">
-    <a href="/configuracion/servicios" style="padding: 8px 2px; font-size: 14px; text-decoration: none; border-bottom: 2px solid rgb(145,132,217); color: rgb(233,233,237);">Servicios</a>
-    <span title="Disponible en una etapa posterior" style="padding: 8px 2px; font-size: 14px; border-bottom: 2px solid transparent; color: rgb(89,93,108);">Templates de tareas</span>
-    <span title="Disponible en una etapa posterior" style="padding: 8px 2px; font-size: 14px; border-bottom: 2px solid transparent; color: rgb(89,93,108);">Vencimientos</span>
-    <span title="Disponible en una etapa posterior" style="padding: 8px 2px; font-size: 14px; border-bottom: 2px solid transparent; color: rgb(89,93,108);">Notificaciones</span>
-  </nav>
+  {% set pestana_config_activa = 'servicios' %}
+  {% include "_config_pestanas.html" %}
 
   <div style="display: flex; flex-direction: column; gap: 12px; max-width: 900px;">
     <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">

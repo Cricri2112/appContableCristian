@@ -1,0 +1,29 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}{{ cliente.nombre }} · Próximos vencimientos — Estudio Contable{% endblock %}
+
+{# Vista 12: vencimientos aplicables al cliente por su régimen vigente,
+   próximos 30 días. Solo lectura. #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% include "_ficha_encabezado.html" %}
+
+  <div style="display: flex; flex-direction: column; gap: 12px; max-width: 720px;">
+    <table class="table">
+      <thead><tr><th>Fecha</th><th>Descripción</th><th>Organismo</th></tr></thead>
+      <tbody>
+        {% for o in proximos_cliente %}
+        <tr>
+          <td style="color: rgb(178,182,202);">{{ o.fecha | fecha }}</td>
+          <td>{{ o.descripcion }}</td>
+          <td>{% with org=o.vencimiento.organismo.value %}{% include "_tag_organismo.html" %}{% endwith %}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" style="color: rgb(147,151,171);">No hay vencimientos para {{ cliente.regimen | regimen }} en los próximos 30 días.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: rgb(117,121,140); margin: 0;">Según el régimen vigente del cliente. Los vencimientos se cargan en Configuración → Vencimientos.</p>
+  </div>
+</div>
+{% endblock %}

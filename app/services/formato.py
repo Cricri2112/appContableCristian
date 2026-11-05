@@ -70,6 +70,18 @@ def fecha_larga(valor: date | datetime) -> str:
     )
 
 
+def mes_largo(valor: date) -> str:
+    """Ej.: "noviembre 2026" (navegador de períodos)."""
+    return f"{MESES[valor.month - 1]} {valor.year}"
+
+
+def nombre_mes(numero: int | None) -> str:
+    """1 → "enero". None → —."""
+    if not numero:
+        return VACIO
+    return MESES[numero - 1]
+
+
 def mes_abreviado(valor: date) -> str:
     """Solo la abreviatura del mes: "ene" (celdas del mapa de períodos)."""
     return MESES_CORTOS[valor.month - 1]

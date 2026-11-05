@@ -1,0 +1,6 @@
+{# Respuesta HTMX tras cambiar el estado de una tarea: el grupo del cliente
+   (o nada, si el filtro activo lo dejó vacío) y el contador del menú
+   lateral actualizado "fuera de banda" (hx-swap-oob). #}
+{% if grupo %}{% include "_grupo_tareas.html" %}{% endif %}
+{% set progreso = progreso_tareas() %}
+<span id="nav-progreso" hx-swap-oob="true" style="margin-left: auto; font-size: 11px; color: rgb(147,151,171);">{% if progreso and progreso[1] %}{{ progreso[0] }}/{{ progreso[1] }}{% endif %}</span>

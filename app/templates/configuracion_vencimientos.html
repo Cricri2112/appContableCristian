@@ -1,0 +1,66 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Configuración · Vencimientos — Estudio Contable{% endblock %}
+
+{# Vista 22: vencimientos con filtros de año, organismo y régimen. #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% set pestana_config_activa = 'vencimientos' %}
+  {% include "_config_pestanas.html" %}
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <form method="get" action="/configuracion/vencimientos" style="display: flex; gap: 8px; align-items: center; margin: 0; flex-wrap: wrap;">
+        <select class="input" name="anio" style="width: auto; min-height: 34px;" onchange="this.form.submit()">
+          <option value="actual" {% if filtro_anio == 'actual' %}selected{% endif %}>{{ anio_actual }} + recurrentes</option>
+          {% for a in anios %}
+          <option value="{{ a }}" {% if filtro_anio == a | string %}selected{% endif %}>{{ a }}</option>
+          {% endfor %}
+          <option value="todos" {% if filtro_anio == 'todos' %}selected{% endif %}>Todos los años</option>
+        </select>
+        <select class="input" name="organismo" style="width: auto; min-height: 34px;" onchange="this.form.submit()">
+          <option value="">Todos los organismos</option>
+          {% for valor, etiqueta in organismos_legibles.items() %}
+          <option value="{{ valor }}" {% if filtro_organismo == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+        <select class="input" name="regimen" style="width: auto; min-height: 34px;" onchange="this.form.submit()">
+          <option value="">Todos los regímenes</option>
+          {% for valor in regimenes %}
+          <option value="{{ valor }}" {% if filtro_regimen == valor %}selected{% endif %}>{{ 'Todos (genérico)' if valor == 'todos' else valor | regimen }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      <a href="/configuracion/vencimientos/nuevo" class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo vencimiento</a>
+    </div>
+
+    <div style="overflow-x: auto;">
+    <table class="table">
+      <thead><tr><th>Descripción</th><th>Organismo</th><th>Régimen</th><th>Mes</th><th style="text-align: right;">Día</th><th>Año</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        {% for v in vencimientos %}
+        <tr {% if not v.activo %}style="color: rgb(147,151,171);"{% endif %}>
+          <td>{{ v.descripcion }}</td>
+          <td>{% with org=v.organismo.value %}{% include "_tag_organismo.html" %}{% endwith %}</td>
+          <td style="font-size: 13px; color: rgb(178,182,202);">{{ v.regimen | regimen }}</td>
+          <td style="color: rgb(178,182,202);">{{ v.mes | nombre_mes if v.mes else 'todos' }}</td>
+          <td style="text-align: right;">{{ v.dia_vencimiento }}</td>
+          <td style="{{ 'color: rgb(147,151,171);' if not v.anio }}">{{ v.anio or 'recurrente' }}</td>
+          <td style="font-size: 13px;">{{ 'Activo' if v.activo else 'Inactivo' }}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <a href="/configuracion/vencimientos/{{ v.id }}/editar" class="btn btn-ghost" style="font-size: 13px;">Editar</a>
+            <form method="post" action="/configuracion/vencimientos/{{ v.id }}/activo" style="display: inline; margin: 0;">
+              <button type="submit" class="btn btn-ghost" style="font-size: 13px; color: rgb(147,151,171);">{{ 'Desactivar' if v.activo else 'Reactivar' }}</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" style="color: rgb(147,151,171);">Sin vencimientos para este filtro.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size: 12px; color: rgb(117,121,140); margin: 0; max-width: 720px;">Carga manual una vez al año desde los calendarios oficiales DGI/BPS. Mes vacío = todos los meses; año vacío = recurrente. Un día 31 en un mes corto se muestra el último día real. Si un vencimiento alcanza a varios regímenes (pero no a todos), se carga una fila por régimen.</p>
+  </div>
+</div>
+{% endblock %}

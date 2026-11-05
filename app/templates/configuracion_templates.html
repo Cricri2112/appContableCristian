@@ -1,0 +1,63 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Configuración · Templates de tareas — Estudio Contable{% endblock %}
+
+{# Vista 21: templates de tareas por servicio + régimen. #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% set pestana_config_activa = 'templates' %}
+  {% include "_config_pestanas.html" %}
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <form method="get" action="/configuracion/templates" style="display: flex; gap: 8px; align-items: center; margin: 0;">
+        <select class="input" name="servicio" style="width: auto; min-height: 34px;" onchange="this.form.submit()">
+          <option value="">Todos los servicios</option>
+          {% for s in servicios %}
+          <option value="{{ s.id }}" {% if filtro_servicio == s.id %}selected{% endif %}>{{ s.nombre }}</option>
+          {% endfor %}
+        </select>
+        <select class="input" name="regimen" style="width: auto; min-height: 34px;" onchange="this.form.submit()">
+          <option value="">Todos los regímenes</option>
+          {% for valor in regimenes %}
+          <option value="{{ valor }}" {% if filtro_regimen == valor %}selected{% endif %}>{{ 'Todos (genérico)' if valor == 'todos' else valor | regimen }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      <a href="/configuracion/templates/nuevo" class="btn btn-primary"><i class="ph ph-plus"></i>Nuevo template</a>
+    </div>
+
+    {% if error_listado %}
+    <div role="alert" style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ error_listado }}</div>
+    {% endif %}
+
+    <div style="overflow-x: auto;">
+    <table class="table">
+      <thead><tr><th>Servicio</th><th>Régimen</th><th style="width: 36px; text-align: right;">#</th><th>Tarea</th><th>Mes gen.</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        {% for fila in filas %}
+        {% set t = fila.template %}
+        <tr {% if not t.activo %}style="color: rgb(147,151,171);"{% endif %}>
+          <td style="font-size: 13px; color: rgb(178,182,202);">{{ fila.servicio.nombre }}</td>
+          <td><span class="tag tag-neutral">{{ t.regimen | regimen }}</span></td>
+          <td style="text-align: right; color: rgb(147,151,171);">{{ t.orden }}</td>
+          <td>{{ t.nombre }}</td>
+          <td style="color: rgb(178,182,202); font-size: 13px;">{{ t.mes_generacion | nombre_mes if t.mes_generacion else '—' }}</td>
+          <td style="font-size: 13px;">{{ 'Activo' if t.activo else 'Inactivo' }}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <a href="/configuracion/templates/{{ t.id }}/editar" class="btn btn-ghost" style="font-size: 13px;">Editar</a>
+            <form method="post" action="/configuracion/templates/{{ t.id }}/activo" style="display: inline; margin: 0;">
+              <button type="submit" class="btn btn-ghost" style="font-size: 13px; color: rgb(147,151,171);">{{ 'Desactivar' if t.activo else 'Reactivar' }}</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="color: rgb(147,151,171);">Sin templates cargados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size: 12px; color: rgb(117,121,140); margin: 0; max-width: 720px;">Orden: servicio, régimen (el genérico "Todos" primero) y número de orden. Los cambios aplican solo a las tareas que se generen de ahora en más. Desactivar no pide confirmación y no toca tareas ya generadas.</p>
+  </div>
+</div>
+{% endblock %}

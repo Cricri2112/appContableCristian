@@ -1,0 +1,68 @@
+{% extends "configuracion_vencimientos.html" %}
+
+{% block titulo %}{{ 'Editar' if vencimiento_editado else 'Nuevo' }} vencimiento — Estudio Contable{% endblock %}
+
+{# Diálogo de crear/editar vencimiento (vista 22b). #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+{% set accion = '/configuracion/vencimientos/' ~ vencimiento_editado.id ~ '/editar' if vencimiento_editado else '/configuracion/vencimientos/nuevo' %}
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="{{ accion }}" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <span class="dialog-title">{{ 'Editar vencimiento' if vencimiento_editado else 'Nuevo vencimiento' }}</span>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px;">
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Descripción <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" name="descripcion" placeholder="ej: Aportes mensuales" value="{{ valores.get('descripcion', '') }}">
+        {{ error_campo('descripcion') }}
+      </div>
+      <div class="field">
+        <label>Organismo <span style="color: rgb(145,132,217);">*</span></label>
+        <div class="seg">
+          {% for valor, etiqueta in organismos_legibles.items() %}
+          <label class="seg-opt"><input type="radio" name="organismo" value="{{ valor }}" {% if valores.get('organismo') == valor %}checked{% endif %}>{{ etiqueta }}</label>
+          {% endfor %}
+        </div>
+        {{ error_campo('organismo') }}
+      </div>
+      <div class="field" style="grid-column: span 2;">
+        <label>Régimen <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="regimen">
+          {% for valor in regimenes %}
+          <option value="{{ valor }}" {% if valores.get('regimen') == valor %}selected{% endif %}>{{ valor | regimen }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('regimen') }}
+      </div>
+      <div class="field">
+        <label>Mes</label>
+        <select class="input" name="mes">
+          <option value="">Todos los meses</option>
+          {% for numero in range(1, 13) %}
+          <option value="{{ numero }}" {% if valores.get('mes') == numero | string %}selected{% endif %}>{{ numero | nombre_mes }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('mes') }}
+      </div>
+      <div class="field">
+        <label>Día de vencimiento <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" name="dia_vencimiento" inputmode="numeric" placeholder="1–31" value="{{ valores.get('dia_vencimiento', '') }}">
+        {{ error_campo('dia_vencimiento') }}
+      </div>
+      <div class="field">
+        <label>Año</label>
+        <input class="input" name="anio" inputmode="numeric" placeholder="Recurrente" value="{{ valores.get('anio', '') }}">
+        {{ error_campo('anio') }}
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140);">No se valida duplicado exacto: la carga anual es de bajo volumen y queda a tu criterio. Un día 31 en abril se muestra como 30.</div>
+    <div class="dialog-actions">
+      <a href="/configuracion/vencimientos" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">{{ 'Guardar' if vencimiento_editado else 'Crear vencimiento' }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

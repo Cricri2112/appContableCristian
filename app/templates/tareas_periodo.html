@@ -1,0 +1,55 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Tareas — Estudio Contable{% endblock %}
+
+{# Vista 04: tareas del período agrupadas por cliente. Filtros: período,
+   cliente y estado. Cambiar estado = un clic en el tag (HTMX). #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+    <div>
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;">Tareas</div>
+      <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Tareas del período</h1>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+      <div style="display: inline-flex; align-items: center; border: 1px solid rgba(233,233,237,0.16); border-radius: 8px; overflow: hidden;">
+        <a href="/tareas?{{ query_anterior }}" class="btn btn-icon" aria-label="Mes anterior" style="width: 32px; height: 32px; border-radius: 0;"><i class="ph ph-caret-left"></i></a>
+        <span style="font-size: 13px; padding: 0 10px; min-width: 110px; text-align: center;">{{ filtros.periodo | mes_largo }}</span>
+        <a href="/tareas?{{ query_siguiente }}" class="btn btn-icon" aria-label="Mes siguiente" style="width: 32px; height: 32px; border-radius: 0;"><i class="ph ph-caret-right"></i></a>
+      </div>
+      <form method="get" action="/tareas" style="margin: 0;">
+        <input type="hidden" name="periodo" value="{{ filtros.periodo.strftime('%Y-%m') }}">
+        <input type="hidden" name="estado" value="{{ filtros.estado }}">
+        <select class="input" name="cliente" style="width: auto; min-height: 34px;" onchange="this.form.submit()">
+          <option value="">Todos los clientes</option>
+          {% for c in clientes_filtro %}
+          <option value="{{ c.id }}" {% if filtros.cliente_id == c.id %}selected{% endif %}>{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      <div class="seg">
+        {% for valor, etiqueta in [('todas', 'Todas'), ('pendientes', 'Pendientes'), ('completadas', 'Completadas')] %}
+        <a class="seg-opt" href="/tareas?{{ query_estado[valor] }}" style="text-decoration: none; color: inherit; {{ 'color: rgb(145,132,217); box-shadow: inset 0 0 0 1px rgb(145,132,217);' if filtros.estado == valor }}">{{ etiqueta }}</a>
+        {% endfor %}
+      </div>
+      <a href="/tareas/nueva?{{ query }}" class="btn btn-primary"><i class="ph ph-plus"></i>Tarea ad-hoc</a>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 16px; align-items: center; font-size: 13px; color: rgb(147,151,171); flex-wrap: wrap;">
+    <span><span style="color: rgb(233,233,237); font-size: 17px; font-weight: 500;">{{ completadas_periodo }}/{{ total_periodo }}</span> completadas</span>
+    <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-ok);"></span>al día</span>
+    <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-warn);"></span>&gt; 5 días</span>
+    <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-danger);"></span>≤ 5 días o vencido</span>
+  </div>
+
+  {% for grupo in grupos %}
+  {% include "_grupo_tareas.html" %}
+  {% else %}
+  <div class="card" style="padding: 16px 18px; color: rgb(147,151,171); font-size: 14px;">
+    No hay tareas en {{ filtros.periodo | mes_largo }}{% if filtros.estado != 'todas' or filtros.cliente_id %} con estos filtros{% endif %}.
+    Las tareas mensuales se generan solas el día 1 (o al contratar un servicio) a partir de los templates de Configuración.
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
