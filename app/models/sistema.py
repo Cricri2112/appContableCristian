@@ -4,6 +4,8 @@
   edición y eliminación, más intentos fallidos de login (enmienda A2).
 - `scheduler_ejecuciones` (Chat 4): la escribe y lee solo el scheduler (E5+).
 - `usuario_login` (Chat 5): usuario único de la app.
+- `configuracion` (Etapa 6): ajustes editables desde la app (clave/valor),
+  hoy solo el email de destino del resumen diario (F10, vista 23).
 """
 
 from datetime import datetime
@@ -56,3 +58,17 @@ class UsuarioLogin(Base, ConTimestamps):
     password_hash: Mapped[str] = mapped_column(Text, nullable=False)
     intentos_fallidos: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     bloqueado_hasta: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+
+class Configuracion(Base, ConTimestamps):
+    """Ajustes simples de la app, editables desde Configuración.
+
+    Se agregó en la Etapa 6 porque F10 pide que el email de destino se
+    cambie desde la app y el modelo original no tenía dónde guardarlo.
+    """
+
+    __tablename__ = "configuracion"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    clave: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
+    valor: Mapped[str | None] = mapped_column(Text, nullable=True)

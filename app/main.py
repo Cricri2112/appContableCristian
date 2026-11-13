@@ -21,6 +21,7 @@ from app.routes import (
     credenciales,
     honorarios,
     inicio,
+    recordatorios,
     tareas,
     templates_tareas,
     vencimientos,
@@ -92,3 +93,4 @@ app.include_router(credenciales.router)
 app.include_router(tareas.router)
 app.include_router(templates_tareas.router)
 app.include_router(vencimientos.router)
+app.include_router(recordatorios.router)

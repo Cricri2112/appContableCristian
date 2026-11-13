@@ -63,7 +63,7 @@ class Cargo:
     importe: Decimal
 
 
-def _honorarios_del_contrato(db: Session, contrato_id: int) -> list[HonorarioHistorial]:
+def honorarios_del_contrato(db: Session, contrato_id: int) -> list[HonorarioHistorial]:
     return (
         db.query(HonorarioHistorial)
         .filter(HonorarioHistorial.servicio_contratado_id == contrato_id)
@@ -72,7 +72,7 @@ def _honorarios_del_contrato(db: Session, contrato_id: int) -> list[HonorarioHis
     )
 
 
-def _honorario_vigente_en(
+def honorario_vigente_en(
     registros: list[HonorarioHistorial], referencia: date
 ) -> Decimal | None:
     """Honorario vigente a una fecha: el registro con la mayor fecha_desde
@@ -85,7 +85,7 @@ def _honorario_vigente_en(
     return vigente.honorario if vigente else None
 
 
-def _mes_generacion_del_servicio(db: Session, servicio_id: int) -> int | None:
+def mes_generacion_del_servicio(db: Session, servicio_id: int) -> int | None:
     """Menor `mes_generacion` entre los templates activos del servicio (B1)."""
     meses = [
         mes
@@ -104,7 +104,7 @@ def cargos_esperados_contrato(
     db: Session, contrato: ServicioContratado, servicio: Servicio
 ) -> list[Cargo]:
     """Cargos esperados de un contrato según su frecuencia (B1)."""
-    registros = _honorarios_del_contrato(db, contrato.id)
+    registros = honorarios_del_contrato(db, contrato.id)
     if not registros:
         return []
 
@@ -117,14 +117,14 @@ def cargos_esperados_contrato(
 
     if frecuencia == "unico":
         # (c) Un cargo único desde la fecha_inicio, honorario vigente a esa fecha.
-        importe = _honorario_vigente_en(registros, contrato.fecha_inicio)
+        importe = honorario_vigente_en(registros, contrato.fecha_inicio)
         if importe is None or contrato.fecha_inicio > limite:
             return []
         return [Cargo(primer_dia_mes(contrato.fecha_inicio), importe)]
 
     if frecuencia == "anual":
         # (b) Un cargo por año en el mes de generación de sus templates.
-        mes = _mes_generacion_del_servicio(db, servicio.id)
+        mes = mes_generacion_del_servicio(db, servicio.id)
         if mes is None:
             return []  # sin templates no hay cargo esperado
         cargos = []
@@ -132,7 +132,7 @@ def cargos_esperados_contrato(
             imputacion = date(anio, mes, 1)
             # El cargo cuenta si su mes cae dentro de la vida del contrato.
             if contrato.fecha_inicio <= imputacion <= limite:
-                importe = _honorario_vigente_en(registros, imputacion)
+                importe = honorario_vigente_en(registros, imputacion)
                 if importe is not None:
                     cargos.append(Cargo(imputacion, importe))
         return cargos
@@ -147,7 +147,7 @@ def cargos_esperados_contrato(
         # sin pasar el límite del contrato (contratos finalizados a mitad
         # de mes conservan el honorario cerrado en fecha_fin).
         referencia = min(ultimo_dia_mes(periodo), limite)
-        importe = _honorario_vigente_en(registros, referencia)
+        importe = honorario_vigente_en(registros, referencia)
         if importe is not None:
             cargos.append(Cargo(periodo, importe))
         periodo = mes_siguiente(periodo)
@@ -185,7 +185,7 @@ def calcular_saldo(db: Session, cliente_id: int) -> dict:
     }
 
 
-def _periodo_cubierto(db: Session, cliente_id: int, periodo: date) -> bool:
+def periodo_cubierto(db: Session, cliente_id: int, periodo: date) -> bool:
     """Un período (mes) está cubierto si algún cobro del cliente declara un
     rango de períodos que lo incluye."""
     return (
@@ -220,19 +220,19 @@ def mapa_periodos(db: Session, cliente_id: int) -> list[dict]:
     mes_actual = primer_dia_mes(hoy())
     mapas = []
     for contrato, servicio in contratos:
-        registros = _honorarios_del_contrato(db, contrato.id)
+        registros = honorarios_del_contrato(db, contrato.id)
         celdas = []
         periodo = max(date(mes_actual.year, 1, 1), primer_dia_mes(contrato.fecha_inicio))
         while periodo <= mes_actual:
             celdas.append({
                 "periodo": periodo,
-                "cubierto": _periodo_cubierto(db, cliente_id, periodo),
+                "cubierto": periodo_cubierto(db, cliente_id, periodo),
             })
             periodo = mes_siguiente(periodo)
         mapas.append({
             "servicio": servicio,
             "celdas": celdas,
-            "honorario_vigente": _honorario_vigente_en(registros, hoy()),
+            "honorario_vigente": honorario_vigente_en(registros, hoy()),
         })
     return mapas
 
@@ -252,7 +252,7 @@ def contar_periodos_impagos(db: Session, cliente_id: int) -> int:
     impagos: set[date] = set()
     for contrato, servicio in contratos:
         for cargo in cargos_esperados_contrato(db, contrato, servicio):
-            if not _periodo_cubierto(db, cliente_id, cargo.periodo):
+            if not periodo_cubierto(db, cliente_id, cargo.periodo):
                 impagos.add(cargo.periodo)
     return len(impagos)
 

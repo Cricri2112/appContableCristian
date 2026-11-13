@@ -26,6 +26,19 @@ class Settings(BaseSettings):
     # Procesos programados (APScheduler). Se apaga en los tests.
     scheduler_activo: bool = True
 
+    # Email transaccional por API (Chat 4, decisión 7; Etapa 6: Brevo).
+    # Sin clave o sin remitente, el email diario no se envía y queda
+    # registrado en scheduler_ejecuciones (el ciclo diario sigue igual).
+    brevo_api_key: str | None = None
+    email_remitente: str | None = None
+
+    # Dirección de la app, para el link al pie del email.
+    app_url: str = "http://localhost:8000"
+
+    # Carpeta de respaldos diarios de la base (Chat 4, decisión 4). En
+    # desarrollo es local; el destino externo se configura en la Etapa 7.
+    respaldos_dir: str = "./respaldos"
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 

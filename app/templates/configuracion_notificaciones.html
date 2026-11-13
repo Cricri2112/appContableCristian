@@ -1,0 +1,58 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Configuración · Notificaciones — Estudio Contable{% endblock %}
+
+{# Vista 23: email de destino del resumen diario + último estado de los
+   procesos programados (hallazgo H-10, solo lectura). #}
+{% macro estado_proceso(ejecucion) %}
+{% if ejecucion %}
+{% set ok = ejecucion.resultado.startswith('ok') and 'ERROR' not in ejecucion.resultado %}
+<span style="display: inline-flex; align-items: center; gap: 6px; text-align: right;">
+  <span style="width: 6px; height: 6px; border-radius: 50%; flex: 0 0 auto; background: {{ 'var(--color-ok)' if ok else 'var(--color-danger)' }};"></span>
+  {{ ejecucion.fecha_ejecucion.strftime('%d/%m %H:%M') }}
+</span>
+{% else %}
+<span style="color: rgb(117,121,140);">sin ejecuciones todavía</span>
+{% endif %}
+{% endmacro %}
+
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% set pestana_config_activa = 'notificaciones' %}
+  {% include "_config_pestanas.html" %}
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 20px; max-width: 900px; align-items: start;">
+    <form method="post" action="/configuracion/notificaciones" class="card" style="gap: 14px; padding: 16px 18px; margin: 0;">
+      <div class="card-kicker">Email resumen diario</div>
+      <div class="field">
+        <label>Dirección de destino <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" type="email" name="email_destino" value="{{ email_destino }}" placeholder="tu casilla de email">
+        {% if errores.get('email_destino') %}
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores['email_destino'] }}</div>
+        {% elif guardado %}
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-ok-text);"><i class="ph ph-check-circle"></i>Guardado.</div>
+        {% endif %}
+      </div>
+      <div style="display: flex; justify-content: flex-end;"><button type="submit" class="btn btn-primary">Guardar</button></div>
+      {% if not email_configurado %}
+      <div style="display: flex; gap: 6px; font-size: 12px; color: var(--color-warn-text);"><i class="ph ph-warning" style="flex: 0 0 auto; margin-top: 2px;"></i>El envío todavía no está configurado: faltan BREVO_API_KEY y/o EMAIL_REMITENTE en el archivo .env. Mientras tanto el panel funciona igual y el error queda registrado en el proceso diario.</div>
+      {% endif %}
+      <div class="card-meta">Cambiar la casilla no toca código. La infraestructura de envío se configura por variables de entorno.</div>
+    </form>
+
+    <section class="card" style="gap: 10px; padding: 16px 18px;">
+      <div class="card-kicker">Cómo funciona</div>
+      <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: rgb(178,182,202);">
+        <div style="display: flex; gap: 10px;"><i class="ph ph-clock" style="color: rgb(145,132,217); flex: 0 0 auto; margin-top: 2px;"></i>Un único email por día, a las 06:00, solo si hay recordatorios activos sin silenciar.</div>
+        <div style="display: flex; gap: 10px;"><i class="ph ph-list-dashes" style="color: rgb(145,132,217); flex: 0 0 auto; margin-top: 2px;"></i>Agrupado como el panel: vencimientos próximos → tareas atrasadas → cobros pendientes.</div>
+        <div style="display: flex; gap: 10px;"><i class="ph ph-bell" style="color: rgb(145,132,217); flex: 0 0 auto; margin-top: 2px;"></i>El panel de la app es la fuente; el email es un espejo. Si falla el envío, el ciclo diario sigue.</div>
+      </div>
+      <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(233,233,237,0.16) 48px, rgba(233,233,237,0.16) calc(100% - 48px), transparent);"></div>
+      <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px;"><span style="color: rgb(147,151,171);">Proceso diario</span>{{ estado_proceso(ultimo_diario) }}</div>
+      {% if ultimo_diario %}<div style="font-size: 12px; color: rgb(147,151,171); overflow-wrap: anywhere;">{{ ultimo_diario.resultado }}</div>{% endif %}
+      <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px;"><span style="color: rgb(147,151,171);">Proceso mensual</span>{{ estado_proceso(ultimo_mensual) }}</div>
+      {% if ultimo_mensual %}<div style="font-size: 12px; color: rgb(147,151,171); overflow-wrap: anywhere;">{{ ultimo_mensual.resultado }}</div>{% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

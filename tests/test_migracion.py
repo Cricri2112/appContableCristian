@@ -1,5 +1,6 @@
-"""Criterio de terminado 1: `alembic upgrade head` sobre base vacía
-crea las 16 tablas."""
+"""Criterio de terminado 1 de la Etapa 0: `alembic upgrade head` sobre base
+vacía crea el esquema completo. Eran 16 tablas; la Etapa 6 sumó
+`configuracion` (email de destino del resumen diario), total 17."""
 
 import tempfile
 from pathlib import Path
@@ -25,12 +26,13 @@ TABLAS_ESPERADAS = {
     "auditoria",
     "scheduler_ejecuciones",
     "usuario_login",
+    "configuracion",
 }
 
 RAIZ_PROYECTO = Path(__file__).resolve().parent.parent
 
 
-def test_migracion_inicial_crea_las_16_tablas(monkeypatch):
+def test_migraciones_crean_todas_las_tablas(monkeypatch):
     with tempfile.TemporaryDirectory() as directorio:
         url = f"sqlite:///{directorio}/migracion.db"
 
@@ -52,13 +54,13 @@ def test_migracion_inicial_crea_las_16_tablas(monkeypatch):
             assert TABLAS_ESPERADAS <= tablas, (
                 f"Faltan tablas: {TABLAS_ESPERADAS - tablas}"
             )
-            assert len(TABLAS_ESPERADAS) == 16
+            assert len(TABLAS_ESPERADAS) == 17
         finally:
             engine.dispose()
 
 
-def test_esquema_de_modelos_coincide_con_16_tablas():
-    """Los modelos SQLAlchemy definen exactamente las mismas 16 tablas."""
+def test_esquema_de_modelos_coincide_con_las_migraciones():
+    """Los modelos SQLAlchemy definen exactamente las mismas tablas."""
     from app.models import Base
 
     assert set(Base.metadata.tables.keys()) == TABLAS_ESPERADAS

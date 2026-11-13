@@ -124,6 +124,14 @@ def _validar_datos_cobro(db: Session, datos: dict) -> tuple[dict, dict]:
     return limpios, errores
 
 
+def _reevaluar_recordatorios(db: Session, cliente_id: int) -> None:
+    """F5 → F10: un cobro o descuento puede dejar cubierto un período con
+    recordatorio `cobro_pendiente`; se reevalúa en el momento (Chat 3)."""
+    from app.services import recordatorios
+
+    recordatorios.cerrar_cobros_cubiertos(db, cliente_id)
+
+
 def registrar_cobro(db: Session, datos: dict) -> Cobro:
     limpios, errores = _validar_datos_cobro(db, datos)
     if errores:
@@ -131,6 +139,7 @@ def registrar_cobro(db: Session, datos: dict) -> Cobro:
     cobro = Cobro(**limpios)
     db.add(cobro)
     db.commit()
+    _reevaluar_recordatorios(db, cobro.cliente_id)
     return cobro
 
 
@@ -143,14 +152,17 @@ def editar_cobro(db: Session, cobro_id: int, datos: dict) -> Cobro:
     for campo, valor in limpios.items():
         setattr(cobro, campo, valor)
     db.commit()
+    _reevaluar_recordatorios(db, cobro.cliente_id)
     return cobro
 
 
 def eliminar_cobro(db: Session, cobro_id: int) -> None:
     """Eliminación física; el registro queda en auditoria (datos_antes)."""
     cobro = db.get(Cobro, cobro_id)
+    cliente_id = cobro.cliente_id
     db.delete(cobro)
     db.commit()
+    _reevaluar_recordatorios(db, cliente_id)
 
 
 def _validar_datos_descuento(db: Session, cliente_id: int, datos: dict) -> tuple[dict, dict]:
@@ -190,6 +202,7 @@ def registrar_descuento(db: Session, cliente_id: int, datos: dict) -> Descuento:
     descuento = Descuento(**limpios)
     db.add(descuento)
     db.commit()
+    _reevaluar_recordatorios(db, descuento.cliente_id)
     return descuento
 
 
@@ -201,10 +214,13 @@ def editar_descuento(db: Session, descuento_id: int, datos: dict) -> Descuento:
     for campo, valor in limpios.items():
         setattr(descuento, campo, valor)
     db.commit()
+    _reevaluar_recordatorios(db, descuento.cliente_id)
     return descuento
 
 
 def eliminar_descuento(db: Session, descuento_id: int) -> None:
     descuento = db.get(Descuento, descuento_id)
+    cliente_id = descuento.cliente_id
     db.delete(descuento)
     db.commit()
+    _reevaluar_recordatorios(db, cliente_id)

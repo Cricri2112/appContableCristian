@@ -208,16 +208,20 @@ def editar_tarea(
 
 # ---------- Estados ----------
 
-def _aplicar_estado(tarea: Tarea, nuevo: str) -> None:
+def _aplicar_estado(db: Session, tarea: Tarea, nuevo: str) -> None:
+    from app.services import recordatorios
+
     tarea.estado = nuevo
     # Al completar se registra cuándo; al reabrir vuelve a null.
     tarea.fecha_completada = ahora_montevideo() if nuevo == "completada" else None
+    # F10: si la tarea quedó completada o cancelada, su recordatorio se cierra.
+    recordatorios.cerrar_de_tarea(db, tarea)
 
 
 def avanzar_estado(db: Session, tarea_id: int) -> Tarea:
     """Un clic: pendiente → en proceso → completada; terminadas → pendiente."""
     tarea = db.get(Tarea, tarea_id)
-    _aplicar_estado(tarea, SIGUIENTE_ESTADO[tarea.estado.value])
+    _aplicar_estado(db, tarea, SIGUIENTE_ESTADO[tarea.estado.value])
     db.commit()
     return tarea
 
@@ -227,7 +231,7 @@ def cancelar(db: Session, tarea_id: int) -> Tarea:
     tarea = db.get(Tarea, tarea_id)
     if tarea.estado.value not in ESTADOS_ABIERTOS:
         raise ErrorValidacion({"estado": "Solo se cancelan tareas pendientes o en proceso."})
-    _aplicar_estado(tarea, "cancelada")
+    _aplicar_estado(db, tarea, "cancelada")
     db.commit()
     return tarea
 

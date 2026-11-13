@@ -60,11 +60,11 @@ def test_recuperacion_al_arranque(db_temporal):
     _preparar(db_temporal)
     assert scheduler.mensual_corrio_este_mes(db_temporal) is False
 
-    assert scheduler.recuperar_al_arranque(db_temporal) is True
+    assert scheduler.recuperar_mensual(db_temporal) is True
     assert db_temporal.query(Tarea).count() == 1
 
     # Ya corrió: al volver a arrancar no hace nada.
-    assert scheduler.recuperar_al_arranque(db_temporal) is False
+    assert scheduler.recuperar_mensual(db_temporal) is False
     assert len(_ejecuciones(db_temporal)) == 1
 
 

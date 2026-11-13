@@ -32,10 +32,19 @@
   </aside>
 
   <div style="display: flex; flex-direction: column; min-width: 0;">
-    <div style="display: flex; align-items: center; gap: 8px; padding: 12px 28px; border-bottom: 1px solid rgb(41,43,49);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 12px 28px; border-bottom: 1px solid rgb(41,43,49); position: relative;">
       <span style="font-size: 12px; color: rgb(117,121,140); margin-right: auto;">{{ hoy() | fecha_larga }}</span>
-      {# Campanita de recordatorios: se activa en la Etapa 6 (F10). #}
-      <button class="btn btn-icon btn-secondary" aria-label="Recordatorios" disabled title="Disponible en una etapa posterior"><i class="ph ph-bell" style="font-size: 18px;"></i></button>
+      {# Campanita de recordatorios (F10): contador de activos + panel que se
+         carga por HTMX al tocarla. #}
+      {% set cantidad_recordatorios = recordatorios_activos() %}
+      <button type="button" class="btn btn-icon btn-secondary" aria-label="Recordatorios" title="Recordatorios" style="position: relative;"
+              hx-get="/recordatorios/panel" hx-target="#panel-recordatorios" hx-swap="innerHTML"
+              onclick="document.getElementById('panel-recordatorios').hidden = false">
+        <i class="ph ph-bell" style="font-size: 18px;"></i>
+        <span id="badge-recordatorios" {% if not cantidad_recordatorios %}hidden{% endif %} style="position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: rgb(145,132,217); color: rgb(22,24,38); font-size: 11px; font-weight: 600; display: grid; place-items: center;">{{ cantidad_recordatorios }}</span>
+      </button>
+      <div id="panel-recordatorios" hidden
+           style="position: absolute; top: 56px; right: 28px; width: min(420px, calc(100vw - 32px)); max-height: 75vh; overflow-y: auto; z-index: 20; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: rgb(35,37,50); box-shadow: rgb(147,151,171) 0 0 0 1px, rgba(0,0,0,0.65) 0 16px 40px;"></div>
       <form method="post" action="/logout" style="margin: 0;">
         <button type="submit" class="btn btn-icon btn-secondary" aria-label="Cerrar sesión" title="Cerrar sesión"><i class="ph ph-sign-out" style="font-size: 18px;"></i></button>
       </form>

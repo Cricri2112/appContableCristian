@@ -14,7 +14,12 @@ from app.models.tareas import Tarea, TareaTemplate
 from app.models.recordatorios import Recordatorio
 from app.models.vencimientos import VencimientoCalendario
 from app.models.gastos import GastoIngresoPropio
-from app.models.sistema import Auditoria, SchedulerEjecucion, UsuarioLogin
+from app.models.sistema import (
+    Auditoria,
+    Configuracion,
+    SchedulerEjecucion,
+    UsuarioLogin,
+)
 
 # Se importa al final para evitar un ciclo: el servicio necesita que todos
 # los modelos ya estén definidos para registrar sus listeners.
@@ -40,4 +45,5 @@ __all__ = [
     "Auditoria",
     "SchedulerEjecucion",
     "UsuarioLogin",
+    "Configuracion",
 ]

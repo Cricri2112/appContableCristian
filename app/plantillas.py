@@ -24,7 +24,16 @@ def _contexto_global(request) -> dict:
 
         return tareas.progreso_periodo(db, fechas.primer_dia_mes(fechas.hoy()))
 
-    return {"progreso_tareas": progreso_tareas}
+    def recordatorios_activos():
+        """Contador de la campanita (F10)."""
+        db = getattr(request.state, "db", None)
+        if db is None:
+            return 0
+        from app.services import recordatorios
+
+        return recordatorios.contar_activos(db)
+
+    return {"progreso_tareas": progreso_tareas, "recordatorios_activos": recordatorios_activos}
 
 
 templates = Jinja2Templates(

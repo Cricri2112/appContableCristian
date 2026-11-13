@@ -27,3 +27,9 @@
 main nav {
   justify-content: flex-start;
 }
+
+/* `hidden` siempre oculta, aunque el elemento tenga un display en línea
+   (panel de recordatorios, contador de la campanita). */
+[hidden] {
+  display: none !important;
+}
