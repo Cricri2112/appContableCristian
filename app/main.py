@@ -19,6 +19,7 @@ from app.routes import (
     cobros,
     configuracion,
     credenciales,
+    finanzas,
     honorarios,
     inicio,
     recordatorios,
@@ -94,3 +95,4 @@ app.include_router(tareas.router)
 app.include_router(templates_tareas.router)
 app.include_router(vencimientos.router)
 app.include_router(recordatorios.router)
+app.include_router(finanzas.router)

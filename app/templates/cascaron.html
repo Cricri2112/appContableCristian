@@ -19,7 +19,7 @@
         <i class="ph {{ icono }}" style="font-size: 18px;"></i>{{ etiqueta }}{{ extra }}
       </a>
     {% endmacro %}
-    {{ item_nav('/', 'ph-squares-four', 'Dashboard', False, habilitada=False) }}
+    {{ item_nav('/', 'ph-squares-four', 'Dashboard', seccion == 'dashboard') }}
     {{ item_nav('/clientes', 'ph-users', 'Clientes', seccion == 'clientes') }}
     {{ item_nav('/cobros', 'ph-currency-dollar', 'Cobros', seccion == 'cobros') }}
     {# H-02: junto a "Tareas", completadas/total del período en curso (sin canceladas). #}

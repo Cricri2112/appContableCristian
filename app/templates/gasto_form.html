@@ -1,0 +1,68 @@
+{% extends "finanzas_gastos.html" %}
+
+{% block titulo %}{{ 'Editar' if movimiento else 'Nuevo' }} registro — Estudio Contable{% endblock %}
+
+{# Diálogo de crear/editar gasto o ingreso propio (vista 25b). #}
+{% block dialogo %}
+{% macro error_campo(nombre) %}
+{% if errores.get(nombre) %}
+<div style="display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--color-danger-text);"><i class="ph ph-warning-circle"></i>{{ errores[nombre] }}</div>
+{% endif %}
+{% endmacro %}
+{% set accion = '/finanzas/gastos/' ~ movimiento.id ~ '/editar' if movimiento else '/finanzas/gastos/nuevo' %}
+<div class="dialog-backdrop" style="z-index: 50; align-items: start; padding-top: 48px; overflow: auto;">
+  <form method="post" action="{{ accion }}" class="dialog" style="width: min(600px, 100%); display: flex; flex-direction: column; gap: 14px;">
+    <input type="hidden" name="f_periodo" value="{{ filtros.periodo.strftime('%Y-%m') }}">
+    <input type="hidden" name="f_tipo" value="{{ filtros.tipo }}">
+    <input type="hidden" name="f_categoria" value="{{ filtros.categoria }}">
+    <span class="dialog-title">{{ 'Editar gasto / ingreso propio' if movimiento else 'Nuevo gasto / ingreso propio' }}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;">
+      <div class="field">
+        <label>Tipo <span style="color: rgb(145,132,217);">*</span></label>
+        <div class="seg">
+          {% for valor, etiqueta in [('gasto', 'Gasto'), ('ingreso', 'Ingreso')] %}
+          <label class="seg-opt"><input type="radio" name="tipo" value="{{ valor }}" {% if valores.get('tipo') == valor %}checked{% endif %}>{{ etiqueta }}</label>
+          {% endfor %}
+        </div>
+        {{ error_campo('tipo') }}
+      </div>
+      <div class="field">
+        <label>Fecha <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" type="date" name="fecha" value="{{ valores.get('fecha', '') }}">
+        {{ error_campo('fecha') }}
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Concepto <span style="color: rgb(145,132,217);">*</span></label>
+        <input class="input" name="concepto" placeholder="ej: Aportes CJPPU noviembre" value="{{ valores.get('concepto', '') }}">
+        {{ error_campo('concepto') }}
+      </div>
+      <div class="field">
+        <label>Importe <span style="color: rgb(145,132,217);">*</span></label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 10px; top: 8px; font-size: 14px; color: rgb(147,151,171);">$</span>
+          <input class="input" name="importe" inputmode="numeric" placeholder="0" value="{{ valores.get('importe', '') }}" style="padding-left: 24px;">
+        </div>
+        {{ error_campo('importe') }}
+      </div>
+      <div class="field">
+        <label>Categoría <span style="color: rgb(145,132,217);">*</span></label>
+        <select class="input" name="categoria">
+          {% for valor, etiqueta in categorias_legibles.items() %}
+          <option value="{{ valor }}" {% if valores.get('categoria') == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+        {{ error_campo('categoria') }}
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Notas</label>
+        <input class="input" name="notas" placeholder="Opcional" value="{{ valores.get('notas', '') }}">
+      </div>
+    </div>
+    <div style="font-size: 12px; color: rgb(117,121,140);">Importe mayor a cero, fecha no futura. Los cobros de clientes no se cargan acá.</div>
+    <div class="dialog-actions">
+      <a href="/finanzas/gastos?{{ query }}" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -57,3 +57,50 @@ def test_notificaciones_guarda_el_email(sesion, db_temporal):
                      follow_redirects=False)
     assert ok.status_code == 303
     assert ajustes.email_destino(db_temporal) == "yo@ejemplo.com"
+
+
+# ---------- Corte 6b ----------
+
+def test_dashboard_muestra_los_bloques(sesion):
+    pagina = sesion.get("/")
+    assert pagina.status_code == 200
+    for texto in ("Ingresos del mes", "P&amp;L del mes", "Próximos vencimientos",
+                  "Tareas del período", "Mayor saldo deudor"):
+        assert texto in pagina.text
+
+
+def test_historico_y_proyeccion(sesion):
+    historico = sesion.get("/finanzas/historico")
+    assert historico.status_code == 200
+    assert "Histórico · últimos 12 meses" in historico.text
+    proyeccion = sesion.get("/finanzas/proyeccion")
+    assert proyeccion.status_code == 200
+    assert ("Proyección basada en la cartera actual. No incluye trabajos únicos "
+            "ni cambios futuros.") in proyeccion.text
+
+
+def test_abm_de_gastos(sesion, db_temporal):
+    from app.models import GastoIngresoPropio
+
+    hoy = fechas.hoy()
+    datos = {"tipo": "gasto", "fecha": hoy.isoformat(), "concepto": "Aportes CJPPU",
+             "importe": "12.400", "categoria": "cjppu", "notas": "",
+             "f_periodo": hoy.strftime("%Y-%m"), "f_tipo": "", "f_categoria": ""}
+
+    malo = sesion.post("/finanzas/gastos/nuevo", data=datos | {"concepto": ""})
+    assert malo.status_code == 422
+    assert "El concepto no puede estar vacío." in malo.text
+
+    ok = sesion.post("/finanzas/gastos/nuevo", data=datos, follow_redirects=False)
+    assert ok.status_code == 303
+    movimiento = db_temporal.query(GastoIngresoPropio).one()
+
+    listado = sesion.get(ok.headers["location"])
+    assert "Aportes CJPPU" in listado.text
+
+    confirmar = sesion.get(f"/finanzas/gastos/{movimiento.id}/eliminar")
+    assert ("¿Confirmás que querés eliminar este registro? Esta acción no se puede "
+            "deshacer.") in confirmar.text
+    sesion.post(f"/finanzas/gastos/{movimiento.id}/eliminar", data={})
+    db_temporal.expire_all()
+    assert db_temporal.query(GastoIngresoPropio).count() == 0

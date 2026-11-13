@@ -1,0 +1,10 @@
+{# Encabezado de Histórico y proyección (vistas 24a/24b). Espera `pestana`. #}
+<div>
+  <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(147,151,171); margin-bottom: 4px;"><a href="/" style="color: inherit; text-decoration: none;">Dashboard</a> / Finanzas</div>
+  <h1 style="font-size: 25px; font-weight: 500; margin: 0; letter-spacing: -0.015em;">Histórico mensual y proyección</h1>
+</div>
+<nav style="display: flex; gap: 22px; border-bottom: 1px solid rgb(41,43,49);">
+  {% for clave, url, etiqueta in [('historico', '/finanzas/historico', 'Histórico · últimos 12 meses'), ('proyeccion', '/finanzas/proyeccion', 'Proyección · próximos 6 meses')] %}
+  <a href="{{ url }}" style="padding: 8px 2px; font-size: 14px; text-decoration: none; border-bottom: 2px solid {{ 'rgb(145,132,217)' if pestana == clave else 'transparent' }}; color: {{ 'rgb(233,233,237)' if pestana == clave else 'rgb(147,151,171)' }};">{{ etiqueta }}</a>
+  {% endfor %}
+</nav>

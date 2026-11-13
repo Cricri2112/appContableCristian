@@ -1,0 +1,22 @@
+{% extends "finanzas_gastos.html" %}
+
+{% block titulo %}Eliminar registro — Estudio Contable{% endblock %}
+
+{# Eliminación física con la confirmación literal del Chat 3 (F9). #}
+{% block dialogo %}
+<div class="dialog-backdrop" style="z-index: 50;">
+  <div class="dialog">
+    <span class="dialog-title">Eliminar registro</span>
+    <p class="dialog-body">¿Confirmás que querés eliminar este registro? Esta acción no se puede deshacer.</p>
+    <div class="dialog-actions">
+      <a href="/finanzas/gastos?{{ query }}" class="btn btn-secondary">Cancelar</a>
+      <form method="post" action="/finanzas/gastos/{{ movimiento_a_eliminar }}/eliminar" style="margin: 0;">
+        <input type="hidden" name="f_periodo" value="{{ filtros.periodo.strftime('%Y-%m') }}">
+        <input type="hidden" name="f_tipo" value="{{ filtros.tipo }}">
+        <input type="hidden" name="f_categoria" value="{{ filtros.categoria }}">
+        <button type="submit" class="btn btn-primary" style="color: var(--color-danger-text); border-color: var(--color-danger);">Eliminar</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

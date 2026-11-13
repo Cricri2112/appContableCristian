@@ -1,0 +1,32 @@
+{% extends "cascaron.html" %}
+
+{% block titulo %}Proyección — Estudio Contable{% endblock %}
+
+{# Vista 24b: próximos 6 meses con la cartera actual. #}
+{% block principal %}
+<div style="display: flex; flex-direction: column; gap: 20px; max-width: 1000px;">
+  {% include "_finanzas_encabezado.html" %}
+
+  <div style="display: flex; flex-direction: column; gap: 12px; max-width: 720px;">
+    <div style="overflow-x: auto;">
+    <table class="table">
+      <thead><tr><th>Mes</th><th style="text-align: right;">Ingreso esperado proyectado</th><th>Observación</th></tr></thead>
+      <tbody>
+        {% for f in filas %}
+        <tr>
+          <td style="white-space: nowrap;">{{ f.mes | mes_corto }}</td>
+          <td style="text-align: right; white-space: nowrap;">{{ f.total | importe }}</td>
+          <td style="font-size: 13px;">
+            {% if f.observaciones %}<span style="color: rgb(210,206,253);">{{ f.observaciones | join(' · ') }}</span>
+            {% else %}<span style="color: rgb(117,121,140);">sin cambios</span>{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: 8px; background: rgb(27,29,43); box-shadow: rgb(63,66,77) 0 0 0 1px; font-size: 13px; color: rgb(178,182,202);"><i class="ph ph-info" style="color: rgb(145,132,217); flex: 0 0 auto; margin-top: 2px;"></i>Proyección basada en la cartera actual. No incluye trabajos únicos ni cambios futuros.</div>
+    <p style="font-size: 12px; color: rgb(117,121,140); margin: 0;">Contratos activos × honorarios vigentes (incluye cambios ya registrados con vigencia futura); anuales en su mes de generación si cae en la ventana. No proyecta gastos.</p>
+  </div>
+</div>
+{% endblock %}
